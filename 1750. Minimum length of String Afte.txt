@@ -1,0 +1,36 @@
+1750. Minimum length of String After Deleting Similar Ends
+
+Explaination:
+
+This Python code defines a class `Solution` with a method `minimumLength` that calculates the minimum possible length of a non-empty string `s` after performing zero or more operations.
+
+Here's how the code works:
+
+1. It initializes two pointers `l` (left) and `r` (right) to the beginning and end of the string `s`, respectively.
+
+2. It enters a while loop that continues as long as `l` is less than `r` and the characters at positions `l` and `r` are the same. This loop is intended to handle cases where the string has leading and trailing characters that are the same.
+
+3. Inside this loop:
+   - It retrieves the character `c` at position `l`, assuming that `s[l]` is equal to `s[r]`.
+   - It increments `l` until it finds a character different from `c` or until `l` becomes greater than or equal to `r`.
+   - It decrements `r` until it finds a character different from `c` or until `r` becomes less than or equal to `l`.
+
+4. After exiting the loop, it returns the length of the substring of `s` from index `l` to index `r`, inclusive. This represents the minimum possible length of `s` after performing the operations.
+
+This code efficiently handles cases where the string `s` has leading and trailing characters that are the same, finding the minimum possible length by removing these characters. The correction made to the loop ensures that `l` and `r` are updated properly after finding the character `c`, ensuring correctness in determining the minimum length of the substring.
+Solution:
+
+class Solution:
+    def minimumLength(self, s: str) -> int:
+        l, r = 0, len(s) - 1
+
+        while l < r and s[l] == s[r]:
+            c = s[l]
+
+            while l <= r and s[l] == c:
+                l +=1
+            
+            while r > l and s[r] ==c:
+                r -= 1
+
+        return r - l + 1

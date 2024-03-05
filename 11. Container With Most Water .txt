@@ -1,0 +1,33 @@
+11. Container With Most Water 
+
+Explaination:
+
+This Python code defines a class `Solution` with a method `maxArea` that calculates the maximum area of water that can be contained between two vertical lines represented by the `height` list.
+
+Here's how the code works:
+
+1. It initializes three variables: `res` (result), `l` (left pointer), and `r` (right pointer). `res` will store the maximum area found, while `l` and `r` represent the indices of the left and right lines, respectively.
+
+2. It enters a while loop that continues as long as the left pointer `l` is less than the right pointer `r`. This loop iterates from the outermost lines towards the center, gradually reducing the width of the area considered.
+
+3. Inside the loop:
+   - It calculates the area of the current rectangle formed by the lines at indices `l` and `r`, which is equal to the width (difference between `r` and `l`) multiplied by the minimum height between the lines (`min(height[l], height[r])`).
+   - It updates the `res` variable to store the maximum of the current area and the previous maximum area.
+   - It then moves the pointers. If the height of the line at index `l` is less than the height of the line at index `r`, it means that increasing the width (moving `l` towards the right) will not increase the height of the rectangle, so it's beneficial to try moving `l` towards the right to see if it improves the area. Conversely, if the height of the line at index `l` is greater than or equal to the height of the line at index `r`, it means that moving `r` towards the left will not increase the height of the rectangle, so it's beneficial to try moving `r` towards the left.
+
+4. After exiting the loop, the function returns the maximum area `res`.
+
+This code efficiently calculates the maximum area of water that can be contained between two vertical lines by utilizing a two-pointer approach. It iterates from both ends towards the center, adjusting the pointers based on the height of the lines to maximize the area. The time complexity of this algorithm is O(n), where n is the number of lines in the `height` list, as each pointer moves at most n times.
+
+Soltuion:
+
+class Solution:
+    def maxArea(self, height: List[int]) -> int:
+        res, l, r = 0, 0, len(height) - 1
+        while l < r:
+            res = max(res, (r - l) * min(height[l], height[r]))
+            if height[l] < height[r]:
+                l += 1
+            else:
+                r -= 1
+        return res

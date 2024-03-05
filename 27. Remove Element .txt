@@ -1,0 +1,32 @@
+27. Remove Element 
+
+Explaination:
+
+This Python code defines a class `Solution` with a method `removeElement` that removes all occurrences of a specified value `val` from a list of integers `nums` and returns the length of the modified list.
+
+Here's how the code works:
+
+1. It initializes a variable `k` to 0. This variable will represent the index where the next non-target value will be placed.
+
+2. It iterates through each element of the list `nums` using a for loop with index `i`.
+
+3. For each element at index `i`, it checks if the value is not equal to the target value `val`. If the value is not equal to `val`, it means the element should be kept in the modified list.
+
+4. If the element is not equal to `val`, it assigns the value of the element at index `i` to the position `k` in the list `nums`, and then increments `k` by 1 to move to the next position for the next non-target element.
+
+5. After processing all elements in the list, the function returns the value of `k`, which represents the length of the modified list without the target value `val`.
+
+This code efficiently removes all occurrences of the target value `val` from the list `nums` by overwriting the elements in-place and updating the length of the modified list accordingly. The time complexity of this algorithm is O(n), where n is the length of the input list `nums`, as it iterates through each element of the list once.
+
+Soltuion:
+
+class Solution:
+    def removeElement(self, nums: List[int], val: int) -> int:
+        k = 0
+
+        for i in range(len(nums)):
+            if nums[i] != val:
+                nums[k] = nums[i]
+                k += 1
+
+        return k

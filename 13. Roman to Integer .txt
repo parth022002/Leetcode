@@ -1,0 +1,34 @@
+13. Roman to Integer 
+
+Explaination:
+
+This Python code defines a class `Solution` with a method `romanToInt` that converts a Roman numeral string `s` into an integer.
+
+Here's how the code works:
+
+1. It initializes a dictionary `roman_dict` that maps each Roman numeral character to its corresponding integer value. This dictionary provides a convenient lookup for converting Roman numerals to integers.
+
+2. It initializes a variable `int_val` to store the integer representation of the Roman numeral string, initially set to 0.
+
+3. It iterates through each character in the input Roman numeral string `s` using a for loop.
+
+4. For each character at index `i` in the loop:
+   - It checks if `i` is greater than 0 and if the value of the current character `s[i]` is greater than the value of the previous character `s[i - 1]`. If this condition is true, it means the current character represents a value greater than the previous character (e.g., IV or IX). In this case, it subtracts twice the value of the previous character from the value of the current character and adds the result to `int_val`.
+   - If the above condition is not true, it simply adds the value of the current character to `int_val`.
+
+5. After iterating through all characters in the input string, the function returns the accumulated integer value `int_val`.
+
+This code efficiently converts a Roman numeral string into an integer representation by iterating through the characters and applying the rules of Roman numeral conversion, such as subtractive notation (e.g., IV for 4 and IX for 9). The use of a dictionary for lookup ensures constant time complexity for conversion of individual characters.
+
+Soltuion:
+
+class Solution:
+    def romanToInt(self, s: str) -> int:
+        roman_dict = {"I": 1, "V": 5, "X": 10, "L": 50, "C": 100, "D": 500, "M": 1000}
+        int_val = 0
+        for i in range(len(s)):
+            if i > 0 and roman_dict[s[i]] > roman_dict[s[i - 1]]:
+                int_val += roman_dict[s[i]] - 2 * roman_dict[s[i - 1]]
+            else:
+                int_val += roman_dict[s[i]]
+        return int_val

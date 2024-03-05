@@ -1,0 +1,46 @@
+948. Bag of Tokens
+
+Explaination:
+
+This Python code defines a class `Solution` with a method `bagOfTokensScore` that simulates playing a game with tokens and power. The objective is to maximize the score, which is the number of tokens accumulated.
+
+Here's how the code works:
+
+1. It initializes three variables: `res` (result), `score`, and `power`. `res` keeps track of the maximum score achieved, `score` keeps track of the current score, and `power` represents the current power level of the player.
+
+2. The list of tokens `tokens` is sorted in non-decreasing order using the `sort()` method. This sorting is important for efficient handling of tokens.
+
+3. Two pointers `l` (left) and `r` (right) are initialized to point to the beginning and end of the sorted list of tokens, respectively.
+
+4. A while loop iterates as long as `l` is less than or equal to `r`, ensuring that there are tokens to be considered.
+
+5. Inside the loop:
+   - If the current power (`power`) is greater than or equal to the value of the token at index `l`, the player can afford to buy the token. In this case, the player buys the token, increments `l`, decrements `power` by the token value, increments `score`, and updates `res` to the maximum of `res` and `score`.
+   - If the player cannot afford to buy the token at index `l`, but has previously bought some tokens (`score > 0`), the player decides to trade a token with the highest value (at index `r`) for power. In this case, the player decrements `r`, increments `power` by the token value, and decrements `score`.
+   - If neither of the above conditions is met, it indicates that the player cannot afford to buy more tokens and does not have any tokens to trade. The loop breaks, and the function returns the maximum score achieved (`res`).
+
+6. Finally, the function returns the maximum score achieved.
+
+This code efficiently iterates through the tokens using two pointers, making decisions based on the player's power and the available tokens, to maximize the score. It has a time complexity of O(nlogn) due to the sorting operation, where n is the number of tokens.
+
+Sotuion:
+
+class Solution:
+    def bagOfTokensScore(self, tokens: List[int], power: int) -> int:
+        res = score = 0
+        tokens.sort()
+
+        l, r = 0, len(tokens) - 1
+        while l <= r:
+            if power >= tokens[l]:
+                power -= tokens[l]
+                l += 1
+                score += 1
+                res = max(res, score)
+            elif score>0:
+                power += tokens[r]
+                r -= 1
+                score -= 1
+            else:
+                break
+        return res

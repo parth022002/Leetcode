@@ -1,0 +1,54 @@
+9. Palindrome number 
+
+Explaination:
+
+This Python code is a solution to determine whether a given integer `x` is a palindrome. A palindrome is a number that reads the same backward as forward.
+
+Here's a breakdown of how the code works:
+
+1. The function `isPalindrome` takes an integer `x` as input and returns a boolean indicating whether `x` is a palindrome.
+
+2. If `x` is less than 0, the function returns `False` since negative numbers cannot be palindromes.
+
+3. The variable `div` is initialized to 1. This variable is used to find the divisor needed to extract the leftmost digit of `x` later in the code.
+
+4. The first while loop calculates the divisor `div` such that it is greater than the number `x`. It does this by multiplying `div` by 10 until it exceeds `x`.
+
+5. After finding the divisor `div`, the code enters a second while loop that executes as long as `x` is non-zero. This loop checks each pair of digits from the leftmost and rightmost ends of `x`.
+
+6. Inside the loop, it extracts the rightmost digit of `x` using the modulo operator `%` and stores it in the variable `right`. It extracts the leftmost digit of `x` using integer division `//` by `div` and stores it in the variable `left`.
+
+7. It then compares the leftmost and rightmost digits. If they are not equal, it returns `False` indicating that `x` is not a palindrome.
+
+8. If the leftmost and rightmost digits are equal, it removes these two digits from `x` by using the modulo operator `%` to get rid of the leftmost digit and then integer division `//` by 10 to shift the remaining digits to the right.
+
+9. It also adjusts the divisor `div` by dividing it by 100 since two digits have been removed from `x`.
+
+10. The loop continues until `x` becomes zero, which means all digits have been compared and found to be equal.
+
+11. If the loop completes without returning `False`, it means all pairs of digits were equal, and the number is a palindrome. In this case, it returns `True`.
+
+Overall, this algorithm efficiently checks whether an integer is a palindrome without converting it to a string. It has a time complexity of O(log10(n)), where n is the value of the integer `x`.
+
+Solution:
+
+	class Solution:
+    def isPalindrome(self, x: int) -> bool:
+        if x < 0:
+            return False
+        div = 1
+        while x >= 10*div:
+            div *= 10
+        
+        while x:
+            right = x%10
+            left = x//div
+
+            if left != right:
+                return False
+
+            x = (x%div) // 10
+            div = div / 100
+        return True
+        
+

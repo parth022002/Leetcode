@@ -1,0 +1,48 @@
+67. Add binary
+
+Explaination:
+
+This Python code defines a class `Solution` with a method `addBinary` that adds two binary numbers represented as strings `a` and `b` and returns the result as a binary string.
+
+Here's a breakdown of how the code works:
+
+1. It initializes an empty string `result` to store the result of the addition.
+2. It initializes a variable `carry` to store the carry-over during addition, initially set to 0.
+3. It initializes two indices `i` and `j` to the lengths of strings `a` and `b` minus 1, respectively. These indices are used to iterate through the binary numbers from right to left.
+4. It enters a while loop that continues as long as either `i` or `j` is greater than or equal to 0, ensuring that we process all digits of both binary numbers.
+5. Within the loop, it calculates the sum of the current digits from `a` and `b`, along with the carry from the previous addition.
+6. It updates the indices `i` and `j` to move to the next digits in `a` and `b`, respectively.
+7. It calculates the remainder of the sum when divided by 2, which gives the current digit of the result.
+8. It updates the `result` string by appending the current digit to its left.
+9. It calculates the carry for the next iteration by dividing the sum by 2.
+10. After the loop, if there's still a carry remaining, it appends '1' to the left of the result to account for it.
+11. Finally, it returns the result string.
+
+This code efficiently adds two binary numbers represented as strings by iterating through the digits from right to left and keeping track of the carry-over. It has a time complexity of O(max(len(a), len(b))), where len(a) and len(b) are the lengths of the input binary strings `a` and `b`, respectively, as it iterates through the longer string.
+
+
+Sotuion:
+
+class Solution:
+    def addBinary(self, a: str, b: str) -> str:
+        result = ''
+        carry = 0
+        i, j = len(a) - 1, len(b) - 1
+    
+        while i >= 0 or j >= 0:
+            sum_ = carry
+        
+            if i >= 0:
+                sum_ += int(a[i])
+                i -= 1
+            if j >= 0:
+                sum_ += int(b[j])
+                j -= 1
+        
+            result = str(sum_ % 2) + result
+            carry = sum_ // 2
+    
+        if carry:
+            result = '1' + result
+    
+        return result

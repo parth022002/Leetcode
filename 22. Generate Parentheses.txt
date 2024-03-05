@@ -1,0 +1,45 @@
+22. Generate Parentheses
+
+Explaination:
+
+This Python code defines a class `Solution` with a method `generateParenthesis` that generates all valid combinations of `n` pairs of parentheses.
+
+Here's how the code works:
+
+1. It initializes an empty list `stack` to keep track of the current combination of parentheses, and an empty list `res` to store the generated valid combinations.
+
+2. It defines a recursive function `backtrack` that generates valid combinations of parentheses.
+
+3. Inside the `backtrack` function:
+   - If the count of open parentheses (`openN`) and closed parentheses (`closedN`) is equal to `n`, it means a valid combination has been generated. In this case, the current combination stored in `stack` is appended to the result list `res`.
+   - If the count of open parentheses (`openN`) is less than `n`, it means it's possible to add an open parenthesis. So, an open parenthesis is appended to `stack`, and the `backtrack` function is called recursively with incremented `openN`.
+   - If the count of closed parentheses (`closedN`) is less than `openN`, it means it's possible to add a closed parenthesis to match an open parenthesis. So, a closed parenthesis is appended to `stack`, and the `backtrack` function is called recursively with incremented `closedN`.
+
+4. The `backtrack` function is initially called with `openN` and `closedN` set to 0 to start the generation process.
+
+5. After all valid combinations have been generated, the function returns the result list `res`.
+
+This code efficiently generates all valid combinations of `n` pairs of parentheses using backtracking. It explores all possible combinations by trying different options at each step and backtracking when necessary. The time complexity of this algorithm is O(4^n / sqrt(n)), which represents the total number of valid combinations of parentheses.
+
+Soltuion:
+class Solution:
+    def generateParenthesis(self, n: int) -> List[str]:
+        stack = []
+        res = []
+
+        def backtrack(openN, closedN):
+            if openN == closedN == n:
+                res.append("".join(stack))
+                return
+
+            if openN < n:
+                stack.append("(")
+                backtrack(openN + 1, closedN)
+                stack.pop()
+
+            if closedN < openN:
+                stack.append(")")
+                backtrack(openN, closedN + 1)
+                stack.pop()
+        backtrack(0,0)
+        return res

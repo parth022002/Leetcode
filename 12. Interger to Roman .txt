@@ -1,0 +1,54 @@
+12. Interger to Roman 
+
+Explaination:
+
+This Python code defines a class `Solution` with a method `intToRoman` that converts an integer `num` into a Roman numeral string representation.
+
+Here's how the code works:
+
+1. It first performs input validation, ensuring that the input integer `num` is within the range 1 to 3999, inclusive. If the input is outside this range, it raises a `ValueError`.
+
+2. It defines a list of tuples `roman_numerals`, where each tuple contains a numeric value and its corresponding Roman numeral representation. The tuples are sorted in descending order of numeric value, which is essential for generating the correct Roman numeral representation.
+
+3. It initializes an empty string `roman` to store the Roman numeral representation of the input integer.
+
+4. It iterates through each tuple in the `roman_numerals` list:
+   - For each tuple, it calculates the count of how many times the current value fits into the input integer `num` using integer division `//`.
+   - It updates `num` by taking the remainder after dividing by the current value.
+   - It appends the corresponding Roman numeral representation (`numeral`) multiplied by the count to the `roman` string.
+
+5. After iterating through all tuples, the function returns the constructed Roman numeral string.
+
+This code efficiently converts an integer into its Roman numeral representation by iteratively subtracting the largest possible value from the integer and appending the corresponding Roman numeral until the integer becomes zero. The Roman numerals are chosen to represent values in descending order to ensure the most compact representation.
+
+Soltuion:
+
+class Solution:
+    def intToRoman(self, num: int) -> str:
+        if num < 1 or num > 3999:
+            raise ValueError("Input must be between 1 and 3999")
+
+        roman_numerals = [
+            (1000, "M"),
+            (900, "CM"),
+            (500, "D"),
+            (400, "CD"),
+            (100, "C"),
+            (90, "XC"),
+            (50, "L"),
+            (40, "XL"),
+            (10, "X"),
+            (9, "IX"),
+            (5, "V"),
+            (4, "IV"),
+            (1, "I")
+        ]
+
+        roman = ""
+        for value, numeral in roman_numerals:
+            count = num // value
+            num %= value
+            roman += numeral * count
+
+        return roman
+        

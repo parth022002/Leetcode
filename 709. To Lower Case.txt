@@ -1,0 +1,18 @@
+709. To Lower Case
+
+Explaination:
+
+This Python code defines a class `Solution` with a method `toLowerCase` that takes a string `s` as input and returns a new string where all alphabetic characters are converted to lowercase using the built-in `lower()` method.
+
+Here's a breakdown of how the code works:
+
+1. The `lower()` method is called on the input string `s`. This method returns a copy of the string with all alphabetic characters converted to lowercase.
+
+2. The converted string is then returned as the output of the `toLowerCase` method.
+
+This code efficiently converts all alphabetic characters in the input string to lowercase in a single line of code using the built-in method provided by Python. It has a time complexity of O(n), where n is the length of the input string `s`, as the `lower()` method iterates through each character of the string once.
+
+Soltuion:
+	class Solution:
+    		def toLowerCase(self, s: str) -> str:
+        		return s.lower()

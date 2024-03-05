@@ -1,0 +1,51 @@
+17. Letter Combination of Phone Number
+
+Explaination:
+
+This Python code defines a class `Solution` with a method `letterCombinations` that generates all possible combinations of letters that can be formed using a given string of digits.
+
+Here's how the code works:
+
+1. It initializes an empty list `res` to store the generated combinations and a dictionary `digitToChar` that maps each digit to its corresponding letters on a phone keypad.
+
+2. It defines a recursive function `backtrack` that generates combinations of letters.
+
+3. Inside the `backtrack` function:
+   - If the length of the current string `curStr` is equal to the length of the input `digits`, it means a valid combination has been generated. In this case, the current combination stored in `curStr` is appended to the result list `res`.
+   - Otherwise, for each character `c` corresponding to the digit at index `i` in `digits`, the `backtrack` function is called recursively with incremented index `i` and the updated `curStr` by appending `c`.
+
+4. If the input `digits` is not empty, the `backtrack` function is initially called with index `0` and an empty string `""` as the starting `curStr`.
+
+5. After all possible combinations have been generated, the function returns the result list `res`.
+
+This code efficiently generates all possible combinations of letters corresponding to a given string of digits using backtracking. It explores all possible combinations by trying different options at each step and backtracking when necessary. The time complexity of this algorithm depends on the number of possible combinations, which is typically exponential but bounded by the number of digits in the input string.
+
+Soltuion:
+
+class Solution:
+    def letterCombinations(self, digits: str) -> List[str]:
+        res = []
+        digitToChar = {
+            "2" : "abc",
+            "3" : "def",
+            "4" : "ghi",
+            "5" : "jkl",
+            "6" : "mno",
+            "7" : "pqrs",
+            "8" : "tuv",
+            "9" : "wxyz"
+        }
+
+        def backtrack(i, curStr):
+            if len(curStr) == len(digits):
+                res.append(curStr)
+                return
+            
+            for c in digitToChar[digits[i]]:
+                backtrack(i + 1, curStr + c)
+
+        if digits:
+            backtrack(0,"")
+
+        return res
+        

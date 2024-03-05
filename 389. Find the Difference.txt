@@ -1,0 +1,38 @@
+389. Find the Difference
+
+Explaination:
+
+This Python code defines a class `Solution` with a method `findTheDifference` that takes two strings `s` and `t` as input and returns the character that is present in string `t` but not in string `s`.
+
+Here's a breakdown of how the code works:
+
+1. It first uses the `Counter` class from the `collections` module to count the occurrences of each character in both strings `s` and `t`. This creates two dictionaries `count_s` and `count_t`, where keys represent characters and values represent their counts in the respective strings.
+
+2. It then iterates over the characters in the `count_t` dictionary.
+
+3. For each character `c` in `count_t`, it checks if `c` is not present in the `count_s` dictionary. If `c` is not present in `count_s`, it means that `c` occurs exactly once in string `t` (because it's not present in string `s`), so it returns `c`.
+
+4. If `c` is present in both `count_s` and `count_t`, it checks if the count of `c` in `t` (`count_t[c]`) is greater than the count of `c` in `s` (`count_s[c]`). If it is, it means `c` occurs more times in `t` than in `s`, so it returns `c`.
+
+5. If neither of the above conditions is met for any character `c` in `count_t`, it means all characters in `t` are present in `s` with the same frequency, except for one extra character. In this case, the function implicitly returns the last character from the loop, as it's the only character that meets none of the conditions.
+
+The code essentially finds the character that occurs more times in `t` than in `s`, or the character that is present in `t` but not in `s`, and returns it.
+
+This algorithm has a time complexity of O(n), where n is the length of the longer string (`t`), because constructing the Counter objects and iterating over the characters in `t` both take linear time with respect to the length of `t`.
+
+Sotuion:
+	
+class Solution:
+    def findTheDifference(self, s: str, t: str) -> str:
+        count_s, count_t = Counter(s), Counter(t)
+
+        for c in count_t:
+            if c not in count_s:
+                return c
+            if count_s[c] < count_t[c]:
+                return c
+
+
+        
+
+        
