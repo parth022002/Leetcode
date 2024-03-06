@@ -1,0 +1,28 @@
+141. Linked List Cycle
+Explaination:
+
+This Python code defines a class `Solution` with a method `hasCycle` that takes a linked list's head node (`head`) as input and returns a boolean indicating whether the linked list contains a cycle (i.e., if it loops back on itself).
+
+Here's a breakdown of how the method works:
+
+1. Initialize two pointers `slow` and `fast` to the head of the linked list (`head`).
+2. Use a `while` loop to iterate through the linked list. The loop continues as long as `fast` and `fast.next` are not `None`, meaning there are at least two more nodes to move forward.
+3. Inside the loop, move the `slow` pointer one step forward by assigning `slow = slow.next`.
+4. Move the `fast` pointer two steps forward by assigning `fast = fast.next.next`. This step ensures that the `fast` pointer moves twice as fast as the `slow` pointer.
+5. Check if the `slow` pointer and the `fast` pointer point to the same node. If they do, it means there is a cycle in the linked list, so return `True`.
+6. If the loop finishes without finding a cycle (i.e., `slow` and `fast` pointers never meet), return `False` indicating that there is no cycle in the linked list.
+
+This algorithm utilizes the concept of two pointers moving at different speeds to detect cycles in a linked list efficiently. The `slow` pointer moves one step at a time while the `fast` pointer moves two steps at a time. If there's a cycle, eventually the `fast` pointer will catch up to the `slow` pointer. If there's no cycle, the `fast` pointer will reach the end of the list (`None`) before the `slow` pointer.
+
+Solution:
+
+class Solution:
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+        slow, fast = head, head
+
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+            if slow == fast:
+                return True
+        return False
