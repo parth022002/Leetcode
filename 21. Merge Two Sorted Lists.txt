@@ -1,0 +1,48 @@
+21. Merge Two Sorted Lists
+Explaination:
+
+This Python code defines a class `Solution` with a method `mergeTwoLists` that merges two sorted linked lists `l1` and `l2` into a single sorted linked list. The merged list contains all the elements from both input lists in ascending order.
+
+Here's how the method works:
+
+1. It starts by creating a dummy node and initializes a `tail` pointer to point to this dummy node. This `tail` pointer will be used to build the merged list.
+2. It enters a loop that continues as long as both `l1` and `l2` are not `None`, meaning there are still elements in both lists to be merged.
+3. Inside the loop, it compares the values of the current nodes pointed by `l1` and `l2`.
+   - If the value of `l1` is smaller, it appends the node pointed by `l1` to the `tail` and moves `l1` to the next node.
+   - If the value of `l2` is smaller or equal, it appends the node pointed by `l2` to the `tail` and moves `l2` to the next node.
+   - It then moves the `tail` pointer to the next node in the merged list.
+4. After exiting the loop, it checks if either `l1` or `l2` still has remaining nodes.
+   - If `l1` has remaining nodes, it appends the remaining nodes of `l1` to the merged list by pointing the `tail.next` to `l1`.
+   - If `l2` has remaining nodes, it appends the remaining nodes of `l2` to the merged list by pointing the `tail.next` to `l2`.
+5. Finally, it returns the `next` pointer of the dummy node, which points to the head of the merged list.
+
+This algorithm efficiently merges two sorted linked lists by iterating through both lists simultaneously and comparing the values of the nodes to build the merged list in ascending order. The time complexity of this algorithm is O(m + n), where m and n are the lengths of the input linked lists `l1` and `l2`, respectively.
+
+Solution:
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def mergeTwoLists(self, l1: ListNode, l2: ListNode) -> ListNode:
+        dummy = ListNode()
+        tail = dummy
+
+        while l1 and l2 :
+            if l1.val < l2.val:
+                tail.next = l1
+                l1 = l1.next
+            else:
+                tail.next = l2
+                l2 = l2.next
+            tail = tail.next
+
+        if l1:
+            tail.next = l1
+        elif l2:
+            tail.next = l2
+            
+        return dummy.next
+        

@@ -1,0 +1,42 @@
+75. Sort Colors
+Explaination:
+
+This Python code defines a class `Solution` with a method `sortColors` that sorts an array containing only 0's, 1's, and 2's in-place. This problem is commonly referred to as the "Dutch National Flag Problem".
+
+Here's a breakdown of how the method works:
+
+1. Initialize three pointers: `l` (left), `r` (right), and `i` (iterator). `l` represents the boundary for 0's, `r` represents the boundary for 2's, and `i` is used for iteration through the array.
+2. Define a nested function `swap(i, j)` to swap elements at indices `i` and `j` in the `nums` array.
+3. Start iterating through the array using the `i` pointer.
+4. Within the loop, check the value of `nums[i]`:
+   - If `nums[i]` is 0, it needs to be moved to the left boundary for 0's. Swap `nums[l]` with `nums[i]`, then increment `l` to move the boundary to the right.
+   - If `nums[i]` is 2, it needs to be moved to the right boundary for 2's. Swap `nums[i]` with `nums[r]`, then decrement `r` to move the boundary to the left. We decrement `i` by 1 in this case to re-examine the value at the `i`th index after swapping, as the value at `i` might have been a 0 that needs to be moved to the left boundary.
+5. Increment `i` to proceed to the next element in the array.
+6. Repeat steps 4-5 until `i` exceeds the right boundary (`r`).
+7. At this point, all 0's are on the left side, all 2's are on the right side, and 1's are automatically in their correct positions.
+8. The array `nums` is now sorted in-place, with all 0's preceding 1's and all 1's preceding 2's.
+
+This algorithm effectively sorts the array in a single pass through the array, with a time complexity of O(n), where n is the length of the input array `nums`.
+
+Solution:
+
+class Solution:
+    def sortColors(self, nums: List[int]) -> None:
+        l, r = 0, len(nums) - 1
+        i = 0
+
+        def swap(i, j):
+            tmp = nums[i]
+            nums[i] = nums[j]
+            nums[j] = tmp
+
+        while i <= r:
+            if nums[i] == 0:
+                swap(l, i)
+                l += 1
+            elif nums[i] == 2:
+                swap(i, r)
+                r -= 1
+                i -= 1
+            i += 1
+

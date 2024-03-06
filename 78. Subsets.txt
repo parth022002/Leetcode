@@ -1,0 +1,41 @@
+78. Subsets
+Explaination:
+
+This Python code defines a class `Solution` with a method `subsets` that generates all possible subsets of a given list of integers `nums`.
+
+Here's how the method works:
+
+1. Initialize an empty list `res` which will store all the subsets.
+2. Initialize an empty list `subset` which will be used to build subsets during the depth-first search (DFS) process.
+3. Define a nested function `dfs(i)` which represents the DFS traversal to generate subsets starting from index `i` in the `nums` list.
+4. The base case of the recursion is when `i` is equal to or exceeds the length of `nums`. In this case, it means that we have processed all elements of `nums`, so the current subset (`subset`) is complete and we append a copy of it to the result list `res`.
+5. Inside the `dfs` function, for each element at index `i` in `nums`, we:
+   - Include the element at index `i` in the current subset by appending it to `subset`.
+   - Recursively call `dfs(i + 1)` to explore subsets starting from the next index.
+   - After the recursive call returns, we backtrack by removing the last element from `subset` using `subset.pop()`. This step is crucial to explore different combinations of subsets.
+   - Recursively call `dfs(i + 1)` again to explore subsets without including the element at index `i`.
+6. Finally, call the `dfs` function with an initial index of 0 to start generating subsets from the beginning of `nums`.
+7. Return the list `res` containing all generated subsets.
+
+This algorithm effectively utilizes a depth-first search approach to generate all possible combinations of elements in the input list, resulting in a list of all subsets.
+
+Soltuion:
+
+class Solution:
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        res = []
+
+        subset = []
+        def dfs(i):
+            if i >= len(nums):
+                res.append(subset.copy())
+                return
+
+            subset.append(nums[i])
+            dfs(i + 1)
+
+            subset.pop()
+            dfs(i + 1)
+
+        dfs(0)
+        return res   

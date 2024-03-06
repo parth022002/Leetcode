@@ -1,0 +1,29 @@
+64. Minimum Path Sum
+Explaination:
+
+This Python code defines a class `Solution` with a method `minPathSum` that calculates the minimum path sum from the top-left corner to the bottom-right corner of a grid. The path can only move right or down at any point.
+
+Here's how the method works:
+
+1. It starts by defining the number of rows (`ROWS`) and columns (`COLS`) in the input grid.
+2. It initializes a 2D array `res` with dimensions `(ROWS + 1) x (COLS + 1)`, where each element is initialized to positive infinity (`float("inf")`). This array will store the cumulative minimum path sums from each cell to the bottom-right corner.
+3. It sets `res[ROWS - 1][COLS]` to 0, indicating that the minimum path sum from the bottom-right corner to itself is 0.
+4. It iterates through each cell of the grid in reverse order (from bottom-right to top-left) using nested loops.
+   - For each cell `(r, c)`, it calculates the minimum path sum from that cell to the bottom-right corner by adding the current cell value `grid[r][c]` to the minimum of the path sum from the cell below `(r + 1, c)` and the path sum from the cell to the right `(r, c + 1)`. This minimum value is stored in `res[r][c]`.
+5. After completing the nested loops, the method returns `res[0][0]`, which contains the minimum path sum from the top-left corner to the bottom-right corner.
+
+Overall, this algorithm efficiently calculates the minimum path sum by dynamic programming, utilizing the calculated minimum path sums from adjacent cells to compute the minimum path sum for each cell in the grid. The time complexity of this algorithm is O(m * n), where m is the number of rows and n is the number of columns in the grid.
+
+Soltuion:
+
+class Solution:
+    def minPathSum(self, grid: List[List[int]]) -> int:
+        ROWS, COLS = len(grid), len(grid[0])
+
+        res = [[float("inf")] * (COLS + 1) for r in range(ROWS + 1)]
+        res[ROWS - 1][COLS] = 0
+
+        for r in range(ROWS - 1,-1,-1):
+            for c in range(COLS - 1,-1,-1):
+                res[r][c] = grid[r][c] + min(res[r + 1][c], res[r][c + 1])
+        return res[0][0]
