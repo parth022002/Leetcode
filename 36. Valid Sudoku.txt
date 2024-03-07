@@ -1,0 +1,38 @@
+36. Valid Sudoku
+Explaination:
+
+This Python code defines a class `Solution` with a method `isValidSudoku` that checks whether a given Sudoku board is valid according to Sudoku rules.
+
+Here's how the method works:
+
+1. It initializes three defaultdicts: `cols`, `rows`, and `squares`. These defaultdicts are used to keep track of the numbers seen in each column, row, and 3x3 subgrid, respectively.
+2. It iterates through each cell of the Sudoku board using nested loops.
+3. For each cell, if the cell contains a number (i.e., not "."), it checks whether that number violates the Sudoku rules:
+   - It checks whether the number is already present in the same row, column, or 3x3 subgrid.
+   - If the number violates any of these conditions, it returns `False`, indicating that the Sudoku board is invalid.
+4. If the loop completes without finding any violations, it returns `True`, indicating that the Sudoku board is valid.
+
+This algorithm efficiently checks the validity of a Sudoku board by iterating through each cell only once, with a time complexity of O(1), since the size of the Sudoku board is fixed. The use of defaultdicts ensures constant-time lookup for checking whether a number is already present in a row, column, or subgrid. Therefore, the overall time complexity is O(1).
+
+Solution:
+
+class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        cols = collections.defaultdict(set)
+        rows = collections.defaultdict(set)
+        squares = collections.defaultdict(set)
+
+        for r in range(9):
+            for c in range(9):
+                if board[r][c] ==".":
+                    continue 
+                if (board[r][c] in rows[r] or 
+                    board[r][c] in cols[c] or 
+                    board[r][c] in squares[(r // 3, c //3)]):
+                    return False
+                cols[c].add(board[r][c])
+                rows[r].add(board[r][c])
+                squares[(r // 3, c //3)].add(board[r][c])
+
+        return True
+        

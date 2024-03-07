@@ -1,0 +1,24 @@
+876. Middle of the Linked List
+Explaination:
+
+This Python code defines a class `Solution` with a method `middleNode` that finds the middle node of a given linked list. If the linked list contains an even number of nodes, it returns the second middle node.
+
+Here's how the method works:
+
+1. It initializes two pointers, `slow` and `fast`, both pointing to the head of the linked list.
+2. It enters a loop that continues as long as both `fast` and `fast.next` are not `None`. This loop essentially moves the `fast` pointer twice as fast as the `slow` pointer, effectively finding the middle node.
+3. Inside the loop, it advances the `slow` pointer by one step (`slow = slow.next`) and the `fast` pointer by two steps (`fast = fast.next.next`).
+4. Once the loop exits, it means the `fast` pointer has reached the end of the linked list, or one step away from the end. At this point, the `slow` pointer is pointing to the middle node of the linked list.
+5. Finally, it returns the `slow` pointer, which now points to the middle node of the linked list.
+
+This algorithm effectively finds the middle node of a linked list using two pointers moving at different speeds, with a time complexity of O(n), where n is the number of nodes in the linked list. Since the `fast` pointer traverses the list twice as fast as the `slow` pointer, the overall time complexity is linear in the length of the linked list.
+
+Solution:
+class Solution:
+    def middleNode(self, head: ListNode) -> ListNode:
+        slow, fast = head, head
+
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+        return slow

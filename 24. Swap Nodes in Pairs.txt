@@ -1,0 +1,47 @@
+24. Swap Nodes in Pairs
+Explaination:
+
+This Python code defines a class `Solution` with a method `swapPairs` that swaps every pair of adjacent nodes in a given linked list. If the length of the linked list is odd, the last node remains as is.
+
+Here's how the method works:
+
+1. It starts by creating a dummy node with value 0 and sets its `next` pointer to the head of the input linked list. This dummy node serves as the previous node for the first pair of nodes.
+2. It initializes two pointers `prev` and `curr`, both initially pointing to the dummy node and the head of the linked list, respectively.
+3. It enters a loop that continues as long as both `curr` and `curr.next` are not `None`, meaning there are at least two nodes to swap.
+4. Inside the loop, it performs the following operations:
+   - It stores the reference to the node following the next pair of nodes in the variable `nxtPair`.
+   - It identifies the second node in the current pair and assigns it to the variable `second`.
+   - It rearranges the links to swap the current pair of nodes:
+     - Connects the `next` pointer of `second` to the current node `curr`.
+     - Connects the `next` pointer of `curr` to the node following the next pair (`nxtPair`).
+     - Connects the `next` pointer of `prev` to `second`, effectively linking the swapped pair to the preceding nodes.
+   - It updates the `prev` and `curr` pointers to advance to the next pair of nodes (`second` and `nxtPair`, respectively).
+5. Once the loop completes, it returns the `next` pointer of the dummy node, which points to the head of the modified linked list.
+
+This algorithm efficiently swaps pairs of adjacent nodes by rearranging the pointers, with a time complexity of O(n), where n is the number of nodes in the linked list. The algorithm iterates through the list once, and for each node, it performs constant time operations to rearrange the pointers.
+
+Solution:
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def swapPairs(self, head: ListNode) -> ListNode:
+        dummy = ListNode(0, head)
+        prev, curr = dummy, head
+
+        while curr and curr.next:
+            nxtPair = curr.next.next
+            second = curr.next
+
+            second.next = curr
+            curr.next = nxtPair
+            prev.next = second
+
+            prev = curr
+            curr = nxtPair
+
+        return dummy.next
+        
