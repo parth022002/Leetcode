@@ -1,0 +1,72 @@
+2864.Maximun Odd Binary number
+Solution 1 : 
+Explaination:
+
+This Python code defines a class `Solution` with a method `maximumOddBinaryNumber` that takes a binary string `s` and returns a modified binary string where the maximum number of consecutive '1's are preserved and the string is made odd by setting the least significant bit to '1'.
+
+Here's how the code works:
+
+1. It initializes a variable `count` to 0, which will count the number of '1's in the input string `s`.
+
+2. It iterates through each character `c` in the string `s`.
+   
+   - If the current character `c` is '1', it increments the `count` variable.
+
+3. After counting the number of '1's in the string, it constructs the modified binary string by:
+   
+   - Appending `count - 1` times '1' to preserve the maximum number of consecutive '1's.
+   
+   - Appending `(len(s) - count)` times '0' to fill in the remaining characters with '0's.
+   
+   - Appending '1' to make the string odd.
+
+4. Finally, it returns the constructed modified binary string.
+
+This code efficiently constructs a modified binary string where the maximum number of consecutive '1's is preserved, and the string is made odd by setting the least significant bit to '1'. The time complexity of this algorithm is O(n), where n is the length of the input string `s`, as it iterates through the string once to count the number of '1's and construct the modified binary string.
+
+Solution:
+class Solution:
+    def maximumOddBinaryNumber(self, s: str) -> str:
+ 	count = 0
+        for c in s:
+            if c == "1":
+                count += 1
+
+        return (count- 1) * "1" + (len(s) - count) * "0" + "1"
+
+
+Solution 2:
+Explaination:
+
+This Python code defines a class `Solution` with a method `maximumOddBinaryNumber` that takes a binary string `s` and returns a modified binary string where the maximum number of consecutive '1's are preserved and the string is made odd by setting the least significant bit to '1'.
+
+Here's how the code works:
+
+1. It converts the input string `s` into a list of characters using list comprehension: `[c for c in s]`. This allows for easier manipulation of individual characters.
+
+2. It initializes a variable `left` to 0, which represents the leftmost index of the substring containing '1's.
+
+3. It iterates through each character in the list representation of `s` using a for loop with index `i`.
+
+4. For each character `s[i]`, if it is '1', it swaps the current character with the character at the `left` index. This effectively moves the '1' to the leftmost possible position.
+
+5. After iterating through the entire list, it ensures that the last character of the string (least significant bit) is set to '1' by swapping the character at `left - 1` with the character at the last index (`len(s) - 1`).
+
+6. Finally, it joins the list of characters back into a string using the `join` method and returns the modified binary string.
+
+This code efficiently constructs a modified binary string where the maximum number of consecutive '1's is preserved, and the string is made odd by setting the least significant bit to '1'. The time complexity of this algorithm is O(n), where n is the length of the input string `s`, as it iterates through the string once to manipulate the characters and construct the modified binary string.
+
+Soluiton:
+class Solution:
+    def maximumOddBinaryNumber(self, s: str) -> str:
+        s = [ c for c in s]
+        left = 0 
+
+        for i in range(len(s)):
+            if s[i] == "1":
+                s[i], s[left] = s[left], s[i]
+                left += 1
+        s[left - 1], s[len(s) - 1] = s[len(s) - 1], s[left - 1]
+        return "".join(s)
+    
+    

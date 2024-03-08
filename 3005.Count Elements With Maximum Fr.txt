@@ -1,0 +1,32 @@
+3005.Count Elements With Maximum Frequency
+Explanation:
+
+This Python code defines a class `Solution` with a method `maxFrequencyElements` that finds the maximum frequency of any integer in the input list `nums`, and then counts how many integers have this maximum frequency.
+
+Here's how the code works:
+
+1. It uses the `collections.Counter` function to count the occurrences of each integer in the `nums` list and creates a dictionary-like object `f` where keys are the unique integers and values are their respective frequencies.
+
+2. It finds the maximum frequency `mx` among all frequencies using the `max()` function.
+
+3. It initializes a variable `c` to 0. This variable will count how many integers have the maximum frequency.
+
+4. It iterates through each integer `x` in the `nums` list:
+   - If the frequency of the current integer `x` (retrieved from the `f` dictionary) is equal to the maximum frequency `mx`, it means `x` has the maximum frequency. In this case, it increments the counter `c` by 1.
+
+5. After iterating through all integers in the `nums` list, the function returns the value of the counter `c`, which represents the number of integers having the maximum frequency.
+
+This code efficiently finds the maximum frequency of any integer in the input list and then counts how many integers have this maximum frequency. It utilizes the `Counter` function from the `collections` module to perform frequency counting, and then iterates through the list to count the occurrences of integers with the maximum frequency. The time complexity of this algorithm is O(n), where n is the length of the input list `nums`, as it iterates through the list once to calculate frequencies and then again to count the occurrences of integers with the maximum frequency.
+
+Solution:
+
+class Solution:
+    def maxFrequencyElements(self, nums: List[int]) -> int:
+        f = collections.Counter(nums)
+        mx = max(f.values())
+
+        c = 0 
+        for x in nums:
+            if f[x] == mx:
+                c += 1
+        return c

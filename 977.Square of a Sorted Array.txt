@@ -1,0 +1,35 @@
+977.Square of a Sorted Array
+Explaination:
+
+This Python code defines a class `Solution` with a method `sortedSquares` that takes a list of integers `nums` and returns a new list containing the squares of each integer from `nums`, sorted in non-decreasing order.
+
+Here's how the code works:
+
+1. It initializes an empty list `res` to store the squares of the integers from `nums`, sorted in non-decreasing order.
+
+2. It initializes two pointers `l` and `r` to point to the start and end of the `nums` list, respectively.
+
+3. It enters a while loop that continues as long as the left pointer `l` is less than or equal to the right pointer `r`. This loop iterates through the `nums` list from both ends towards the center.
+
+4. Inside the loop:
+   - It compares the squares of the integers at positions `l` and `r`. If the square of the integer at position `l` is greater than the square of the integer at position `r`, it means the square of the integer at position `l` will have a higher value in the sorted list. In this case, it appends the square of the integer at position `l` to the `res` list and increments `l`. Otherwise, it appends the square of the integer at position `r` to the `res` list and decrements `r`.
+
+5. After exiting the loop, it returns the reversed `res` list using slicing (`[::-1]`). Since `res` was constructed by appending squares of integers from both ends of the `nums` list, the resulting list will be in non-decreasing order, so reversing it will give the sorted squares in non-decreasing order.
+
+This code efficiently generates the squares of integers from `nums` and sorts them in non-decreasing order using a two-pointer approach. The time complexity of this algorithm is O(n), where n is the number of integers in the `nums` list, as it iterates through the list once.
+
+Solution:
+
+class Solution:
+    def sortedSquares(self, nums: List[int]) -> List[int]:
+        res = []
+        l , r = 0, len(nums) -1
+        while l <= r:
+            if nums[l] * nums[l] > nums[r] * nums[r]:
+                res.append(nums[l]*nums[l])
+                l += 1
+            else:
+                res.append(nums[r]*nums[r])
+                r -= 1
+
+        return res[::-1]

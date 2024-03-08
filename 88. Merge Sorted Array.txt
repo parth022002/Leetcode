@@ -1,0 +1,38 @@
+88. Merge Sorted Array
+Explaination:
+
+This Python code defines a class `Solution` with a method `merge` that merges two sorted lists `num1` and `num2` into `num1`, assuming `num1` has enough space to accommodate all elements from `num2`.
+
+Here's how the code works:
+
+1. It calculates the index of the last element of the merged list as `last = m + n - 1`, where `m` is the length of `num1` and `n` is the length of `num2`.
+
+2. It enters a while loop that continues as long as there are elements remaining in both lists (`m > 0` and `n > 0`).
+
+3. Inside the loop, it compares the last elements of both lists (`num1[m - 1]` and `num2[n - 1]`):
+   - If the last element of `num1` is greater than the last element of `num2`, it places the last element of `num1` at the position `last` in `num1`, and decrements `m` by 1 to move to the next element in `num1`.
+   - Otherwise, it places the last element of `num2` at the position `last` in `num1`, and decrements `n` by 1 to move to the next element in `num2`.
+   - In either case, it decrements `last` by 1 to move towards the start of `num1`.
+
+4. After the loop, if there are still elements remaining in `num2` (i.e., `n > 0`), it copies the remaining elements of `num2` into `num1`, starting from the `last` index and moving towards the start of `num1`.
+
+This code efficiently merges two sorted lists into `num1` in-place by comparing elements from the end of both lists and placing the larger element at the end of `num1`. It then copies any remaining elements from `num2` into `num1`. The time complexity of this algorithm is O(m + n), where `m` and `n` are the lengths of `num1` and `num2`, respectively.
+
+Solution:
+
+class Solution:
+    def merge(self, num1: List[int], m: int, num2: List[int], n: int) -> None:
+        last = m + n - 1
+
+        while m > 0 and n > 0:
+            if num1[m - 1] > num2[n - 1]:
+                num1[last] = num1[m - 1]
+                m -= 1
+            else:
+                num1[last] = num2[n - 1]
+                n -= 1
+            last -= 1
+
+        while n > 0:
+            num1[last] = num2[n - 1]
+            n, last = n -1, last -1

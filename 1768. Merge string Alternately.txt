@@ -1,0 +1,36 @@
+1768. Merge string Alternately
+Explaination:
+
+This Python code defines a class `Solution` with a method `mergeAlternately` that merges two input strings `word1` and `word2` alternately, taking one character from each string at a time.
+
+Here's how the code works:
+
+1. It initializes two pointers `i` and `j` to 0, which will be used to traverse `word1` and `word2`, respectively.
+
+2. It initializes an empty list `res` to store the merged characters.
+
+3. It enters a while loop that continues as long as both pointers `i` and `j` are within the lengths of `word1` and `word2`, respectively.
+
+4. Inside the loop, it appends the character at index `i` of `word1` to the result list `res`, followed by the character at index `j` of `word2`. Then, it increments both pointers `i` and `j` by 1 to move to the next characters in `word1` and `word2`, respectively.
+
+5. After the loop, it appends the remaining substring of `word1` (if any) to the result list `res` by slicing from index `i` to the end of `word1`, and similarly appends the remaining substring of `word2` (if any) to `res` by slicing from index `j` to the end of `word2`.
+
+6. Finally, it joins all the characters in the result list `res` into a single string using the `join` method and returns the merged string.
+
+This code efficiently merges two input strings alternately, taking one character from each string at a time, and handles cases where the lengths of the input strings may differ. The time complexity of this algorithm is O(n + m), where n and m are the lengths of the input strings `word1` and `word2`, respectively, as it iterates through both strings once.
+
+Solution:
+
+class Solution:
+    def mergeAlternately(self, word1: str, word2: str) -> str:
+        i , j = 0, 0 
+        res = []
+        while i < len(word1) and j < len(word2):
+            res.append(word1[i])
+            res.append(word2[j])
+            i += 1
+            j += 1
+        res.append(word1[i:])
+        res.append(word2[j:])
+
+        return "".join(res)

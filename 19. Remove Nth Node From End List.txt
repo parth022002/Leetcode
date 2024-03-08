@@ -1,0 +1,51 @@
+19. Remove Nth Node From End List
+Explaination:
+
+This Python code defines a class `Solution` with a method `removeNthFromEnd` that removes the nth node from the end of a singly-linked list and returns the head of the modified list.
+
+Here's how the code works:
+
+1. It initializes a dummy node `dummy` as the head of the list with a value of 0 and its next node pointing to the actual head of the list. This dummy node is used to handle edge cases where the node to be removed is the head of the list.
+
+2. It initializes two pointers `left` and `right` to the dummy node and the head of the list, respectively.
+
+3. It iterates through the list with the `right` pointer moving forward until it reaches the nth node from the beginning of the list, or until it reaches the end of the list.
+
+4. After the first loop, the `right` pointer points to the (n+1)th node from the beginning of the list. If the end of the list is reached before finding the nth node, it means that the list is shorter than n nodes, so no removal is needed.
+
+5. It then iterates through the list with both `left` and `right` pointers moving forward. When `right` reaches
+
+the end of the list (i.e., becomes None), `left` will be pointing to the node preceding the nth node from the end.
+
+6. Once `left` is positioned at the node before the one to be removed, it updates its next pointer to skip the next node (the nth node from the end), effectively removing it from the list.
+
+7. Finally, it returns the next node of the dummy node, which is the head of the modified list.
+
+This code efficiently removes the nth node from the end of the singly-linked list using two pointers approach, which requires only one pass through the list. The time complexity of this algorithm is O(n), where n is the number of nodes in the list.
+
+Solution:
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def removeNthFromEnd(self, head: ListNode, n: int) -> ListNode:
+        dummy = ListNode(0, head)
+        left = dummy
+        right = head
+
+        while n > 0 and right:
+            right = right.next
+            n -=1
+
+        while right:
+            left = left.next
+            right = right.next
+
+        left.next = left.next.next
+        return dummy.next
+
+
+        
