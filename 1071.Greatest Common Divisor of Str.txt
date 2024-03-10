@@ -1,0 +1,37 @@
+1071.Greatest Common Divisor of Strings
+Explaination:
+
+This Python code defines a class `Solution` with a method `gcdOfStrings` that finds the greatest common divisor (GCD) of two strings `str1` and `str2`. The GCD of two strings is the largest string which divides both `str1` and `str2`.
+
+Here's how the code works:
+
+1. It calculates the lengths of the input strings `str1` and `str2` and assigns them to `len1` and `len2` variables, respectively.
+
+2. It defines a nested function `isDivisor(l)` which checks if a given length `l` is a divisor of both `len1` and `len2`, and whether the substrings of length `l` repeat to form the original strings `str1` and `str2`.
+
+3. It iterates over possible lengths for the GCD of the strings, starting from the minimum of the lengths of `str1` and `str2`, down to 1. This is done using a `for` loop with a range that goes from `min(len1, len2)` to 1, in descending order.
+
+4. For each length `l`, it checks if it's a divisor using the `isDivisor` function. If it is, it returns the substring of `str1` of length `l` (since any longer substring would also be a common divisor). This substring is the greatest common divisor of the two strings.
+
+5. If no common divisor is found, it returns an empty string `""`.
+
+The `isDivisor` function checks whether a given length `l` is a divisor of both `len1` and `len2`, and whether the substrings of length `l` repeat to form the original strings `str1` and `str2`. It does so by verifying if both `len1` and `len2` are divisible by `l`, and whether the repeated substring of length `l` forms the original strings.
+
+This code efficiently finds the greatest common divisor of two strings using an iterative approach. The time complexity of this algorithm is O(n^2), where n is the length of the shorter of the two input strings, due to the nested iteration over possible lengths for the common divisor. However, in practice, it's likely to be faster than O(n^2) for typical inputs.
+
+Solution:
+
+class Solution:
+    def gcdOfStrings(self, str1: str, str2: str) -> str:
+        len1, len2 = len(str1), len(str2)
+
+        def isDivisor(l):
+            if len1 % l or len2 % l:
+                return False
+            f1, f2 = len1 // l, len2 // l
+            return str1[:l] * f1 == str1 and str1[:l] * f2 == str2
+
+        for l in range(min(len1, len2), 0, -1):
+            if isDivisor(l):
+                return str1[:l]
+        return ""

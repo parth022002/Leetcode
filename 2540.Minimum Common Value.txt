@@ -1,0 +1,28 @@
+2540.Minimum Common Value
+Explaination:
+
+This Python code defines a class `Solution` with a method `getCommon` that takes two lists of integers `nums1` and `nums2` and returns the smallest common element between them. If there are no common elements, it returns -1.
+
+Here's how the code works:
+
+1. It computes the intersection of the two input lists `nums1` and `nums2` using set intersection operation (`&`). This operation finds the common elements between the two sets and creates a new set containing those common elements.
+
+2. It then computes the minimum element from the intersection set using the `min` function. If the intersection set is empty (i.e., no common elements), it returns -1 using the `or` operator with a default value `[-1]`.
+
+3. Finally, it returns the minimum common element found.
+
+Let's break down the code further:
+
+- `set(nums1) & set(nums2)` computes the intersection of two sets created from `nums1` and `nums2`, respectively. This operation efficiently finds the common elements between the two lists.
+- `min(intersection or [-1])` computes the minimum element from the intersection set. If the intersection set is empty (i.e., no common elements), it returns -1 as the default value.
+
+This code efficiently finds the smallest common element between two lists of integers. The time complexity of this algorithm depends on the lengths of the input lists and the efficiency of set operations, typically O(n), where n is the total number of elements in both lists.
+
+Solution:
+
+class Solution:
+    def getCommon(self, nums1: List[int], nums2: List[int]) -> int:
+        intersection = set(nums1) & set(nums2)
+        return min(intersection or [-1] )
+
+        

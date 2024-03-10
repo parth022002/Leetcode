@@ -1,0 +1,31 @@
+349.intersection of Two Arrays
+Explaination:
+
+This Python code defines a class `Solution` with a method `intersection` that takes two lists of integers `nums1` and `nums2` and returns a list containing the intersection of the two lists (i.e., the common elements).
+
+Here's how the code works:
+
+1. It converts both input lists `nums1` and `nums2` into sets `set1` and `set2`, respectively. Sets are used to efficiently perform set operations like intersection.
+
+2. It computes the intersection of `set1` and `set2` using the set intersection operator (`&`). This operation finds the common elements between the two sets.
+
+3. It converts the resulting set of common elements into a list using the `list` constructor. This step is necessary to return the intersection as a list, as the set intersection operation returns a set.
+
+4. Finally, it returns the list containing the intersection of `nums1` and `nums2`.
+
+Let's discuss the time complexity of this algorithm:
+
+- Converting the input lists `nums1` and `nums2` into sets takes O(n1 + n2) time, where n1 and n2 are the lengths of the input lists.
+- Computing the intersection using the set intersection operator takes O(min(n1, n2)) time.
+- Converting the resulting set into a list takes O(min(n1, n2)) time.
+
+Therefore, the overall time complexity of this algorithm is O(n1 + n2), where n1 and n2 are the lengths of the input lists `nums1` and `nums2`, respectively.
+
+Solution:
+
+class Solution:
+    def intersection(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        set1 = set(nums1)
+        set2 = set(nums2)
+
+        return list(set1 & set2)
