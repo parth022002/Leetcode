@@ -1,0 +1,41 @@
+80. Remove dupicates from sorted Array II
+Explaination:
+
+This Python code defines a class `Solution` with a method `removeDuplicates` that modifies an array in-place such that duplicates appear at most twice and returns the length of the modified array.
+
+Here's how the method works:
+
+1. It takes one parameter:
+   - `nums`: A list of integers where duplicates need to be removed.
+
+2. It initializes two pointers `l` and `r` to 0, representing the left and right pointers of a sliding window, respectively.
+
+3. It enters a while loop that runs until the right pointer `r` reaches the end of the array (`len(nums)`).
+   
+4. Within this loop, it starts another inner while loop to count consecutive duplicates. It increments the right pointer `r` and counts the duplicates while the next element is equal to the current element (`nums[r] == nums[r + 1]`). It increments a `count` variable to keep track of the number of consecutive duplicates encountered.
+
+5. After counting consecutive duplicates, it enters a for loop that runs for a maximum of two times (to ensure duplicates appear at most twice). It copies the current element (`nums[r]`) at most twice to the left pointer `l` of the array. The left pointer `l` is then incremented accordingly.
+
+6. After processing duplicates for a particular sequence, the right pointer `r` is incremented to move to the next unique element or the end of the array.
+
+7. Finally, it returns the value of the left pointer `l`, which indicates the length of the modified array without duplicates appearing more than twice.
+
+This algorithm essentially keeps track of duplicates using two pointers and ensures that each unique element appears at most twice in the modified array, with a time complexity of O(n), where n is the length of the input array `nums`, as it iterates through the array only once.
+
+Solution:
+
+class Solution:
+    def removeDuplicates(self, nums: List[int]) -> int:
+        l, r = 0, 0 
+
+        while r < len(nums):
+            count = 1
+            while r + 1< len(nums) and nums[r] == nums[r + 1]:
+                r += 1
+                count += 1
+            for i in range(min (2, count)):
+                nums[l] = nums[r]
+                l +=1
+            r += 1
+        return l
+

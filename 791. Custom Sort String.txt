@@ -1,0 +1,45 @@
+791. Custom Sort String
+Explaination:
+
+This Python code defines a class `Solution` with a method `customSortString` that sorts the characters in a string `s` according to the order specified in another string `order`. Any characters not present in the `order` string are appended to the end of the sorted string.
+
+Here's how the method works:
+
+1. It takes two parameters:
+   - `order`: A string representing the desired order of characters.
+   - `s`: A string representing the input string to be sorted.
+
+2. It uses the `collections.Counter` function to count the occurrences of each character in the string `s`, storing the counts in the dictionary `s_counts`.
+
+3. It initializes an empty list called `string_builder`, which will be used to build the sorted string.
+
+4. It iterates through each character in the `order` string using a for loop.
+
+5. For each character in the `order` string, it checks if it exists in the `s_counts` dictionary (i.e., if it is present in the input string `s`). If it exists:
+   - It extends `string_builder` with the current character repeated by the count of occurrences of that character in the input string `s`.
+   - It removes the character from the `s_counts` dictionary since it has been used.
+
+6. After processing all characters in the `order` string, it iterates through the remaining characters in the `s_counts` dictionary using a for loop.
+   - For each remaining character and its count, it extends `string_builder` with the character repeated by its count.
+
+7. Finally, it returns the sorted string by joining the characters in `string_builder` into a single string.
+
+This algorithm has a time complexity of O(n + m), where n is the length of the `s` string and m is the length of the `order` string. This is because the code iterates through both strings once, and dictionary operations like checking for existence and deletion are typically O(1) operations.
+
+Solution : 
+
+class Solution:
+    def customSortString(self, order: str, s: str) -> str:
+        s_counts = collections.Counter(s)
+
+        string_builder = []
+
+        for char in order:
+            if char in s_counts:
+                string_builder.extend([char] * s_counts[char])
+
+                del s_counts[char]
+        for char, count in s_counts.items():
+            string_builder.extend([char] * count)
+
+        return "".join(string_builder)

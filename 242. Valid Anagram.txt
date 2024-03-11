@@ -1,0 +1,52 @@
+242. Valid Anagram
+Explaination:
+
+This Python code defines a class `Solution` with a method `isAnagram` that checks if two input strings `s` and `t` are anagrams of each other. Anagrams are words or phrases formed by rearranging the letters of another word or phrase, typically using all the original letters exactly once.
+
+Let's go through the code step by step:
+
+1. The `isAnagram` method takes in two parameters, `s` and `t`, both of type `str`, and returns a boolean indicating whether `s` and `t` are anagrams of each other.
+
+2. It first checks if the lengths of the two strings are not equal. If they are not equal, it immediately returns `False`, indicating that they cannot be anagrams.
+
+3. Two dictionaries `countS` and `countT` are initialized. These dictionaries will hold the counts of characters in strings `s` and `t` respectively. The keys will be characters, and the values will be the counts of those characters in the corresponding string.
+
+4. It then iterates over the characters of the strings `s` and `t` using a loop. In each iteration, it updates the counts of characters in the respective dictionaries (`countS` and `countT`). It uses the `get` method with a default value of 0 to handle cases where the character does not exist in the dictionary yet.
+
+5. After counting the characters, it iterates over the keys of `countS` (which are characters in string `s`). For each character, it checks if the count of that character in `s` is equal to the count of the same character in `t`. If they are not equal, it means the strings are not anagrams, so it returns `False`.
+
+6. If the loop completes without finding any discrepancies in character counts, it means that the strings are anagrams, so it returns `True`.
+
+This algorithm has a time complexity of O(n), where n is the length of the input strings `s` and `t`, because it iterates over each character of the strings only once.
+
+Solution : 
+
+class Solution:
+    def isAnagram(self, s: str, t: str) -> bool:
+        if len(s) != len(t):
+            return False
+
+        countS, countT = {}, {}
+
+        for i in range(len(s)):
+            countS[s[i]] = 1 + countS.get(s[i], 0)
+            countT[t[i]] = 1 + countT.get(t[i], 0)
+
+        for c in countS:
+            if countS[c] != countT.get(c,0):
+                return False
+            
+        return True
+
+
+solution 2 :
+
+class Solution:
+    def isAnagram(self, s: str, t: str) -> bool:
+        return sorted(s) == sorted(t)
+
+solution 3 : 
+
+class Solution:
+    def isAnagram(self, s: str, t: str) -> bool:
+        return Counter(s) == Counter(t)

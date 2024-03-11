@@ -1,0 +1,39 @@
+1431. Kids With the Greatest Number of Candies
+Explaination:
+
+This Python code defines a class `Solution` with a method `kidsWithCandies` that determines which children can have the greatest number of candies after adding some extra candies to their original amount.
+
+Here's how the method works:
+
+1. It takes two parameters:
+   - `candies`: A list of integers representing the number of candies each child currently has.
+   - `extraCandies`: An integer representing the number of extra candies each child can have.
+
+2. It first finds the maximum number of candies among all children using the `max` function, storing it in the variable `maxc`.
+
+3. It initializes an empty list called `result`, which will store boolean values indicating whether each child can have the maximum number of candies after adding the extra candies.
+
+4. It iterates through the list of candies using a for loop with the index `i`.
+
+5. For each child, it checks if the sum of their current number of candies and the extra candies (`candies[i] + extraCandies`) is greater than or equal to the maximum number of candies (`maxc`).
+   - If it is, it means that child can have the greatest number of candies, so it appends `True` to the `result` list.
+   - If not, it means that child cannot have the greatest number of candies, so it appends `False` to the `result` list.
+
+6. After iterating through all children, it returns the `result` list, which contains boolean values indicating whether each child can have the greatest number of candies.
+
+This algorithm has a time complexity of O(n), where n is the number of children (length of the `candies` list), because it iterates through the list of candies only once.
+
+Solution : 
+
+class Solution:
+    def kidsWithCandies(self, candies: List[int], extraCandies: int) -> List[bool]:
+        maxc = max(candies)
+        result = []
+        
+        for i in range(len(candies)):
+            if candies[i] + extraCandies >= maxc:
+                result.append(True)
+            else:
+                result.append(False)
+        return result
+
