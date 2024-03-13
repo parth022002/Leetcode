@@ -1,0 +1,70 @@
+42. Trapping Rain Water
+Explanation:
+
+This Python code defines a class `Solution` with a method `trap` that calculates the amount of water that can be trapped after raining on a landscape represented by a list of integers `height`. Let's break down the method:
+
+```python
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        if not height:
+            return 0
+
+        l, r = 0, len(height) - 1
+        leftMax, rightMax = height[l], height[r]
+        res = 0
+
+        while l < r:
+            if leftMax < rightMax:
+                l += 1
+                leftMax = max(leftMax, height[l])
+                res += leftMax - height[l]
+            else:
+                r -= 1 
+                rightMax = max(rightMax, height[r])
+                res += rightMax - height[r]
+        return res
+```
+
+1. `trap` takes a list of integers `height` as input and returns an integer representing the amount of water that can be trapped.
+
+2. It first checks if the `height` list is empty. If it is, it returns 0, as there are no elements to trap water.
+
+3. It initializes two pointers `l` and `r` at the beginning and end of the `height` list respectively, representing the left and right boundaries.
+
+4. It also initializes variables `leftMax` and `rightMax` with the heights of the leftmost and rightmost elements of the `height` list.
+
+5. It initializes the variable `res` to store the total trapped water.
+
+6. It enters a while loop where `l` is less than `r`, indicating that there are still elements between the two pointers.
+
+7. Within the loop, it checks if `leftMax` is less than `rightMax`. If it is, it means there is potentially more space to trap water on the left side. It increments `l` by 1, updates `leftMax` to the maximum of its current value and the height at the new `l` position, and adds the difference between `leftMax` and the height at the new `l` position to `res`.
+
+8. If `leftMax` is not less than `rightMax`, it means there is potentially more space to trap water on the right side. It decrements `r` by 1, updates `rightMax` to the maximum of its current value and the height at the new `r` position, and adds the difference between `rightMax` and the height at the new `r` position to `res`.
+
+9. Once the loop terminates, it returns the total trapped water stored in `res`.
+
+This method effectively simulates the process of trapping water between two boundaries represented by the `height` list. It adjusts the boundaries based on the height of the landscape, calculating the trapped water as it moves through the list.
+
+Solution:
+
+class Solution:
+    def trap(self, height: List[int]) -> int:
+        if not height:
+            return 0
+
+        l, r = 0, len(height) - 1
+        leftMax, rightMax = height[l], height[r]
+        res = 0
+
+        while l < r:
+            if leftMax < rightMax:
+                l += 1
+                leftMax = max(leftMax, height[l])
+                res += leftMax - height[l]
+            else:
+                r -= 1 
+                rightMax = max(rightMax, height[r])
+                res += rightMax - height[r]
+        return res
+
+        
