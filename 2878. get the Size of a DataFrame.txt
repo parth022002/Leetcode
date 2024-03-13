@@ -1,0 +1,26 @@
+2878. get the Size of a DataFrame
+Explanation:
+
+This Python code defines a function `getDataframeSize` that takes a pandas DataFrame `players` as input and returns a list containing the size of the DataFrame. Let's break down the code:
+
+```python
+import pandas as pd
+
+def getDataframeSize(players: pd.DataFrame) -> List[int]:
+    return list(players.shape)
+```
+
+1. `import pandas as pd`: This line imports the pandas library and assigns it the alias `pd`. Pandas is a powerful data manipulation library in Python.
+
+2. `def getDataframeSize(players: pd.DataFrame) -> List[int]:`: This line defines a function `getDataframeSize` which takes a pandas DataFrame `players` as input and returns a list of integers. The type hints indicate that `players` is expected to be a pandas DataFrame, and the return type is a list of integers.
+
+3. `return list(players.shape)`: This line retrieves the shape of the DataFrame `players` using the `shape` attribute, which returns a tuple containing the number of rows and columns in the DataFrame. It then converts this tuple into a list using the `list()` function and returns it.
+
+Overall, this function simply returns a list containing the number of rows and columns in the provided DataFrame. The first element of the list represents the number of rows, and the second element represents the number of columns.
+
+Solution:
+
+import pandas as pd
+
+def getDataframeSize(players: pd.DataFrame) -> List[int]:
+    return list(players.shape)

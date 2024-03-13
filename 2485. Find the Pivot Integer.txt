@@ -1,0 +1,53 @@
+2485. Find the Pivot Integer
+Explanation:
+
+This Python code defines a class `Solution` with a method `pivotInteger`. Let's break down the method:
+
+```python
+def pivotInteger(self, n: int) -> int:
+    x = math.sqrt(n*(n+1)/2)
+    converted = int(x)
+    return converted if converted == x else -1
+```
+
+1. `pivotInteger` takes an integer `n` as input and returns an integer.
+2. Inside the method, it calculates the square root of `n*(n+1)/2` and assigns it to the variable `x`. This expression seems to be an attempt to find the sum of integers from 1 to `n`.
+3. It then converts `x` to an integer using the `int()` function and stores the result in the variable `converted`.
+4. Finally, it checks if `converted` is equal to `x`. If they are equal, it returns `converted`, otherwise, it returns `-1`. This check likely aims to determine if `x` is an integer, meaning that the sum of integers from 1 to `n` is a perfect square. If it's not, it returns `-1`.
+
+However, there's a potential issue in this code: the `math` module is used but not imported. To make this code work, you need to import the `math` module at the beginning of the file:
+
+```python
+import math
+```
+
+Once you import `math`, the code should function properly.
+
+Solution:
+
+class Solution:
+    def pivotInteger(self, n: int) -> int:
+	numbers = []
+
+        	for i in range(1, n + 1):
+	            numbers.append(i)
+	
+	        for pivot in range(n // 2, n):
+        	    beforePivot = sum(numbers[:pivot + 1])
+	            afterPivot = sum(numbers[pivot:])
+
+        	    if beforePivot == afterPivot:
+	                return pivot + 1
+        	return -1
+
+
+another :
+class Solution:
+    def pivotInteger(self, n: int) -> int:
+        x = math.sqrt(n*(n+1)/2)
+        converted = int(x)
+        return converted if converted == x else -1
+        
+    
+
+

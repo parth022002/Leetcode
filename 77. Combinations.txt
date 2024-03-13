@@ -1,0 +1,57 @@
+77. Combinations
+Explanation:
+
+This Python code defines a class `Solution` with a method `combine` that generates combinations of `k` numbers from 1 to `n`. Let's break down the method:
+
+```python
+def combine(self, n: int, k: int) -> List[List[int]]:
+    res = []
+
+    def backtrack(start, combi):
+        if len(combi) == k:
+            res.append(combi.copy())
+            return 
+
+        for i in range(start, n + 1):
+            combi.append(i)
+            backtrack(i + 1, combi)
+            combi.pop()
+
+    backtrack(1,[])
+    return res
+```
+
+1. `combine` takes two integers `n` and `k` as input and returns a list of lists of integers.
+2. Inside the method, it initializes an empty list `res` to store the resulting combinations.
+3. It defines a nested function `backtrack` which generates combinations recursively using backtracking.
+4. The `backtrack` function takes two parameters: `start`, which indicates the starting point for generating combinations, and `combi`, which is the current combination being built.
+5. If the length of `combi` reaches `k`, it means a valid combination is formed, so it appends a copy of `combi` to the result list `res`.
+6. It then iterates over numbers from `start` to `n` (inclusive) and appends each number to `combi`.
+7. It recursively calls `backtrack` with the updated `start` value (`i + 1`) and the updated `combi`.
+8. After the recursive call, it removes the last element from `combi` to backtrack and explore other combinations.
+9. The method starts the recursion by calling `backtrack(1, [])`.
+10. Finally, it returns the list of combinations `res`.
+
+This method effectively generates all possible combinations of `k` numbers from 1 to `n` using backtracking.
+
+Solution:
+
+class Solution:
+    def combine(self, n: int, k: int) -> List[List[int]]:
+        res = []
+
+        def backtrack(start, combi):
+            if len(combi) == k:
+                res.append(combi.copy())
+                return 
+            
+            for i in range(start, n + 1):
+                combi.append(i)
+                backtrack(i + 1, combi)
+                combi.pop()
+            
+        backtrack(1,[])
+        return res
+
+
+        

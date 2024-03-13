@@ -1,0 +1,43 @@
+169. Majority Element 
+Explaination:
+
+This Python code defines a solution for finding the majority element in a list of integers.
+
+1. The `majorityElement` function takes a list of integers `nums` as input and returns the majority element, which is an element that appears more than ⌊n / 2⌋ times, where n is the length of the list.
+
+2. The length of the input list `nums` is stored in variable `n`.
+
+3. A `defaultdict` named `m` is created to store the count of occurrences of each integer in the input list. This dictionary maps each integer to its count.
+
+4. A loop iterates through each element in the input list:
+
+   - For each element `num`, its count is incremented in the `m` dictionary.
+
+5. After counting all occurrences, the variable `n` is updated to represent half the length of the list (`n // 2`), which is the threshold for determining the majority element.
+
+6. Another loop iterates through each key-value pair in the `m` dictionary:
+
+   - For each key-value pair, if the value (count of occurrences) is greater than `n`, it means the key (integer) is the majority element.
+   
+   - In this case, the majority element (key) is returned.
+   
+7. If no majority element is found, the function returns 0.
+
+This algorithm efficiently determines the majority element in the given list of integers using a dictionary to count occurrences. If a majority element exists, it returns that element; otherwise, it returns 0.
+
+Solution:
+
+class Solution:
+    def majorityElement(self, nums: List[int]) -> int:
+        n = len(nums)
+        m = defaultdict(int)
+
+        for num in nums:
+            m[num] += 1
+
+        n = n // 2
+        for key, value in m.items():
+            if value > n:
+                return key
+
+        return 0

@@ -1,0 +1,27 @@
+2877.Create a DataFrame from list 
+Explaination:
+
+This Python code defines a function `createDataframe` that takes a list of lists `student_data`, where each inner list contains two integers representing student ID and age respectively. The function converts this data into a pandas DataFrame with columns 'student_id' and 'age'. Let's break down the code:
+
+```python
+import pandas as pd
+
+def createDataframe(student_data: List[List[int]]) -> pd.DataFrame:
+    return pd.DataFrame(student_data, columns=['student_id','age'], dtype=int)
+```
+
+1. `import pandas as pd`: This line imports the pandas library and assigns it the alias `pd`. Pandas is a powerful data manipulation library in Python.
+
+2. `def createDataframe(student_data: List[List[int]]) -> pd.DataFrame:`: This line defines a function `createDataframe` which takes a list of lists `student_data` as input and returns a pandas DataFrame. The type hints indicate that `student_data` is a list of lists of integers, and the return type is a pandas DataFrame.
+
+3. `return pd.DataFrame(student_data, columns=['student_id','age'], dtype=int)`: This line creates a pandas DataFrame from the `student_data` list. It specifies the column names as 'student_id' and 'age' using the `columns` parameter. Additionally, it specifies the data type of the DataFrame columns as integer using the `dtype` parameter.
+
+Overall, this function converts the provided list of lists containing student ID and age data into a pandas DataFrame with appropriate column names and data types.
+
+Solution:
+
+import pandas as pd
+
+def createDataframe(student_data: List[List[int]]) -> pd.DataFrame:
+    return pd.DataFrame(student_data, columns=['student_id','age'], dtype=int)
+    

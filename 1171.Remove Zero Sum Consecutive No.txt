@@ -1,0 +1,59 @@
+1171.Remove Zero Sum Consecutive Nodes from Linked List 
+Explaination:
+
+This Python code defines a solution for removing zero-sum sublists from a singly-linked list.
+
+1. The `removeZeroSumSublists` function takes a head node of a singly-linked list as input and returns the head of the modified list after removing zero-sum sublists.
+
+2. A dummy node is created to handle edge cases where the entire list needs to be removed. This dummy node is initialized with a value of 0 and its next pointer points to the head of the original list.
+
+3. A prefix sum is used to keep track of the running sum of the elements encountered so far in the list.
+
+4. A dictionary `prefix_sums` is used to store the prefix sums encountered along with the corresponding node in the list. This helps in identifying zero-sum sublists efficiently.
+
+5. A while loop iterates through each node of the list:
+
+   - At each iteration, the current node's value is added to the prefix sum.
+   
+   - If the prefix sum is found in the `prefix_sums` dictionary, it means a zero-sum sublist exists from the node after the corresponding node in `prefix_sums` to the current node.
+   
+   - In this case, the nodes in the zero-sum sublist are removed by updating the next pointers accordingly.
+   
+   - If the prefix sum is not found in `prefix_sums`, it is added to the dictionary with the current node.
+
+6. Once the loop completes, the head of the modified list (excluding zero-sum sublists) is returned.
+
+This algorithm efficiently removes zero-sum sublists from the given singly-linked list.
+
+Solution:
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def removeZeroSumSublists(self, head: ListNode) -> ListNode:
+        dummy = ListNode(0)
+        dummy.next = head
+        prefix_sum = 0
+        prefix_sums = {0:dummy}
+        current = head
+
+        while current:
+            prefix_sum += current.val
+            if prefix_sum in prefix_sums:
+                to_delete = prefix_sums[prefix_sum].next
+                temp_sum = prefix_sum + to_delete.val
+                while to_delete != current:
+                    del prefix_sums[temp_sum]
+                    to_delete = to_delete.next
+                    temp_sum += to_delete.val
+                prefix_sums[prefix_sum].next = current.next
+            else:
+                prefix_sums[prefix_sum] = current
+            current = current.next
+        
+        return dummy.next
+
+        
