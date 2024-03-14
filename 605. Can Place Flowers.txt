@@ -1,0 +1,43 @@
+605. Can Place Flowers
+Explanation:
+
+This Python code defines a class `Solution` with a method `canPlaceFlowers` that checks if `n` flowers can be planted in a flowerbed represented by the list `flowerbed`. Let's break down the method:
+
+```python
+class Solution:
+    def canPlaceFlowers(self, flowerbed: List[int], n: int) -> bool:
+        f = [0] + flowerbed + [0]
+
+        for i in range(1, len(f) - 1):
+            if f[i -1] == 0 and f[i] == 0 and f[i + 1] == 0:
+                f[i] = 1
+                n -= 1
+        return n<=0
+```
+
+1. `canPlaceFlowers` takes two parameters: `flowerbed`, which is a list representing the flowerbed, and `n`, which is the number of flowers to place.
+
+2. It first creates a new list `f` by adding 0s at the beginning and end of `flowerbed`. This is done to simplify boundary checks when iterating over the flowerbed.
+
+3. It then iterates over the elements of `f` starting from the second element and ending at the second to last element.
+
+4. Within the loop, it checks if the current position (`f[i]`) and its adjacent positions (`f[i - 1]` and `f[i + 1]`) are all 0, indicating that a flower can be planted at this position.
+
+5. If the condition is met, it sets `f[i]` to 1 to indicate that a flower is planted, and decrements `n` by 1 to represent that one flower has been placed.
+
+6. After iterating through the flowerbed, it checks if `n` is less than or equal to 0. If it is, it means all flowers have been successfully placed, so it returns `True`. Otherwise, it returns `False`, indicating that not all flowers could be placed.
+
+This method effectively simulates the process of placing flowers in the flowerbed according to the given rules and returns `True` if `n` or more flowers can be placed, and `False` otherwise.
+
+Solution:
+
+class Solution:
+    def canPlaceFlowers(self, flowerbed: List[int], n: int) -> bool:
+        f = [0] + flowerbed + [0]
+
+        for i in range(1, len(f) - 1):
+            if f[i -1] == 0 and f[i] == 0 and f[i + 1] == 0:
+                f[i] = 1
+                n -= 1
+        return n<=0
+        

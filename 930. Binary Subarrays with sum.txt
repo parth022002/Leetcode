@@ -1,0 +1,62 @@
+930. Binary Subarrays with sum
+Explanation:
+
+This Python code defines a class `Solution` with a method `numSubarraysWithSum` that calculates the number of contiguous subarrays within a list `nums` whose sum equals a given `goal` integer. Let's break down the method:
+
+```python
+class Solution:
+    def numSubarraysWithSum(self, nums: List[int], goal: int) -> int:
+        def helper(x):
+            if x<0:
+                return 0
+            
+            res = 0
+            l, cur = 0, 0
+            for r in range(len(nums)):
+                cur += nums[r]
+                while cur > x:
+                    cur -= nums[l]
+                    l += 1                
+                res += (r - l + 1)
+            return res
+        return helper(goal) - helper(goal - 1)
+```
+
+1. `numSubarraysWithSum` is a method within the `Solution` class that takes two parameters: `nums`, which is a list of integers, and `goal`, which is the target sum.
+
+2. Inside this method, there's a nested function `helper(x)`, which calculates the number of subarrays with a sum less than or equal to `x`.
+
+3. If `x` is less than 0, indicating an invalid sum, the `helper` function returns 0.
+
+4. It initializes variables `res`, `l`, and `cur`. `res` stores the result, `l` represents the left pointer of the sliding window, and `cur` represents the current sum of elements in the sliding window.
+
+5. It iterates over the elements of `nums` using a sliding window approach with the right pointer `r`.
+
+6. It updates the current sum `cur` by adding `nums[r]` to it.
+
+7. It enters a while loop to adjust the left pointer `l` and update the current sum `cur` until the current sum is greater than `x`. This ensures that the sum of elements within the sliding window does not exceed `x`.
+
+8. It updates the result `res` by adding `(r - l + 1)` to it, where `(r - l + 1)` represents the number of subarrays that can be formed within the current sliding window.
+
+9. It returns the result calculated by `helper(goal) - helper(goal - 1)`. This effectively calculates the number of subarrays with a sum equal to `goal` by subtracting the count of subarrays with a sum less than `goal` from the count of subarrays with a sum less than `goal - 1`.
+
+This method provides an efficient solution to find the count of subarrays with a given sum using a sliding window approach.
+
+Solution:
+
+class Solution:
+    def numSubarraysWithSum(self, nums: List[int], goal: int) -> int:
+        def helper(x):
+            if x<0:
+                return 0
+            
+            res = 0
+            l, cur = 0, 0
+            for r in range(len(nums)):
+                cur += nums[r]
+                while cur > x:
+                    cur -= nums[l]
+                    l += 1                
+                res += (r - l + 1)
+            return res
+        return helper(goal) - helper(goal - 1)

@@ -1,0 +1,27 @@
+2879. Display the First three rows
+Explanation:
+
+This Python code defines a function `selectFirstRows` that takes a pandas DataFrame `employees` as input and returns a new DataFrame containing only the first 3 rows of the input DataFrame. Let's break down the code:
+
+```python
+import pandas as pd
+
+def selectFirstRows(employees: pd.DataFrame) -> pd.DataFrame:
+    return employees.head(3)
+```
+
+1. `import pandas as pd`: This line imports the pandas library and assigns it the alias `pd`. Pandas is a powerful data manipulation library in Python.
+
+2. `def selectFirstRows(employees: pd.DataFrame) -> pd.DataFrame:`: This line defines a function `selectFirstRows` which takes a pandas DataFrame `employees` as input and returns a pandas DataFrame. The type hints indicate that `employees` is expected to be a pandas DataFrame, and the return type is also a pandas DataFrame.
+
+3. `return employees.head(3)`: This line returns the first 3 rows of the input DataFrame `employees` using the `head` method. The `head` method is used to select the first n rows from a DataFrame, where n is specified as an argument. In this case, it selects the first 3 rows.
+
+Overall, this function simply returns a new DataFrame containing only the first 3 rows of the input DataFrame `employees`. It's a straightforward operation commonly used for data exploration or previewing data.
+
+Solution:
+
+import pandas as pd
+
+def selectFirstRows(employees: pd.DataFrame) -> pd.DataFrame:
+    return employees.head(3)
+    

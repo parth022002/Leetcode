@@ -1,0 +1,68 @@
+189. Rotate Array
+Explanation:
+
+This Python code defines a class `Solution` with a method `rotate` that rotates the elements of a list `nums` to the right by `k` steps. Let's break down the method:
+
+```python
+class Solution:
+    def rotate(self, nums: List[int], k: int) -> None:
+        k = k % len(nums)
+        l, r = 0, len(nums) - 1
+        while l < r:
+            nums[l], nums[r] = nums[r], nums[l]
+            l, r = l + 1, r - 1
+
+        l, r = 0, k -1
+        while l < r:
+            nums[l], nums[r] = nums[r], nums[l]
+            l, r = l + 1, r - 1
+        
+        l, r = k, len(nums) - 1
+        while l < r:
+            nums[l], nums[r] = nums[r], nums[l]
+            l, r = l + 1, r - 1
+```
+
+1. `rotate` takes two parameters: `nums`, which is a list of integers, and `k`, which is the number of steps to rotate the list to the right.
+
+2. It first calculates `k` modulo the length of the `nums` list. This ensures that `k` is within the range of valid indices.
+
+3. It initializes two pointers `l` and `r` at the beginning and end of the `nums` list respectively.
+
+4. It enters a while loop where `l` is less than `r`, indicating that there are still elements between the two pointers. Inside this loop:
+   - It swaps the elements at positions `l` and `r` in the `nums` list.
+   - It increments `l` by 1 and decrements `r` by 1.
+
+5. After the first loop, it initializes `l` and `r` to 0 and `k - 1` respectively, indicating the range of elements that need to be rotated in the first part of the list.
+
+6. It enters another while loop to swap elements within this range, similar to the first loop.
+
+7. After the second loop, it initializes `l` and `r` to `k` and `len(nums) - 1` respectively, indicating the range of elements that need to be rotated in the second part of the list.
+
+8. It enters a third while loop to swap elements within this range, similar to the previous loops.
+
+9. Since the method signature specifies `-> None`, the function does not return anything explicitly, but it modifies the `nums` list in place, effectively rotating its elements to the right by `k` steps.
+
+Overall, this method effectively rotates the elements of the `nums` list to the right by `k` steps using a three-step approach: reversing the entire list, then reversing the first `k` elements, and finally reversing the remaining elements.
+
+Solution:
+
+class Solution:
+    def rotate(self, nums: List[int], k: int) -> None:
+        k = k % len(nums)
+        l, r = 0, len(nums) - 1
+        while l < r:
+            nums[l], nums[r] = nums[r], nums[l]
+            l, r = l + 1, r - 1
+
+        l, r = 0, k -1
+        while l < r:
+            nums[l], nums[r] = nums[r], nums[l]
+            l, r = l + 1, r - 1
+        
+        l, r = k, len(nums) - 1
+        while l < r:
+            nums[l], nums[r] = nums[r], nums[l]
+            l, r = l + 1, r - 1
+
+ 
