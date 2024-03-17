@@ -1,0 +1,25 @@
+2881. Create a New Column
+Explaination:
+
+This Python function `createBonusColumn` adds a new column named "bonus" to the input DataFrame `employees`. Each value in this new column is twice the corresponding value in the "salary" column. Let's break down the code:
+
+1. `import pandas as pd`: This line imports the pandas library and assigns it the alias `pd`.
+
+2. `def createBonusColumn(employees: pd.DataFrame) -> pd.DataFrame:`: This line defines a function named `createBonusColumn`. It takes one argument, `employees`, which is expected to be a pandas DataFrame. The function returns a pandas DataFrame.
+
+3. `employees["bonus"] = 2 * employees["salary"]`: This line adds a new column named "bonus" to the DataFrame `employees`. The values in this new column are calculated by multiplying each value in the "salary" column by 2. This effectively doubles the salary values to compute the bonus.
+
+4. `return employees`: This line returns the modified DataFrame `employees` with the newly added "bonus" column.
+
+5. `explain`: As in the previous code snippet, this line appears to be a comment or a placeholder for an explanation. It doesn't affect the functionality of the code and is ignored during execution.
+
+So, overall, this function `createBonusColumn` takes a DataFrame of employee data, calculates the bonus as twice the salary for each employee, adds this information as a new column named "bonus", and returns the modified DataFrame.
+
+Solution:
+
+import pandas as pd
+
+def createBonusColumn(employees: pd.DataFrame) -> pd.DataFrame:
+    employees["bonus"] = 2 * employees["salary"]
+    return employees
+    

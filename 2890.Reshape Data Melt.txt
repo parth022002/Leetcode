@@ -1,0 +1,29 @@
+2890.Reshape Data: Melt
+Explaination:
+
+This Python function, `meltTable`, transforms the input DataFrame `report` from wide to long format using the `pd.melt()` function. Let's break down the code:
+
+1. `import pandas as pd`: This line imports the pandas library, a popular library for data manipulation and analysis.
+
+2. `def meltTable(report: pd.DataFrame) -> pd.DataFrame:`: This line defines a function named `meltTable`. It takes one argument, `report`, which is expected to be a pandas DataFrame. The function specifies that it will return a pandas DataFrame.
+
+3. `return pd.melt(report, id_vars=['product'], var_name='quarter', value_name='sales')`: This line uses the `pd.melt()` function to transform the DataFrame from wide to long format.
+   - `report`: This is the DataFrame to be melted.
+   - `id_vars=['product']`: This parameter specifies which column(s) should be retained as identifier variables. In this case, "product" column is retained.
+   - `var_name='quarter'`: This parameter specifies the name of the new column that will store the variable names (in this case, quarters).
+   - `value_name='sales'`: This parameter specifies the name of the new column that will store the values (in this case, sales).
+   - The result is a new DataFrame where each row represents a unique combination of "product" and "quarter", and the "sales" column contains the corresponding values.
+
+4. There is no code for "explain" or any comment explaining the function, but typically, such a line would be used to provide documentation or clarification for the function's purpose.
+
+In summary, the `meltTable` function takes a DataFrame in wide format, with products as rows and quarters as columns, and transforms it into long format, where each row represents a unique combination of product and quarter, and sales are stored as values.
+
+Solution:
+
+import pandas as pd
+
+def meltTable(report: pd.DataFrame) -> pd.DataFrame:
+    return pd.melt(report, id_vars=['product'], var_name='quarter', value_name='sales')
+
+
+

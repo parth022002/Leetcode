@@ -1,0 +1,29 @@
+2889.Reshape Data: pivot
+Explaination:
+
+This Python function, `pivotTable`, creates a pivot table from the input DataFrame `weather`. Let's break down the code:
+
+1. `import pandas as pd`: This line imports the pandas library, which is a popular library for data manipulation and analysis.
+
+2. `def pivotTable(weather: pd.DataFrame) -> pd.DataFrame:`: This line defines a function named `pivotTable`. It takes one argument, `weather`, which is expected to be a pandas DataFrame. The function specifies that it will return a pandas DataFrame.
+
+3. `return weather.pivot(index='month', columns='city', values='temperature')`: This line uses the `pivot()` method of the DataFrame `weather` to create a pivot table.
+   - `index='month'`: This parameter specifies that the "month" column will be used as the index of the pivot table.
+   - `columns='city'`: This parameter specifies that the "city" column will be used to create columns in the pivot table.
+   - `values='temperature'`: This parameter specifies that the values in the pivot table will be taken from the "temperature" column.
+   - The result is a new DataFrame where the rows correspond to the unique values in the "month" column, the columns correspond to the unique values in the "city" column, and the values are the temperatures recorded for each month and city.
+
+4. `explain`: This appears to be a comment or a placeholder for an explanation, but it's not functional code. It will be ignored during execution.
+
+In summary, the `pivotTable` function takes a DataFrame of weather data, creates a pivot table with months as rows, cities as columns, and temperatures as values, and returns the resulting DataFrame.
+
+Solution:
+
+import pandas as pd
+
+def pivotTable(weather: pd.DataFrame) -> pd.DataFrame:
+    return weather.pivot(index='month',columns='city',values='temperature')
+    
+
+
+

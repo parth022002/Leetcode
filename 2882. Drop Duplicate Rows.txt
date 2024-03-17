@@ -1,0 +1,30 @@
+2882. Drop Duplicate Rows
+Explaination:
+
+This Python function, `dropDuplicateEmails`, aims to remove duplicate entries from a DataFrame based on the "email" column. Let's analyze the code:
+
+1. `import pandas as pd`: This line imports the pandas library, an essential library for data manipulation and analysis.
+
+2. `def dropDuplicateEmails(customers: pd.DataFrame) -> pd.DataFrame:`: This line defines a function named `dropDuplicateEmails`. It takes one argument, `customers`, which is expected to be a pandas DataFrame. The function specifies that it will return a pandas DataFrame.
+
+3. `customers.drop_duplicates(subset='email', keep='first', inplace=True)`: This line uses the `drop_duplicates()` method of pandas DataFrame to remove duplicate rows. 
+   - `subset='email'` specifies that the function should consider only the "email" column for identifying duplicates.
+   - `keep='first'` indicates that the first occurrence of each duplicated entry should be kept, and subsequent duplicates should be removed.
+   - `inplace=True` means that the operation will be performed on the DataFrame itself, and it will modify the DataFrame without creating a copy.
+
+4. `return customers`: This line returns the modified DataFrame after removing duplicate entries based on the "email" column.
+
+5. `explain`: Similar to the previous examples, this line appears to be a comment or a placeholder for an explanation. It doesn't affect the functionality of the code and is ignored during execution.
+
+In summary, the function `dropDuplicateEmails` takes a DataFrame of customer data, removes duplicate entries based on the "email" column, and returns the DataFrame with duplicate entries removed.
+
+Solution:
+
+import pandas as pd
+
+def dropDuplicateEmails(customers: pd.DataFrame) -> pd.DataFrame:
+    customers.drop_duplicates(subset='email', keep='first',inplace=True)
+    return customers
+    
+
+

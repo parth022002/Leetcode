@@ -1,0 +1,26 @@
+2886.Change Data type
+Explaination:
+
+This Python function, `changeDatatype`, is designed to convert the data type of the "grade" column in the input DataFrame `students` to integer. Let's break down the code:
+
+1. `import pandas as pd`: This line imports the pandas library, a popular library for data manipulation and analysis.
+
+2. `def changeDatatype(students: pd.DataFrame) -> pd.DataFrame:`: This line defines a function named `changeDatatype`. It takes one argument, `students`, which is expected to be a pandas DataFrame. The function specifies that it will return a pandas DataFrame.
+
+3. `students['grade']=students['grade'].astype(int)`: This line converts the data type of the "grade" column to integer using the `astype()` method of pandas Series.
+   - `students['grade']`: Accesses the "grade" column in the DataFrame.
+   - `.astype(int)`: Converts the data type of the "grade" column to integer. This method is used to cast the data type of a pandas Series to the specified data type.
+
+4. `return students`: This line returns the modified DataFrame with the "grade" column converted to integer data type.
+
+In summary, the `changeDatatype` function takes a DataFrame of student data, converts the data type of the "grade" column to integer, and returns the DataFrame with the modified data type.
+
+Solution:
+
+import pandas as pd
+
+def changeDatatype(students: pd.DataFrame) -> pd.DataFrame:
+    students['grade']=students['grade'].astype(int)
+    return students
+
+

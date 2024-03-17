@@ -1,0 +1,27 @@
+2884. Modify Columns
+Explaination:
+
+This Python function, `modifySalaryColumn`, aims to double the values in the "salary" column of the input DataFrame `employees`. Let's dissect the code:
+
+1. `import pandas as pd`: This line imports the pandas library, a powerful library for data manipulation and analysis.
+
+2. `def modifySalaryColumn(employees: pd.DataFrame) -> pd.DataFrame:`: This line defines a function named `modifySalaryColumn`. It takes one argument, `employees`, which is expected to be a pandas DataFrame. The function specifies that it will return a pandas DataFrame.
+
+3. `employees["salary"] *= 2`: This line multiplies each value in the "salary" column by 2. It's a concise way of doubling the salary for each employee in the DataFrame.
+
+4. `return employees`: This line returns the modified DataFrame with the "salary" column values doubled.
+
+5. `explain`: Like the previous instances, this line appears to be a comment or a placeholder for an explanation, but it's not functional code.
+
+In summary, the `modifySalaryColumn` function takes a DataFrame of employee data, doubles the values in the "salary" column, and returns the modified DataFrame.
+
+Solution:
+
+import pandas as pd
+
+def modifySalaryColumn(employees: pd.DataFrame) -> pd.DataFrame:
+    employees["salary"] *= 2
+    return employees 
+    
+
+

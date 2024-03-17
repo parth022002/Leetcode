@@ -1,0 +1,30 @@
+2887. Fill Missing Data
+Explaination:
+
+This Python function, `fillMissingValues`, is intended to fill missing values in the "quantity" column of the input DataFrame `products` with zeros. Let's break down the code:
+
+1. `import pandas as pd`: This line imports the pandas library, a popular library for data manipulation and analysis.
+
+2. `def fillMissingValues(products: pd.DataFrame) -> pd.DataFrame:`: This line defines a function named `fillMissingValues`. It takes one argument, `products`, which is expected to be a pandas DataFrame. The function specifies that it will return a pandas DataFrame.
+
+3. `products['quantity']=products['quantity'].fillna(0)`: This line fills missing values in the "quantity" column with zeros using the `fillna()` method of pandas Series.
+   - `products['quantity']`: Accesses the "quantity" column in the DataFrame.
+   - `.fillna(0)`: Fills missing values in the "quantity" column with the specified value, in this case, 0.
+
+4. `return products`: This line returns the modified DataFrame with missing values in the "quantity" column filled with zeros.
+
+5. `explain`: It appears that this line is meant to be a comment or placeholder for an explanation, but it contains a typo ("explain" misspelled as "exaplin"). It doesn't affect the functionality of the code and will be ignored during execution.
+
+In summary, the `fillMissingValues` function takes a DataFrame of product data, fills missing values in the "quantity" column with zeros, and returns the DataFrame with the missing values filled.
+
+Solution:
+
+import pandas as pd
+
+def fillMissingValues(products: pd.DataFrame) -> pd.DataFrame:
+    products['quantity']=products['quantity'].fillna(0)
+    return products
+    
+
+
+

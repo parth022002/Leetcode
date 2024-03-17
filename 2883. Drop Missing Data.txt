@@ -1,0 +1,28 @@
+2883. Drop Missing Data
+Explaination:
+
+This Python function, `dropMissingData`, intends to remove rows from a DataFrame where the "name" column has missing values (NaN). Let's go through the code:
+
+1. `import pandas as pd`: This line imports the pandas library.
+
+2. `def dropMissingData(students: pd.DataFrame) -> pd.DataFrame:`: This line defines a function named `dropMissingData`. It takes one argument, `students`, which is expected to be a pandas DataFrame. The function specifies that it will return a pandas DataFrame.
+
+3. `return students.dropna(subset='name')`: This line uses the `dropna()` method of pandas DataFrame to remove rows with missing values (NaN) in the "name" column.
+   - `subset='name'` specifies that the function should only consider the "name" column for checking missing values.
+   - By default, `dropna()` removes entire rows containing any missing value, but since you're providing `subset='name'`, it will only remove rows where the "name" column has missing values.
+
+4. The modified DataFrame, without the rows containing missing values in the "name" column, is then returned.
+
+5. `explain`: As before, this appears to be a comment or a placeholder for an explanation, but it's not functional code.
+
+So, the `dropMissingData` function takes a DataFrame of student data, removes rows where the "name" column has missing values, and returns the DataFrame with those rows removed.
+
+Solution:
+
+
+import pandas as pd
+
+def dropMissingData(students: pd.DataFrame) -> pd.DataFrame:
+    return students.dropna(subset='name')
+    
+

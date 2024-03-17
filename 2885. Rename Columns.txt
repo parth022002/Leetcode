@@ -1,0 +1,30 @@
+2885. Rename Columns
+Explaination:
+
+This Python function, `renameColumns`, is designed to rename specific columns in the input DataFrame `students`. Let's break down the code:
+
+1. `import pandas as pd`: This line imports the pandas library, a popular library for data manipulation and analysis.
+
+2. `def renameColumns(students: pd.DataFrame) -> pd.DataFrame:`: This line defines a function named `renameColumns`. It takes one argument, `students`, which is expected to be a pandas DataFrame. The function specifies that it will return a pandas DataFrame.
+
+3. `students.rename(columns={"id": "student_id", "first": "first_name", "last":"last_name","age":"age_in_years"}, inplace=True)`: This line uses the `rename()` method of pandas DataFrame to rename columns. It renames columns according to the dictionary provided as an argument to the `columns` parameter.
+   - `"id": "student_id"`: Renames the "id" column to "student_id".
+   - `"first": "first_name"`: Renames the "first" column to "first_name".
+   - `"last": "last_name"`: Renames the "last" column to "last_name".
+   - `"age": "age_in_years"`: Renames the "age" column to "age_in_years".
+   - `inplace=True`: This parameter specifies that the modifications should be done in place, meaning the original DataFrame will be modified rather than returning a new DataFrame.
+
+4. `return students`: This line returns the modified DataFrame with the renamed columns.
+
+5. `exaplin`: It seems like there's a typo in this line. Perhaps you intended to write "explain" for adding an explanation, but there's a typo. This line doesn't affect the functionality of the code and will be ignored during execution.
+
+In summary, the `renameColumns` function takes a DataFrame of student data, renames specific columns according to the provided mapping, and returns the DataFrame with the renamed columns.
+
+Solution:
+
+import pandas as pd
+
+def renameColumns(students: pd.DataFrame) -> pd.DataFrame:
+    students.rename(columns={"id": "student_id", "first": "first_name", "last":"last_name","age":"age_in_years"}, inplace=True)
+
+    return students

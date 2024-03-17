@@ -1,0 +1,27 @@
+2888.Reshape Data: concatenate
+Explaination:
+
+This Python function, `concatenateTables`, concatenates two input DataFrames, `df1` and `df2`, along their rows. Let's break down the code:
+
+1. `import pandas as pd`: This line imports the pandas library, a popular library for data manipulation and analysis.
+
+2. `def concatenateTables(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.DataFrame:`: This line defines a function named `concatenateTables`. It takes two arguments, `df1` and `df2`, both of which are expected to be pandas DataFrames. The function specifies that it will return a pandas DataFrame.
+
+3. `return pd.concat([df1,df2])`: This line uses the `concat()` function of pandas to concatenate `df1` and `df2` along their rows. 
+   - `[df1, df2]`: This specifies the list of DataFrames to be concatenated.
+   - `pd.concat()`: This function concatenates the DataFrames provided in the list along the specified axis. By default, it concatenates along axis 0 (rows).
+   - The result of this concatenation is a new DataFrame containing the rows of both input DataFrames.
+
+4. `explain`: It seems like this line is meant to be a comment or a placeholder for an explanation, but it's not functional code. It will be ignored during execution.
+
+In summary, the `concatenateTables` function takes two DataFrames, `df1` and `df2`, concatenates them along their rows, and returns the resulting DataFrame.
+
+Solution:
+
+import pandas as pd
+
+def concatenateTables(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.DataFrame:
+    return pd.concat([df1,df2])
+    
+
+

@@ -1,0 +1,23 @@
+2880. Select Data
+Explaination :
+
+It seems you want an explanation for the code provided. Let me break it down for you:
+
+1. `import pandas as pd`: This line imports the pandas library and assigns it the alias `pd`, which is a common convention in Python programming.
+
+2. `def selectData(students: pd.DataFrame) -> pd.DataFrame:`: This line defines a function named `selectData` that takes one argument `students`, which is expected to be a pandas DataFrame. It also specifies the return type of the function, which is also expected to be a pandas DataFrame.
+
+3. `return students.loc[students["student_id"] == 101,["name", "age"]]`: This line is the core of the function. It returns a subset of the input DataFrame `students`. The `.loc[]` method is used for label-based indexing. Here, it's filtering rows where the value in the "student_id" column is equal to 101. Then, it selects only the columns "name" and "age". So, the returned DataFrame contains only the rows where the student_id is 101, and it includes only the "name" and "age" columns for those rows.
+
+4. `explain`: This line seems to be a comment, likely indicating a placeholder for an explanation or a reminder to add an explanation. However, it's not functional code.
+
+Overall, this function `selectData` takes a DataFrame of students' data, filters it to include only the rows where the student_id is 101, and then returns a DataFrame containing only the "name" and "age" columns for those students.
+
+
+Solution:
+
+import pandas as pd
+
+def selectData(students: pd.DataFrame) -> pd.DataFrame:
+    return students.loc[students["student_id"] == 101,["name", "age"]]
+    

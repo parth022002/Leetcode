@@ -1,0 +1,27 @@
+2891. Method Chaining
+Explaination:
+
+This Python function, `findHeavyAnimals`, filters the input DataFrame `animals` to include only rows where the "weight" column value is greater than 100. Then, it sorts the filtered DataFrame by the "weight" column in descending order and selects only the "name" column. Let's break down the code:
+
+1. `import pandas as pd`: This line imports the pandas library, a popular library for data manipulation and analysis.
+
+2. `def findHeavyAnimals(animals: pd.DataFrame) -> pd.DataFrame:`: This line defines a function named `findHeavyAnimals`. It takes one argument, `animals`, which is expected to be a pandas DataFrame. The function specifies that it will return a pandas DataFrame.
+
+3. `return animals[animals['weight'] > 100].sort_values(['weight'], ascending=False)[['name']]`: 
+   - `animals[animals['weight'] > 100]`: This filters the DataFrame `animals` to include only rows where the "weight" column value is greater than 100.
+   - `.sort_values(['weight'], ascending=False)`: This sorts the filtered DataFrame by the "weight" column in descending order. 
+   - `[['name']]`: This selects only the "name" column from the sorted DataFrame.
+   - The result is a DataFrame containing the names of animals whose weight is greater than 100, sorted by weight in descending order.
+
+4. There is no code for "explain" or any comment explaining the function, but typically, such a line would be used to provide documentation or clarification for the function's purpose.
+
+In summary, the `findHeavyAnimals` function takes a DataFrame of animal data, filters it to include only animals with a weight greater than 100, sorts the result by weight in descending order, and returns a DataFrame containing only the names of these heavy animals.
+
+Solution:
+
+import pandas as pd
+
+def findHeavyAnimals(animals: pd.DataFrame) -> pd.DataFrame:
+    return animals[animals['weight'] > 100].sort_values(['weight'],ascending=False)[['name']]
+    
+
