@@ -1,0 +1,13 @@
+584.Find Customer Referee
+Explaination:
+
+```mysql
+EXPLAIN SELECT name FROM customer WHERE referee_id IS NULL OR referee_id != 2;
+```
+
+This MySQL query selects the `name` from the `customer` table where the `referee_id` is either NULL or not equal to 2. The `EXPLAIN` statement is used to obtain information about how MySQL executes the query, such as which indexes are used and the order of operations.
+
+Solution:
+
+# Write your MySQL query statement below
+select name from customer where referee_id is null or referee_id !=2;

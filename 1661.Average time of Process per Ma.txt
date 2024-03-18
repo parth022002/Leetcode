@@ -1,0 +1,29 @@
+1661.Average time of Process per Machine
+Explaination:
+
+Your MySQL query selects the `machine_id` from the `Activity` table and calculates the average processing time for each machine by subtracting the `timestamp` of the 'start' activity from the `timestamp` of the corresponding 'end' activity, rounded to three decimal places.
+
+Here's the query:
+
+```mysql
+SELECT a1.machine_id, ROUND(AVG(TIMESTAMPDIFF(SECOND, a1.timestamp, a2.timestamp)), 3) AS processing_time
+FROM Activity a1
+JOIN Activity a2
+ON a1.machine_id = a2.machine_id AND a1.process_id = a2.process_id
+AND a1.activity_type = 'start' AND a2.activity_type = 'end'
+GROUP BY a1.machine_id;
+```
+
+This query performs a self-join on the `Activity` table to pair 'start' and 'end' activities based on the `machine_id` and `process_id`. Then it calculates the difference in seconds between the timestamps of paired activities and calculates the average processing time for each machine. The `ROUND()` function is used to round the average processing time to three decimal places.
+
+If you have any further questions or need additional assistance, feel free to ask!
+
+Solution:
+
+# Write your MySQL query statement below
+select a1.machine_id, round(avg(a2.timestamp-a1.timestamp), 3) as processing_time
+from Activity a1
+join Activity a2
+on a1.machine_id=a2.machine_id and a1.process_id=a2.process_id
+and a1.activity_type='start' and a2.activity_type='end'
+group by a1.machine_id

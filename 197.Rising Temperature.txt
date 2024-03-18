@@ -1,0 +1,22 @@
+197.Rising Temperature
+Explaination:
+
+Your MySQL query selects the `id` from the `Weather` table where there exists another record (w2) with a date exactly one day before (DATEDIFF(w1.recordDate, w2.recordDate) = 1) and the temperature on that day (w1) is higher than the temperature on the previous day (w2).
+
+Here's the query:
+
+```mysql
+SELECT w1.id 
+FROM Weather w1, Weather w2
+WHERE DATEDIFF(w1.recordDate, w2.recordDate) = 1 AND w1.temperature > w2.temperature;
+```
+
+This query compares each record (w1) in the `Weather` table with another record (w2) where the date is exactly one day before, and then checks if the temperature on the later date (w1) is higher than the temperature on the previous day (w2).
+
+If you have any further questions or need additional assistance, please feel free to ask!
+
+Solution:
+
+# Write your MySQL query statement below
+SELECT w1.id FROM Weather w1, Weather w2
+WHERE DATEDIFF(w1.recordDate, w2.recordDate) = 1 AND w1.temperature > w2.temperature;

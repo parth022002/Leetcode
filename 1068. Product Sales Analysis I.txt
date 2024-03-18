@@ -1,0 +1,23 @@
+1068. Product Sales Analysis I
+Explaination:
+
+Your MySQL query selects the `product_name`, `year`, and `price` columns from the `Sales` table and the `Product` table using an INNER JOIN operation on the `product_id` column.
+
+Here's the query:
+
+```mysql
+SELECT product_name, year, price 
+FROM Sales 
+INNER JOIN Product ON Sales.product_id = Product.product_id;
+```
+
+This query fetches data from two tables, `Sales` and `Product`, using an INNER JOIN to retrieve only the records that have matching `product_id` values in both tables.
+
+If you have any further questions or need additional assistance, please feel free to ask!
+
+Solution:
+
+# Write your MySQL query statement below
+SELECT product_name, year, price FROM Sales
+INNER JOIN Product ON
+Sales.product_id = Product.product_id;

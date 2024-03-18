@@ -1,0 +1,13 @@
+1683. Invalid Tweets
+Explaination:
+
+```mysql
+EXPLAIN SELECT tweet_id FROM Tweets WHERE LENGTH(content) > 15;
+```
+
+This MySQL query selects the `tweet_id` from the `Tweets` table where the length of the `content` column is greater than 15 characters. The `EXPLAIN` statement is used to obtain information about how MySQL executes the query, such as which indexes are used and the order of operations.
+
+Solution:
+
+# Write your MySQL query statement below
+select tweet_id from Tweets where length(content)>15;

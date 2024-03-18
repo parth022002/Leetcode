@@ -1,0 +1,28 @@
+1581.Customer Who Visited but Did Not Make Any Transactions
+Explaination:
+
+Your MySQL query selects the `customer_id` from the `Visits` table and the count of `visit_id` from the `Transactions` table using a LEFT JOIN operation on the `visit_id` column. It then filters the results to only include visits where there was no transaction made, and finally, groups the results by `customer_id`.
+
+Here's the query:
+
+```mysql
+SELECT v.customer_id, COUNT(v.visit_id) AS count_no_trans 
+FROM Visits v 
+LEFT JOIN Transactions t ON v.visit_id = t.visit_id  
+WHERE t.amount IS NULL 
+GROUP BY v.customer_id;
+```
+
+This query fetches data from two tables, `Visits` and `Transactions`, using a LEFT JOIN to ensure that all records from the `Visits` table are returned, regardless of whether there is a corresponding record in the `Transactions` table. It then filters out the visits where no transaction was made (where `t.amount` is NULL) and groups the results by `customer_id`, providing the count of visits with no transactions for each customer.
+
+If you have any further questions or need additional assistance, please feel free to ask!
+
+Solution:
+
+# Write your MySQL query statement below
+SELECT v.customer_id, COUNT(v.visit_id) AS count_no_trans 
+from Visits v 
+LEFT JOIN Transactions t 
+ON v.visit_id = t.visit_id  
+WHERE t.transaction_id IS NULL 
+GROUP BY v.customer_id;

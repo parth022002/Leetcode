@@ -1,0 +1,13 @@
+1148.Article Views I
+Explaination:
+
+```mysql
+EXPLAIN SELECT DISTINCT author_id AS id FROM Views WHERE author_id = viewer_id ORDER BY id;
+```
+
+This MySQL query selects distinct `author_id` values from the `Views` table where `author_id` is equal to `viewer_id`, and then orders the result by the `id`. The `EXPLAIN` statement is used to obtain information about how MySQL executes the query, such as which indexes are used and the order of operations.
+
+Solution:
+
+# Write your MySQL query statement below
+select distinct author_id as id from Views where author_id = viewer_id order by id;

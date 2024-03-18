@@ -1,0 +1,21 @@
+175. Combine Two Tables
+Explaination:
+
+Your MySQL query selects the `firstName`, `lastName`, `city`, and `state` columns from the `Person` table and the `Address` table using a LEFT JOIN operation on the `personId` column.
+
+Here's the query:
+
+```mysql
+SELECT firstName, lastName, city, state 
+FROM Person 
+LEFT JOIN Address USING(personId);
+```
+
+This query fetches data from two tables, `Person` and `Address`, using a LEFT JOIN to ensure that all records from the `Person` table are returned, regardless of whether there is a corresponding record in the `Address` table. The `USING` clause is used to specify the column used for joining, simplifying the query when the columns have the same name in both tables.
+
+If you have any further questions or need additional assistance, please feel free to ask!
+
+Solution:
+
+# Write your MySQL query statement below
+SELECT firstName, lastName, city, state FROM Person LEFT JOIN Address USING(personId);

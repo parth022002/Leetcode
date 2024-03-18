@@ -1,0 +1,14 @@
+1757.Recyclable and Low fat Products
+Explaination:
+
+```mysql
+EXPLAIN SELECT product_id FROM Products WHERE low_fats='Y' AND recyclable='Y';
+```
+
+This MySQL query retrieves the `product_id` from the `Products` table where the `low_fats` column is set to 'Y' and the `recyclable` column is set to 'Y'. The `EXPLAIN` statement is used to obtain information about how MySQL executes the query, such as which indexes are used and the order of operations.
+
+Solution:
+
+# Write your MySQL query statement below
+select product_id from Products where low_fats='Y' and recyclable='y';
+

@@ -1,0 +1,37 @@
+452.Minimum Number of Arrows to Busrt Ballons
+Explaination:
+
+Your provided Python code defines a class `Solution` with a method `findMinArrowShots`. This method takes a list of lists `points` as input, where each inner list contains two integers representing the start and end coordinates of a balloon. The method aims to find the minimum number of arrows needed to burst all balloons.
+
+Here's a breakdown of what the method does:
+
+1. It sorts the `points` list based on the start coordinates of the balloons.
+2. It initializes a variable `arrows` to 1, as at least one arrow is needed.
+3. It initializes a variable `end` to the end coordinate of the first balloon.
+4. It iterates through the remaining balloons in the sorted list.
+5. For each balloon:
+   - If the start coordinate of the balloon is greater than `end`, it means a new arrow is needed, so `arrows` is incremented by 1, and `end` is updated to the end coordinate of the current balloon.
+   - Otherwise, it means the current balloon can be burst with the same arrow, so `end` is updated to the minimum of its current value and the end coordinate of the current balloon.
+6. It returns the final value of `arrows`, which represents the minimum number of arrows needed to burst all balloons.
+
+This algorithm effectively finds the minimum number of arrows required to burst all balloons by considering their overlapping ranges.
+
+If you have any further questions or need clarification, feel free to ask!
+
+Solution:
+
+class Solution:
+    def findMinArrowShots(self, points: List[List[int]]) -> int:
+        points.sort(key=lambda x:x[0])
+        arrows = 1
+        end = points[0][1]
+
+        for balloon in points[1:]:
+            if balloon[0] > end:
+                arrows += 1
+                end = balloon[1]
+            else:
+                end = min(end, balloon[1])
+        
+        return arrows
+        
