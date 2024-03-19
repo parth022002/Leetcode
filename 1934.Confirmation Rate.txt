@@ -1,0 +1,36 @@
+1934.Confirmation Rate
+Explaination:
+
+This MySQL query calculates the confirmation rate for each user in the `Signups` table. Here's a breakdown of the query:
+
+1. `SELECT s.user_id`: This selects the `user_id` from the `Signups` table.
+
+2. `ROUND(AVG(IF(c.action='confirmed',1,0)),2) AS confirmation_rate`: This calculates the confirmation rate for each user. It uses a conditional expression (`IF`) to assign a value of 1 if the action is 'confirmed', and 0 otherwise. Then, it calculates the average of these values for each user. The `ROUND` function is used to round the result to two decimal places.
+
+3. `FROM Signups s`: This specifies the `Signups` table, aliasing it as `s`.
+
+4. `LEFT JOIN Confirmations c USING (user_id)`: This performs a left join between the `Signups` table (`s`) and the `Confirmations` table (`c`) using the `user_id` column. This ensures that all rows from the `Signups` table are included in the result, regardless of whether there is a matching row in the `Confirmations` table.
+
+5. `GROUP BY s.user_id`: This groups the result set by the `user_id` column from the `Signups` table.
+
+Here's the SQL query:
+
+```sql
+SELECT s.user_id, 
+       ROUND(AVG(IF(c.action='confirmed',1,0)),2) AS confirmation_rate 
+FROM Signups s
+LEFT JOIN Confirmations c USING (user_id)
+GROUP BY s.user_id;
+```
+
+This query calculates the confirmation rate for each user based on the number of confirmations in the `Confirmations` table and the total number of signups for each user in the `Signups` table.
+
+Solution:
+
+# Write your MySQL query statement below
+
+SELECT s.user_id, 
+  ROUND(AVG(IF(c.action='confirmed',1,0)),2) as confirmation_rate 
+FROM Signups s
+LEFT JOIN Confirmations c using (user_id)
+GROUP BY s.user_id

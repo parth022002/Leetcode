@@ -1,0 +1,34 @@
+570.Managers with at least 5 Direct Reports
+Explaination:
+
+This MySQL query selects the names of employees who are managers and have at least five employees reporting to them. Here's a breakdown of the query:
+
+1. `SELECT m.name`: This selects the name of the managers.
+
+2. `FROM employee AS e INNER JOIN employee AS m ON e.managerId = m.id`: This performs an inner join on the `employee` table, matching the manager ID (`m.id`) of each employee (`e`) with the ID of their corresponding manager. This self-join links employees with their managers.
+
+3. `GROUP BY e.managerId`: This groups the result by the manager's ID.
+
+4. `HAVING COUNT(e.id) >= 5`: This filters the groups, selecting only those where the count of employees reporting to the manager (count of `e.id`) is greater than or equal to 5.
+
+Here's the SQL query:
+
+```sql
+SELECT m.name
+FROM employee AS e
+INNER JOIN employee AS m ON e.managerId = m.id
+GROUP BY e.managerId
+HAVING COUNT(e.id) >= 5;
+```
+
+This query retrieves the names of managers who have at least five employees reporting to them.
+
+Solution:
+
+# Write your MySQL query statement below
+Select m.name
+from employee as e
+inner join employee as m
+on e.managerId=m.id
+group by e.managerId 
+having count(e.id)>=5

@@ -1,0 +1,44 @@
+1193.Monthly Transactions I
+Explaination:
+
+This MySQL query retrieves aggregated data from the `Transactions` table, grouping the results by month and country. Here's what each part of the query does:
+
+1. `SUBSTR(trans_date, 1, 7) AS month`: This extracts the first 7 characters of the `trans_date` column, representing the year and month, and aliases it as `month`.
+   
+2. `country`: This column represents the country of the transaction.
+   
+3. `COUNT(id) AS trans_count`: This counts the number of transactions (`id` represents the transaction ID) for each month and country.
+   
+4. `SUM(CASE WHEN state = 'approved' THEN 1 ELSE 0 END) AS approved_count`: This calculates the count of approved transactions for each month and country using a conditional sum. If the state is 'approved', it adds 1, otherwise 0.
+   
+5. `SUM(amount) AS trans_total_amount`: This calculates the total transaction amount for each month and country.
+   
+6. `SUM(CASE WHEN state = 'approved' THEN amount ELSE 0 END) AS approved_total_amount`: This calculates the total amount of approved transactions for each month and country. If the state is 'approved', it adds the amount, otherwise 0.
+
+Finally, the `GROUP BY` clause groups the results by `month` and `country`.
+
+Here's the SQL query:
+
+```sql
+SELECT
+    SUBSTR(trans_date, 1, 7) AS month,
+    country,
+    COUNT(id) AS trans_count,
+    SUM(CASE WHEN state = 'approved' THEN 1 ELSE 0 END) AS approved_count,
+    SUM(amount) AS trans_total_amount,
+    SUM(CASE WHEN state = 'approved' THEN amount ELSE 0 END) AS approved_total_amount
+FROM
+    Transactions
+GROUP BY
+    month,
+    country;
+```
+
+This query provides a summary of transaction data aggregated by month and country, including transaction count, approved transaction count, total transaction amount, and total amount of approved transactions.
+
+Solution:
+
+# Write your MySQL query statement below
+SELECT  SUBSTR(trans_date,1,7) as month, country, count(id) as trans_count, SUM(CASE WHEN state = 'approved' then 1 else 0 END) as approved_count, SUM(amount) as trans_total_amount, SUM(CASE WHEN state = 'approved' then amount else 0 END) as approved_total_amount
+FROM Transactions
+GROUP BY month, country

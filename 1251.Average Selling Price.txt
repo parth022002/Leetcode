@@ -1,0 +1,38 @@
+1251.Average Selling Price
+Explaination:
+
+This MySQL query calculates the average price of each product based on the units sold within a specific time range. Here's the breakdown of the query:
+
+1. `SELECT p.product_id`: This selects the `product_id` from the `Prices` table.
+
+2. `IFNULL(ROUND(SUM(units*price)/SUM(units),2),0) AS average_price`: This calculates the average price for each product. It first multiplies the `units` with the `price` to get the total revenue for each product. Then, it divides this total revenue by the total number of units sold to get the average price per unit. The `ROUND` function is used to round the result to two decimal places. The `IFNULL` function is used to handle cases where there are no units sold (denominator is zero), returning 0 as the average price in such cases.
+
+3. `FROM Prices p`: This specifies the `Prices` table, aliasing it as `p`.
+
+4. `LEFT JOIN UnitsSold u ON p.product_id = u.product_id AND u.purchase_date BETWEEN start_date AND end_date`: This performs a left join between the `Prices` table (`p`) and the `UnitsSold` table (`u`) based on the `product_id`. It also filters the join condition based on the `purchase_date` falling between the `start_date` and `end_date`.
+
+5. `GROUP BY product_id`: This groups the results by the `product_id`.
+
+Here's the SQL query:
+
+```sql
+SELECT p.product_id, 
+       IFNULL(ROUND(SUM(units * price) / SUM(units), 2), 0) AS average_price
+FROM Prices p 
+LEFT JOIN UnitsSold u 
+    ON p.product_id = u.product_id 
+    AND u.purchase_date BETWEEN start_date AND end_date
+GROUP BY p.product_id;
+```
+
+This query calculates the average price for each product based on the units sold within the specified time range, handling cases where there are no units sold by returning 0 as the average price.
+
+Solution:
+
+SELECT p.product_id, 
+       IFNULL(ROUND(SUM(units * price) / SUM(units), 2), 0) AS average_price
+FROM Prices p 
+LEFT JOIN UnitsSold u 
+    ON p.product_id = u.product_id 
+    AND u.purchase_date BETWEEN start_date AND end_date
+GROUP BY p.product_id;

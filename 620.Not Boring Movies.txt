@@ -1,0 +1,31 @@
+620.Not Boring Movies
+Explaination:
+
+This MySQL query selects data from the `Cinema` table where the `id` is odd (`id%2=1`) and the `description` is not equal to 'boring', ordering the results by `rating` in descending order. Here's a breakdown of the query:
+
+1. `SELECT *`: This selects all columns from the `Cinema` table.
+
+2. `FROM Cinema`: This specifies the `Cinema` table.
+
+3. `WHERE id%2=1`: This condition filters the rows where the `id` is odd (`id % 2 = 1`).
+
+4. `AND description <> 'boring'`: This condition filters out rows where the `description` is equal to 'boring'.
+
+5. `ORDER BY rating DESC`: This orders the results by the `rating` column in descending order.
+
+Here's the SQL query:
+
+```sql
+SELECT * 
+FROM Cinema 
+WHERE id % 2 = 1 
+AND description <> 'boring' 
+ORDER BY rating DESC;
+```
+
+This query retrieves data from the `Cinema` table where the `id` is odd and the `description` is not 'boring', sorted by `rating` in descending order.
+
+Solution:
+
+# Write your MySQL query statement below
+select * from Cinema where id%2=1  and description <> 'boring'order by rating desc;  

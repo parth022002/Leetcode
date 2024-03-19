@@ -1,0 +1,31 @@
+596.Classes More Than 5 Students
+Explaination:
+
+Your MySQL query selects the classes with at least 5 students enrolled from the `Courses` table. Here's the breakdown:
+
+1. `SELECT class`: This selects the `class` column from the `Courses` table.
+
+2. `FROM Courses`: This specifies the `Courses` table.
+
+3. `GROUP BY class`: This groups the results by the `class`.
+
+4. `HAVING COUNT(student) >= 5`: This filters the groups to include only those where the count of students (`COUNT(student)`) is greater than or equal to 5.
+
+Here's the SQL query:
+
+```sql
+SELECT class
+FROM Courses
+GROUP BY class
+HAVING COUNT(student) >= 5;
+```
+
+This query retrieves the classes with at least 5 students enrolled from the `Courses` table.
+
+Solution:
+
+# Write your MySQL query statement below
+SELECT class
+FROM Courses
+GROUP BY class
+HAVING COUNT(student) >= 5;

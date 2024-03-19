@@ -1,0 +1,30 @@
+550. Game Play Analysis IV
+Explaination:
+
+This MySQL query calculates the fraction of players who logged in on the day after they first joined the game. Here's the breakdown:
+
+1. The inner subquery retrieves the earliest login date (`first_login`) for each player using the `GROUP BY` clause.
+2. It then compares each player's ID and the date one day before their first login date.
+3. The main query calculates the count of distinct player IDs meeting the criteria specified in the subquery and divides it by the count of all distinct player IDs in the `Activity` table.
+4. The result is rounded to two decimal places.
+
+Here's the SQL query:
+
+```sql
+SELECT ROUND(COUNT(DISTINCT player_id) / (SELECT COUNT(DISTINCT player_id) FROM Activity), 2) AS fraction
+FROM Activity
+WHERE (player_id, DATE_SUB(event_date, INTERVAL 1 DAY)) IN (
+    SELECT player_id, MIN(event_date) AS first_login 
+    FROM Activity 
+    GROUP BY player_id
+);
+```
+
+This query provides the fraction of players who logged in the day after they first joined the game, considering the entire `Activity` table.
+
+Solution:
+
+# Write your MySQL query statement below
+SELECT ROUND(COUNT(DISTINCT player_id) / (SELECT COUNT(DISTINCT player_id) FROM Activity), 2) AS fraction
+FROM Activity
+WHERE (player_id, DATE_SUB(event_date, INTERVAL 1 DAY)) IN ( SELECT player_id, MIN(event_date) AS first_login FROM Activity GROUP BY player_id)

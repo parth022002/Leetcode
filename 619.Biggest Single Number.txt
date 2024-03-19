@@ -1,0 +1,35 @@
+619.Biggest Single Number
+Explaination:
+
+This MySQL query retrieves the maximum unique number from the `MyNumbers` table. Here's the breakdown:
+
+1. The inner query selects all numbers (`num`) from the `MyNumbers` table, grouping them by number (`GROUP BY num`).
+   
+2. It filters out only those numbers that appear exactly once by using the `HAVING COUNT(num) = 1` clause.
+   
+3. The outer query selects the maximum value from the unique numbers obtained from the inner query.
+
+Here's the SQL query:
+
+```sql
+SELECT MAX(num) AS num
+FROM (
+    SELECT num
+    FROM MyNumbers
+    GROUP BY num
+    HAVING COUNT(num) = 1
+) AS unique_numbers;
+```
+
+This query provides the maximum unique number from the `MyNumbers` table, which appears only once in the dataset.
+
+Solution:
+
+# Write your MySQL query statement below
+SELECT MAX(num) AS num
+FROM (
+    SELECT num
+    FROM MyNumbers
+    GROUP BY num
+    HAVING COUNT(num) = 1
+) AS unique_numbers;

@@ -1,0 +1,37 @@
+621.Task Scheduler
+Explaination:
+
+This code seems to be a solution to a problem related to task scheduling. Let me explain how it works:
+
+1. `freq` is a list of length 26 initialized with zeros. It will be used to store the frequency of each task.
+
+2. The loop `for task in tasks` iterates through each task in the input list `tasks`. For each task, it increments the corresponding frequency in the `freq` list.
+
+3. The `freq` list is then sorted in ascending order.
+
+4. The variable `chunk` is assigned the value of the maximum frequency task (the task with the highest frequency) minus 1.
+
+5. The variable `idle` is calculated as `chunk * n`. This represents the maximum number of idle intervals that can be inserted between executions of the most frequent task.
+
+6. The loop `for i in range(24, -1, -1)` iterates from the second most frequent task to the least frequent task. For each task, it calculates how many idle intervals are needed and subtracts them from the `idle` variable.
+
+7. Finally, it returns the total length of the tasks plus any idle intervals required, ensuring that if `idle` is negative, it returns just the length of the tasks.
+
+This algorithm essentially calculates the minimum intervals required to execute all tasks with a cooling period of `n` between repetitions of the same task. It's a greedy approach where the goal is to minimize idle time.
+
+Solution:
+
+class Solution:
+    def leastInterval(self, tasks: List[str], n: int) -> int:
+        freq = [0] * 26
+        for task in tasks:
+            freq[ord(task) - ord('A')] += 1
+        freq.sort()
+        chunk = freq[25] - 1
+        idle = chunk * n
+
+        for i in range(24, -1, -1):
+            idle -= min(chunk, freq[i])
+
+        return len(tasks) + idle if idle >= 0 else len(tasks)
+        

@@ -1,0 +1,34 @@
+1070.Product Salees Analysis III
+Explaination:
+
+Your MySQL query retrieves the product ID, the first year of sale (`first_year`), the quantity, and the price for each product. It specifically selects the sales data for each product in the earliest year of sale. Here's the breakdown:
+
+1. `SELECT product_id, year AS first_year, quantity, price`: This selects the columns `product_id`, `year` (aliased as `first_year`), `quantity`, and `price`.
+
+2. `FROM sales`: This specifies the `sales` table.
+
+3. `WHERE (product_id, year) IN (SELECT product_id, MIN(year) AS year FROM sales GROUP BY product_id)`: This filters the sales data to include only records where the combination of `product_id` and `year` matches the minimum year of sale for each product, determined by the subquery.
+
+Here's the SQL query:
+
+```sql
+SELECT product_id, 
+       year AS first_year, 
+       quantity, 
+       price 
+FROM sales 
+WHERE (product_id, year) IN (
+    SELECT product_id, 
+           MIN(year) AS year 
+    FROM sales 
+    GROUP BY product_id
+);
+```
+
+This query retrieves the sales data for each product in the earliest year of sale, including the product ID, the first year of sale, the quantity sold, and the price.
+
+Solution:
+
+# Write your MySQL query statement below
+select product_id , year as first_year , quantity , price from sales 
+where (product_id , year) in (select product_id , min(year) as year from sales group by product_id)

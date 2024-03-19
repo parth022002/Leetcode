@@ -1,0 +1,35 @@
+1633.Percentage of Users Attended a Contset
+Explaination:
+
+This MySQL query calculates the percentage of users registered for each contest compared to the total number of users in the system. Here's the breakdown of the query:
+
+1. `SELECT contest_id`: This selects the `contest_id` column.
+
+2. `ROUND(COUNT(DISTINCT user_id) * 100 / (SELECT COUNT(user_id) FROM Users), 2) AS percentage`: This calculates the percentage of users registered for each contest by dividing the count of distinct `user_id` in the `Register` table by the total count of `user_id` in the `Users` table, multiplied by 100. The `ROUND` function is used to round the result to two decimal places.
+
+3. `FROM Register`: This specifies the `Register` table.
+
+4. `GROUP BY contest_id`: This groups the results by the `contest_id`.
+
+5. `ORDER BY percentage DESC, contest_id`: This orders the results by the percentage in descending order, and if there's a tie, it sorts by the `contest_id` in ascending order.
+
+Here's the SQL query:
+
+```sql
+SELECT contest_id, 
+       ROUND(COUNT(DISTINCT user_id) * 100 / (SELECT COUNT(user_id) FROM Users), 2) AS percentage
+FROM Register
+GROUP BY contest_id
+ORDER BY percentage DESC, contest_id;
+```
+
+This query calculates the percentage of users registered for each contest compared to the total number of users, presenting the results ordered by percentage in descending order and contest ID in ascending order in case of a tie.
+
+Solution:
+
+# Write your MySQL query statement below
+select contest_id, 
+round(count(distinct user_id) * 100 /(select count(user_id) from Users) ,2) as percentage
+from  Register
+group by contest_id
+order by percentage desc,contest_id

@@ -1,0 +1,30 @@
+2356.Number of Unique Subjects Taught by Each Teacher
+Explaination:
+
+Your MySQL query retrieves the count of distinct subject IDs taught by each teacher. Here's the breakdown:
+
+1. `SELECT teacher_id`: This selects the `teacher_id` column from the `Teacher` table.
+
+2. `COUNT(DISTINCT subject_id) AS cnt`: This counts the distinct `subject_id` values for each teacher. The `DISTINCT` keyword ensures that each subject is counted only once for each teacher.
+
+3. `FROM Teacher`: This specifies the `Teacher` table.
+
+4. `GROUP BY teacher_id`: This groups the results by the `teacher_id`.
+
+Here's the SQL query:
+
+```sql
+SELECT teacher_id,
+       COUNT(DISTINCT subject_id) AS cnt
+FROM Teacher
+GROUP BY teacher_id;
+```
+
+This query provides the count of distinct subject IDs taught by each teacher, grouped by the teacher's ID.
+
+Solution:
+
+# Write your MySQL query statement below
+Select  teacher_id ,
+count(distinct subject_id ) as cnt from Teacher
+group by teacher_id

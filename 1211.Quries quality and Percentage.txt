@@ -1,0 +1,47 @@
+1211.Quries quality and Percentage
+Explaination:
+
+Your MySQL query calculates the quality and the percentage of poor ratings for each query, and it also correctly filters out null values in the `query_name` column. Here's the breakdown of the query:
+
+1. `SELECT query_name`: This selects the `query_name` column from the `Queries` table.
+
+2. `ROUND(AVG(rating / position), 2) AS quality`: This calculates the quality of each query by averaging the ratio of `rating` to `position` for each query. The result is rounded to two decimal places.
+
+3. `ROUND(SUM(IF(rating < 3, 100, 0)) / COUNT(*), 2) AS poor_query_percentage`: This calculates the percentage of poor ratings (ratings less than 3) for each query. It sums up 100 for each poor rating and divides by the total count of ratings for each query. The result is rounded to two decimal places.
+
+4. `FROM Queries`: This specifies the `Queries` table.
+
+5. `WHERE query_name IS NOT NULL`: This filters out null values in the `query_name` column.
+
+6. `GROUP BY query_name`: This groups the results by the `query_name`.
+
+Here's the SQL query:
+
+```sql
+SELECT
+    query_name, 
+    ROUND(AVG(rating / position), 2) AS quality, 
+    ROUND(SUM(IF(rating < 3, 100, 0)) / COUNT(*), 2) AS poor_query_percentage
+FROM 
+    Queries
+WHERE 
+    query_name IS NOT NULL
+GROUP BY
+    query_name;
+```
+
+This query calculates the quality and the percentage of poor ratings for each query, excluding null values in the `query_name` column.
+
+Soltuion:
+
+# Write your MySQL query statement below
+SELECT
+    query_name, 
+    ROUND(AVG(rating / position), 2) quality, 
+    ROUND(SUM(IF(rating < 3, 100, 0)) / COUNT(*), 2) poor_query_percentage
+FROM 
+    Queries
+WHERE 
+    query_name IS NOT NULL
+GROUP BY
+    query_name;

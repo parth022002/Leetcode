@@ -1,0 +1,49 @@
+1280.Student and Examinations
+Explaination:
+
+This MySQL query retrieves data about students, subjects, and the number of exams each student attended. Here's a breakdown of the query:
+
+1. `SELECT S.student_id, S.student_name, T.subject_name`: This selects the student ID, student name, and subject name. 
+
+2. `COUNT(E.student_id) AS attended_exams`: This counts the number of exams attended by each student for each subject. It uses the `Examinations` table to determine the number of exams attended by joining on both the student ID and the subject name.
+
+3. `FROM Students S CROSS JOIN Subjects T`: This performs a cross join between the `Students` table (`S` alias) and the `Subjects` table (`T` alias). This combination ensures that all possible combinations of students and subjects are included in the result set.
+
+4. `LEFT JOIN Examinations E ON E.student_id = S.student_id AND E.subject_name = T.subject_name`: This left joins the `Examinations` table (`E` alias) on the conditions that the student ID matches and the subject name matches.
+
+5. `GROUP BY S.student_id, S.student_name, T.subject_name`: This groups the results by student ID, student name, and subject name.
+
+6. `ORDER BY S.student_id, T.subject_name ASC`: This orders the result set by student ID and subject name in ascending order.
+
+Here's the SQL query:
+
+```sql
+SELECT
+    S.student_id,
+    S.student_name,
+    T.subject_name,
+    COUNT(E.student_id) AS attended_exams
+FROM
+    Students S
+CROSS JOIN
+    Subjects T 
+LEFT JOIN
+    Examinations E ON E.student_id = S.student_id AND E.subject_name = T.subject_name
+GROUP BY
+    S.student_id,
+    S.student_name,
+    T.subject_name
+ORDER BY
+    S.student_id,
+    T.subject_name ASC;
+```
+
+This query provides a summary of the number of exams attended by each student for each subject, including students who haven't attended any exams in certain subjects.
+
+Solution:
+
+# Write your MySQL query statement below
+SELECT S.student_id, s.student_name, T.subject_name, count( E.student_id) AS attended_exams FROM Students S CROSS JOIN Subjects T 
+LEFT JOIN Examinations E on E.student_id = S.student_id AND E.subject_name = T.subject_name
+GROUP BY S.student_id, s.student_name, T.subject_name
+ORDER BY S.student_id,T.subject_name ASC;

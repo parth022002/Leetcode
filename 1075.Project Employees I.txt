@@ -1,0 +1,36 @@
+1075.Project Employees I
+Explaination:
+
+This MySQL query calculates the average years of experience of employees assigned to each project. Here's the breakdown of the query:
+
+1. `SELECT p.project_id`: This selects the `project_id` from the `Project` table.
+
+2. `ROUND(AVG(e.experience_years),2) AS average_years`: This calculates the average years of experience for each project. It computes the average of the `experience_years` column from the `Employee` table for employees assigned to each project. The `ROUND` function is used to round the result to two decimal places.
+
+3. `FROM Project p`: This specifies the `Project` table, aliasing it as `p`.
+
+4. `LEFT JOIN Employee e ON p.employee_id = e.employee_id`: This performs a left join between the `Project` table (`p`) and the `Employee` table (`e`) based on the `employee_id`. This links employees to their respective projects.
+
+5. `GROUP BY p.project_id`: This groups the results by the `project_id`.
+
+Here's the SQL query:
+
+```sql
+SELECT p.project_id, 
+       ROUND(AVG(e.experience_years), 2) AS average_years
+FROM Project p 
+LEFT JOIN Employee e 
+    ON p.employee_id = e.employee_id
+GROUP BY p.project_id;
+```
+
+This query calculates the average years of experience for employees assigned to each project and presents the results grouped by project ID.
+
+Solution:
+
+# Write your MySQL query statement below
+SELECT p.project_id, ROUND(AVG(e.experience_years),2) AS average_years
+FROM Project p 
+LEFT JOIN Employee e
+ON p.employee_id = e.employee_id
+GROUP BY p.project_id

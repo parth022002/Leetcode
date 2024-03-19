@@ -1,0 +1,22 @@
+577. Employee Bonus
+Explaination:
+
+Your SQL query selects the `name` and `bonus` columns from the `Employee` table and the `Bonus` table, respectively, and combines them using a left join on the `empID` column. Then, it filters the result to include only those records where the bonus is less than 1000 or where there is no corresponding bonus record (i.e., the bonus is NULL).
+
+Here's the SQL query:
+
+```sql
+SELECT Employee.name, Bonus.bonus 
+FROM Employee 
+LEFT JOIN Bonus ON Employee.empID = Bonus.empID 
+WHERE Bonus.bonus < 1000 OR Bonus.bonus IS NULL;
+```
+
+This query will return the names of employees along with their bonuses, where the bonus is less than 1000 or the employee doesn't have a bonus record.
+
+Solution:
+
+# Write your MySQL query statement below
+SELECT Employee.name,Bonus.bonus FROM Employee
+LEFT JOIN Bonus ON Employee.empID = Bonus.empID
+WHERE bonus < 1000 OR Bonus IS NULL

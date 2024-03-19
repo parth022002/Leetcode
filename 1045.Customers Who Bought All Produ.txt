@@ -1,0 +1,30 @@
+1045.Customers Who Bought All Products
+Explaination:
+
+This MySQL query retrieves the `customer_id` from the `Customer` table, ensuring that each customer has purchased all products available in the `Product` table. Here's the breakdown:
+
+1. `SELECT customer_id`: This selects the `customer_id` column from the `Customer` table.
+
+2. `FROM Customer`: This specifies the `Customer` table.
+
+3. `GROUP BY customer_id`: This groups the results by the `customer_id`.
+
+4. `HAVING COUNT(DISTINCT product_key) = (SELECT COUNT(product_key) FROM Product)`: This filters the groups to include only those customers who have purchased all distinct product keys available in the `Product` table. The subquery `(SELECT COUNT(product_key) FROM Product)` calculates the total count of distinct product keys available.
+
+Here's the SQL query:
+
+```sql
+SELECT customer_id 
+FROM Customer 
+GROUP BY customer_id 
+HAVING COUNT(DISTINCT product_key) = (SELECT COUNT(product_key) FROM Product);
+```
+
+This query ensures that each customer has purchased all products available in the `Product` table by comparing the count of distinct product keys each customer has purchased to the total count of distinct product keys available. If they match, the customer is included in the result set.
+
+Solution:
+
+# Write your MySQL query statement below
+
+SELECT  customer_id FROM Customer GROUP BY customer_id
+HAVING COUNT(distinct product_key) = (SELECT COUNT(product_key) FROM Product)

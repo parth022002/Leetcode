@@ -1,0 +1,32 @@
+1729.Find Followers Count
+Explaination:
+
+Your MySQL query selects the user IDs and counts the number of followers for each user from the `followers` table. It then orders the results by user ID in ascending order, and within each user ID, it orders by the number of followers in ascending order as well. Here's the breakdown:
+
+1. `SELECT user_id, COUNT(user_id) AS followers_count`: This selects the `user_id` column and counts the occurrences of each `user_id`, representing the number of followers for each user.
+
+2. `FROM followers`: This specifies the `followers` table.
+
+3. `GROUP BY user_id`: This groups the results by the `user_id`, so the count of followers is aggregated for each user.
+
+4. `ORDER BY user_id ASC, followers_count ASC`: This orders the results first by user ID in ascending order (`ASC`), and within each user ID, it orders by the number of followers in ascending order as well.
+
+Here's the SQL query:
+
+```sql
+SELECT user_id, COUNT(user_id) AS followers_count
+FROM followers
+GROUP BY user_id
+ORDER BY user_id ASC, followers_count ASC;
+```
+
+This query retrieves the user IDs and the counts of their followers from the `followers` table, ordered first by user ID and then by the number of followers for each user in ascending order.
+
+Solution:
+
+# Write your MySQL query statement below
+
+select user_id , count(user_id) as followers_count
+from followers
+group by user_id
+order by user_id asc , followers_count asc;
