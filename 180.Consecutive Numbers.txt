@@ -1,0 +1,50 @@
+180.Consecutive Numbers
+Explaination:
+
+This MySQL query retrieves distinct consecutive numbers from the `logs` table. It checks for three consecutive records in the table where the number (`num`) in the current record (`i1`) is equal to the number in the next two consecutive records (`i2` and `i3`). Here's the breakdown:
+
+```sql
+SELECT DISTINCT
+    i1.num AS ConsecutiveNums
+FROM
+    logs i1,
+    logs i2,
+    logs i3
+WHERE
+    i1.id = i2.id + 1 AND
+    i2.id = i3.id + 1 AND
+    i1.num = i2.num AND
+    i2.num = i3.num
+```
+
+Explanation:
+
+1. **SELECT DISTINCT**:
+   - It retrieves unique values of consecutive numbers (`num`) from the `logs` table.
+
+2. **FROM clause**:
+   - It specifies three instances of the `logs` table, aliased as `i1`, `i2`, and `i3`.
+
+3. **WHERE clause**:
+   - It imposes conditions on the data:
+     - `i1.id = i2.id + 1` ensures that `i1` and `i2` are consecutive records.
+     - `i2.id = i3.id + 1` ensures that `i2` and `i3` are consecutive records.
+     - `i1.num = i2.num` checks if the number in `i1` is equal to the number in `i2`.
+     - `i2.num = i3.num` checks if the number in `i2` is equal to the number in `i3`.
+
+This query effectively finds consecutive numbers in the `logs` table and returns them as distinct values.
+
+Solution:
+
+# Write your MySQL query statement below
+SELECT distinct
+    i1.num as ConsecutiveNums
+FROM
+    logs i1,
+    logs i2,
+    logs i3
+WHERE
+    i1.id = i2.id + 1 AND
+    i2.id = i3.id + 1 AND
+    i1.num = i2.num AND
+    i2.num = i3.num

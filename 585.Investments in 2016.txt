@@ -1,0 +1,51 @@
+585.Investments in 2016
+Explaination:
+
+This MySQL query calculates the total insured value for the year 2016 (`tiv_2016`) for insurance policies where the insured value for the year 2015 (`tiv_2015`) is duplicated and the location (latitude, longitude) is unique. Here's the breakdown:
+
+1. **Main Query**:
+   - It selects the rounded sum of insured values for the year 2016 (`tiv_2016`) from the `Insurance` table.
+
+```sql
+SELECT ROUND(SUM(tiv_2016), 2) AS tiv_2016
+```
+
+2. **WHERE Clause**:
+   - It filters the rows from the `Insurance` table:
+     - It selects rows where the insured value for the year 2015 (`tiv_2015`) is found in a subquery that identifies duplicate values of `tiv_2015`.
+     - It further filters rows where the location (latitude, longitude) is unique, as determined by a subquery that groups by latitude and longitude and checks for counts equal to 1.
+
+```sql
+WHERE tiv_2015 IN (
+    SELECT tiv_2015
+    FROM Insurance
+    GROUP BY tiv_2015
+    HAVING COUNT(*) > 1
+)
+AND (lat, lon) IN (
+    SELECT lat, lon
+    FROM Insurance
+    GROUP BY lat, lon
+    HAVING COUNT(*) = 1
+)
+```
+
+This query will sum up the insured values for the year 2016 (`tiv_2016`) for insurance policies meeting the specified conditions.
+
+Solution:
+
+# Write your MySQL query statement below
+SELECT ROUND(SUM(tiv_2016), 2) AS tiv_2016
+FROM Insurance
+WHERE tiv_2015 IN (
+    SELECT tiv_2015
+    FROM Insurance
+    GROUP BY tiv_2015
+    HAVING COUNT(*) > 1
+)
+AND (lat, lon) IN (
+    SELECT lat, lon
+    FROM Insurance
+    GROUP BY lat, lon
+    HAVING COUNT(*) = 1
+)

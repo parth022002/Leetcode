@@ -1,0 +1,30 @@
+610.Trinagle Judgement
+Explaination:
+
+The provided MySQL query selects all columns from the `Triangle` table and adds a new column called `triangle`, which contains either "Yes" or "No" depending on whether the values in the `x`, `y`, and `z` columns form a valid triangle according to the triangle inequality theorem.
+
+Here's the breakdown:
+
+```sql
+SELECT *, IF( x+y>z AND y+z>x AND z+x>y, "Yes", "No") AS triangle
+FROM Triangle
+```
+
+Explanation:
+
+1. **SELECT statement**:
+   - It selects all columns (`*`) from the `Triangle` table.
+
+2. **IF function**:
+   - It checks if the conditions `x+y>z`, `y+z>x`, and `z+x>y` are all true.
+   - If all conditions are true, it assigns "Yes" to the `triangle` column; otherwise, it assigns "No".
+
+3. **AS**:
+   - It aliases the result of the `IF` function as `triangle`.
+
+This query evaluates whether the given sides `x`, `y`, and `z` form a valid triangle and labels each row accordingly.
+
+Solution:
+
+# Write your MySQL query statement below
+SELECT *, IF( x+y>z and y+z>x and z+x>y, "Yes", "No") as triangle FROM Triangle

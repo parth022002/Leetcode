@@ -1,0 +1,38 @@
+196.Delete Duplicate Emails
+Explaination:
+
+This MySQL query deletes duplicate records from the `Person` table based on their email addresses and IDs. It deletes the records where there is another record with the same email address but a lower ID, keeping only the record with the lowest ID for each unique email.
+
+Here's the breakdown:
+
+```sql
+DELETE p1
+```
+- This specifies the table alias `p1` to be deleted from.
+
+```sql
+FROM Person p1
+```
+- This specifies the `Person` table and aliases it as both `p1` and `p2`.
+
+```sql
+INNER JOIN Person p2
+```
+- This joins the `Person` table to itself using the `INNER JOIN` operation, creating a self-join.
+
+```sql
+WHERE p1.email = p2.email 
+AND p1.id > p2.id;
+```
+- This condition specifies that rows should be deleted from `p1` if there exists another row (`p2`) with the same email address (`p1.email = p2.email`) but a lower ID (`p1.id > p2.id`).
+
+Overall, this query deletes duplicate records from the `Person` table, keeping only the record with the lowest ID for each unique email address.
+
+Solution:
+
+# Write your MySQL query statement below
+DELETE p1 
+FROM Person p1 
+INNER JOIN Person p2 
+WHERE p1.email = p2.email AND 
+p1.id > p2.id;

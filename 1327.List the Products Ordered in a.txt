@@ -1,0 +1,42 @@
+1327.List the Products Ordered in a Period
+Explaination:
+
+This MySQL query retrieves the product names and the total units ordered for products that meet the specified conditions (ordered in February 2020 and with a total unit count greater than or equal to 100). Here's the breakdown of the query:
+
+```sql
+SELECT p.product_name AS product_name, SUM(o.unit) AS unit
+```
+- This selects the `product_name` from the `Products` table (aliased as `p`) and the sum of units from the `Orders` table (aliased as `o`).
+
+```sql
+FROM Products p
+JOIN Orders o USING (product_id)
+```
+- This specifies that the data is retrieved by joining the `Products` and `Orders` tables using the `product_id` column.
+
+```sql
+WHERE YEAR(o.order_date) = '2020' AND MONTH(o.order_date) = '02'
+```
+- This condition filters the rows to include only those where the `order_date` falls within February 2020.
+
+```sql
+GROUP BY p.product_id
+```
+- This groups the results by the `product_id`, ensuring that the aggregation functions (`SUM`) are applied per unique product.
+
+```sql
+HAVING SUM(o.unit) >= 100
+```
+- This further filters the grouped results to include only those products whose total unit count is greater than or equal to 100.
+
+Overall, this query retrieves the product names and total units ordered for products meeting the specified conditions.
+
+Solution:
+
+# Write your MySQL query statement below
+
+SELECT p.product_name AS product_name, sum(o.unit) AS unit FROM Products p
+JOIN Orders o USING (product_id)
+WHERE YEAR(o.order_date)='2020' AND MONTH(o.order_date)='02'
+GROUP BY p.product_id
+HAVING SUM(o.unit)>=100

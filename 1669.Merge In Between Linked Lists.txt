@@ -1,0 +1,45 @@
+1669.Merge In Between Linked Lists
+Explaination:
+
+The provided Python code defines a `Solution` class with a method `mergeInBetween` to merge two linked lists (`list1` and `list2`) by connecting a segment of `list1` from index `a` to index `b` (inclusive) with `list2`. Here's a breakdown of the logic:
+
+1. Initialize pointers `ptr` and `qtr` to traverse `list1`.
+2. Move `ptr` to the node before the segment to be replaced.
+3. Move `qtr` to the node after the segment to be replaced.
+4. Connect the last node of `list2` to `qtr`, effectively merging `list2` into `list1`.
+5. Return the modified `list1`.
+
+Here's a step-by-step explanation of the code:
+
+- `ptr` is initially set to the head of `list1`.
+- Iterate `ptr` forward `a - 1` times to reach the node right before the segment to be replaced.
+- Move `qtr` to the node after the segment to be replaced. This is done by iterating `qtr` forward `b - a + 1` times.
+- Connect the last node of `list2` to `qtr`.
+- Return the modified `list1`.
+
+Overall, this code effectively merges `list2` into `list1` by replacing the segment between indices `a` and `b` with `list2`.
+
+Solution:
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def mergeInBetween(self, list1: ListNode, a: int, b: int, list2: ListNode) -> ListNode:
+        ptr = list1
+        for _ in range(a - 1):
+            ptr = ptr.next
+
+        qtr =ptr.next
+        for _ in range(b - a + 1):
+            qtr = qtr.next
+
+        ptr.next = list2
+        while list2.next:
+            list2 = list2.next
+        list2.next = qtr
+
+        return list1
+        

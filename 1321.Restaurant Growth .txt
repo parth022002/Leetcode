@@ -1,0 +1,98 @@
+1321.Restaurant Growth 
+Explaination:
+
+This MySQL query calculates the sum and average of the amounts spent by customers for each day over a rolling seven-day period. Here's the breakdown:
+
+1. **Common Table Expression (CTE)**:
+   - The query starts by defining a CTE named `Each_Day`, which calculates the sum of the amounts spent by customers for each day.
+
+```sql
+WITH Each_Day AS (
+    SELECT
+        visited_on,
+        SUM(amount) amount
+    FROM
+        Customer
+    GROUP BY
+        visited_on
+)
+```
+
+2. **Main Query**:
+   - It selects the visited date (`visited_on`), the total amount spent (`amount`), and the average amount spent (`average_amount`) for each day over a rolling seven-day period.
+
+```sql
+SELECT 
+    c1.visited_on,
+    SUM(c2.amount) amount,
+    ROUND(AVG(c2.amount), 2) average_amount
+```
+
+3. **JOIN**:
+   - It joins the `Each_Day` CTE with itself (`c1` and `c2`) on the condition that the visiting date of `c2` is within 7 days of the visiting date of `c1`.
+
+```sql
+FROM
+    Each_Day AS c1
+JOIN
+    Each_Day AS c2 ON 
+        c2.visited_on <= c1.visited_on AND
+        DATEDIFF(c1.visited_on, c2.visited_on) < 7
+```
+
+4. **GROUP BY**:
+   - It groups the results by the visiting date (`visited_on`) of `c1`.
+
+```sql
+GROUP BY
+    c1.visited_on
+```
+
+5. **HAVING**:
+   - It filters the grouped results to include only those records where there are seven consecutive days.
+
+```sql
+HAVING
+    COUNT(*) = 7
+```
+
+6. **ORDER BY**:
+   - It orders the result set by the visiting date (`visited_on`) in ascending order.
+
+```sql
+ORDER BY
+    visited_on ASC;
+```
+
+This query effectively calculates the sum and average amounts spent by customers over a rolling seven-day period and filters the results to include only those dates where there are seven consecutive days of data.
+
+Solution:
+
+# Write your MySQL query statement below
+
+WITH Each_Day AS (
+    SELECT
+        visited_on,
+        SUM(amount) amount
+    FROM
+        Customer
+    GROUP BY
+        visited_on
+)
+
+SELECT 
+    c1.visited_on,
+    SUM(c2.amount) amount,
+    ROUND(AVG(c2.amount), 2) average_amount
+FROM
+    Each_Day AS c1
+JOIN
+    Each_Day AS c2 ON 
+        c2.visited_on <= c1.visited_on AND
+        DATEDIFF(c1.visited_on, c2.visited_on) < 7
+GROUP BY
+    c1.visited_on
+HAVING
+    COUNT(*) = 7
+ORDER BY
+    visited_on ASC;

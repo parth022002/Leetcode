@@ -1,0 +1,40 @@
+176.Second Highest Salary
+Explaination:
+
+This MySQL query retrieves the second-highest salary from the `Employee` table. It utilizes a subquery to select the distinct salaries, orders them in descending order, skips the first one using the `OFFSET` clause, and then selects the first salary after the offset. The `IFNULL` function is used to handle cases where there might not be a second-highest salary.
+
+Here's the breakdown:
+
+```sql
+SELECT
+    IFNULL(
+      (SELECT DISTINCT Salary
+       FROM Employee
+       ORDER BY Salary DESC
+       LIMIT 1 OFFSET 1),
+    NULL) AS SecondHighestSalary
+```
+
+- The `SELECT` statement retrieves the second-highest salary and aliases it as `SecondHighestSalary`.
+  
+- The subquery:
+  - `SELECT DISTINCT Salary` retrieves all distinct salary values from the `Employee` table.
+  - `ORDER BY Salary DESC` orders the salary values in descending order.
+  - `LIMIT 1 OFFSET 1` skips the first row (highest salary) and selects the second row, effectively getting the second-highest salary.
+
+- The `IFNULL` function:
+  - Checks if the subquery returns `NULL`, indicating there is no second-highest salary.
+  - If the subquery returns `NULL`, it returns `NULL` as the `SecondHighestSalary`.
+
+This query provides the second-highest salary from the `Employee` table, or `NULL` if there is no such value (for example, if there is only one distinct salary in the table).
+
+Solution:
+
+# Write your MySQL query statement below
+SELECT
+    IFNULL(
+      (SELECT DISTINCT Salary
+       FROM Employee
+       ORDER BY Salary DESC
+        LIMIT 1 OFFSET 1),
+    NULL) AS SecondHighestSalary

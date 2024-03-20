@@ -1,0 +1,53 @@
+626.Exchange Seats
+Explaination:
+
+This MySQL query assigns seats to students based on certain conditions. Here's the breakdown:
+
+```sql
+SELECT CASE
+           WHEN s.id % 2 <> 0 AND s.id = (SELECT COUNT(*) FROM Seat) THEN s.id
+```
+- This part of the `CASE` statement handles the scenario when the seat ID is odd and is the last seat in the table. It selects the current seat ID.
+
+```sql
+           WHEN s.id % 2 = 0 THEN s.id - 1
+```
+- This part handles the scenario when the seat ID is even. It assigns the previous seat ID to the student.
+
+```sql
+           ELSE
+               s.id + 1
+       END AS id,
+```
+- This part handles the default scenario, where the seat ID is odd but not the last seat. It assigns the next seat ID to the student.
+
+```sql
+       student
+```
+- This selects the `student` column from the `Seat` table.
+
+```sql
+FROM Seat AS s
+```
+- This specifies the `Seat` table and aliases it as `s`.
+
+```sql
+ORDER BY id
+```
+- This orders the result set by the assigned seat ID.
+
+Overall, this query assigns seats to students based on certain conditions, ensuring that each student is assigned a seat following specific rules.
+
+Solution:
+
+# Write your MySQL query statement below
+
+SELECT CASE
+           WHEN s.id % 2 <> 0 AND s.id = (SELECT COUNT(*) FROM Seat) THEN s.id
+           WHEN s.id % 2 = 0 THEN s.id - 1
+           ELSE
+               s.id + 1
+           END AS id,
+       student
+FROM Seat AS s
+ORDER BY id

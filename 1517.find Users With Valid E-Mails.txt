@@ -1,0 +1,35 @@
+1517.find Users With Valid E-Mails
+Explaination:
+
+This MySQL query selects all columns from the `Users` table where the email addresses (`mail`) match a specific regular expression pattern. The regular expression pattern is designed to match email addresses ending with "@leetcode.com" or "@leetcode.com?com". Here's the breakdown of the query:
+
+```sql
+SELECT *
+```
+- This part of the query selects all columns from the `Users` table.
+
+```sql
+FROM Users
+```
+- This specifies that the data is retrieved from the `Users` table.
+
+```sql
+WHERE mail REGEXP '^[A-Za-z][A-Za-z0-9_\.\-]*@leetcode(\\?com)?\\.com$'
+```
+- This condition filters the rows to include only those where the `mail` column matches the specified regular expression pattern.
+- `^` asserts the start of the string.
+- `[A-Za-z]` matches any uppercase or lowercase letter at the beginning of the email address.
+- `[A-Za-z0-9_\.\-]*` matches any alphanumeric character, underscore, dot, or hyphen after the first character.
+- `@leetcode` matches the literal string "@leetcode".
+- `(\\?com)?` matches an optional occurrence of "?com".
+- `\\.com$` matches the literal string ".com" at the end of the email address.
+- `REGEXP` is used for pattern matching with regular expressions.
+
+Overall, this query selects rows from the `Users` table where the email addresses match the specified regular expression pattern for LeetCode email addresses.
+
+Solution:
+
+# Write your MySQL query statement below
+SELECT *
+FROM Users
+WHERE mail REGEXP '^[A-Za-z][A-Za-z0-9_\.\-]*@leetcode(\\?com)?\\.com$';

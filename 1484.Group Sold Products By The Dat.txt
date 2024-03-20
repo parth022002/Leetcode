@@ -1,0 +1,48 @@
+1484.Group Sold Products By The Date
+Explaination:
+
+This MySQL query selects data from the `activities` table and performs the following operations:
+
+1. It counts the number of distinct products sold (`num_sold`) on each `sell_date`.
+2. It concatenates the distinct product names (`product`) separated by a comma for each `sell_date`, ordered alphabetically (`ORDER BY product ASC`).
+3. It groups the results by `sell_date`.
+4. It orders the results by `sell_date`.
+
+Here's the breakdown of the query:
+
+```sql
+SELECT 
+    sell_date,
+    COUNT(DISTINCT product) AS num_sold,
+    GROUP_CONCAT(DISTINCT product ORDER BY product ASC SEPARATOR ',') AS products
+```
+- It selects the `sell_date` column.
+- It counts the number of distinct products (`product`) sold on each `sell_date` and aliases it as `num_sold`.
+- It concatenates the distinct product names (`product`) ordered alphabetically, separated by a comma using `GROUP_CONCAT`.
+
+```sql
+FROM activities
+```
+- It specifies that the data is retrieved from the `activities` table.
+
+```sql
+GROUP BY sell_date
+```
+- It groups the results by `sell_date`, so the aggregation functions (`COUNT` and `GROUP_CONCAT`) are applied per unique `sell_date`.
+
+```sql
+ORDER BY sell_date;
+```
+- It orders the results by `sell_date` in ascending order.
+
+Overall, this query provides the count of distinct products sold and a concatenated list of distinct product names for each `sell_date`.
+
+Solution:
+
+# Write your MySQL query statement below
+SELECT sell_date,
+       count(DISTINCT product) AS num_sold,
+       group_concat(DISTINCT product ORDER BY product ASC SEPARATOR ',') products
+  FROM activities
+ GROUP BY sell_date
+ ORDER BY sell_date;

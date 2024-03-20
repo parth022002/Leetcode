@@ -1,0 +1,48 @@
+185.Department Top Three Salaries
+Explaination:
+
+The provided MySQL query aims to retrieve the top three employees with the highest salary in each department. It employs the `DENSE_RANK()` window function to assign ranks to employees within each department based on their salaries. Here's the breakdown:
+
+1. **Inner Query (Subquery)**:
+   - It selects the department name (`d.name`), employee name (`e.name`), employee salary (`e.salary`), and assigns a rank (`rnk`) to each employee within their respective department.
+   - The `DENSE_RANK()` function is used to rank employees based on their salary in descending order within each department.
+
+```sql
+SELECT 
+    d.name AS Department,
+    e.name AS Employee,
+    e.salary AS Salary,
+    DENSE_RANK() OVER (PARTITION BY d.name ORDER BY Salary DESC) AS rnk
+FROM Employee e
+JOIN Department d ON e.departmentId = d.id
+```
+
+2. **Outer Query**:
+   - It selects the department name (`Department`), employee name (`Employee`), and salary (`Salary`) from the results of the inner query.
+   - It filters the results to include only those employees with a rank (`rnk`) less than or equal to 3, meaning the top three employees in each department based on salary.
+
+```sql
+SELECT Department, Employee, Salary
+FROM (
+    -- Inner Query (Subquery) here
+) AS rnk_tbl
+WHERE rnk <= 3;
+```
+
+This query will provide a list of the top three employees with the highest salary in each department.
+
+Solution:
+
+#Write your MySQL query statement below
+SELECT Department, Employee, Salary
+FROM (
+    SELECT 
+        d.name AS Department,
+        e.name AS Employee,
+        e.salary AS Salary,
+        DENSE_RANK() OVER (PARTITION BY d.name ORDER BY Salary DESC) AS rnk
+    FROM Employee e
+    JOIN Department d
+    ON e.departmentId = d.id
+) AS rnk_tbl
+WHERE rnk <= 3;

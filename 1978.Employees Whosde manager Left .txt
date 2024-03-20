@@ -1,0 +1,43 @@
+1978.Employees Whosde manager Left the Company
+Explaination:
+
+This MySQL query selects the `employee_id` of employees who have a salary less than 30000 and whose manager is not found in the Employees table. Here's the breakdown:
+
+```sql
+SELECT e1.employee_id
+```
+- This selects the `employee_id` column from the `Employees` table.
+
+```sql
+FROM Employees e1
+```
+- This specifies the `Employees` table and aliases it as `e1`.
+
+```sql
+WHERE e1.salary < 30000 
+```
+- This condition filters the rows, selecting only those employees with a salary less than 30000.
+
+```sql
+AND e1.manager_id NOT IN (
+    SELECT employee_id FROM Employees
+)
+```
+- This condition further filters the rows, excluding employees whose `manager_id` is not found in the Employees table. The subquery selects all `employee_id` from the Employees table.
+
+```sql
+ORDER BY e1.employee_id;
+```
+- This orders the result set by the `employee_id` column in ascending order.
+
+Overall, this query retrieves the `employee_id` of employees with a salary less than 30000 and whose manager is not listed in the Employees table.
+
+Solution:
+
+# Write your MySQL query statement below
+SELECT e1.employee_id
+FROM Employees e1
+WHERE e1.salary < 30000 AND e1.manager_id NOT IN (
+    SELECT employee_id FROM Employees
+)
+ORDER BY e1.employee_id;

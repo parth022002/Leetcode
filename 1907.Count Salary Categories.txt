@@ -1,0 +1,54 @@
+1907.Count Salary Categories
+Explaination:
+
+This MySQL query provides a breakdown of account categories based on income ranges. It uses three separate subqueries within each SELECT statement to count the number of accounts falling into each category.
+
+Here's the breakdown:
+
+```sql
+(SELECT 
+    "Low Salary" AS category,
+    (SELECT COUNT(*) FROM Accounts WHERE income < 20000) AS accounts_count)
+```
+- This part selects the category "Low Salary" and counts the number of accounts where the income is less than 20000.
+
+```sql
+UNION ALL
+```
+- This keyword combines the results of the first SELECT statement with the subsequent ones.
+
+```sql
+(SELECT 
+    "Average Salary" AS category,
+    (SELECT COUNT(*) FROM Accounts WHERE income >= 20000 AND income <= 50000) AS accounts_count)
+```
+- This part selects the category "Average Salary" and counts the number of accounts where the income is between 20000 and 50000.
+
+```sql
+UNION ALL
+```
+- This keyword combines the results of the previous SELECT statements with the subsequent one.
+
+```sql
+(SELECT 
+    "High Salary" AS category,
+    (SELECT COUNT(*) FROM Accounts WHERE income > 50000) AS accounts_count)
+```
+- This part selects the category "High Salary" and counts the number of accounts where the income is greater than 50000.
+
+This query will provide a result set with three rows, each representing a different income category ("Low Salary", "Average Salary", and "High Salary") along with the count of accounts falling into each category.
+
+Solution:
+
+# Write your MySQL query statement below
+(select 
+"Low Salary" as category,
+(select count(*)  from Accounts where income < 20000) as accounts_count)
+union all
+(select 
+"Average Salary" as category,
+(select count(*) from Accounts where income >= 20000 and income <= 50000) as accounts_count)
+union all 
+(select 
+"High Salary" as category,
+(select count(*) from Accounts where income > 50000) as accounts_count)

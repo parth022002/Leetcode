@@ -1,0 +1,33 @@
+1667.Fix Names in a Table
+Explaination:
+
+Your MySQL query is correctly formatting the names stored in the `name` column of the `Users` table. It capitalizes the first letter of each name, making sure that the rest of the name is in lowercase. Here's the breakdown:
+
+```sql
+SELECT 
+    user_id, 
+    CONCAT(UPPER(LEFT(name, 1)), LCASE(SUBSTRING(name, 2))) AS name
+```
+- This part of the query selects the `user_id` column as it is and transforms the `name` column as follows:
+  - `UPPER(LEFT(name, 1))` capitalizes the first letter of the name using the `LEFT` function to extract the first character and `UPPER` function to convert it to uppercase.
+  - `LCASE(SUBSTRING(name, 2))` converts the rest of the name to lowercase using the `SUBSTRING` function to extract the substring starting from the second character and `LCASE` function to convert it to lowercase.
+  - `CONCAT` concatenates the modified first letter with the modified rest of the name.
+
+```sql
+FROM Users
+```
+- This specifies that the data is being retrieved from the `Users` table.
+
+```sql
+ORDER BY user_id;
+```
+- This orders the result set by the `user_id` column in ascending order.
+
+Overall, this query will return the `user_id` along with the names where the first letter is capitalized and the rest of the name is in lowercase, ordered by `user_id`.
+
+Solution:
+
+# Write your MySQL query statement below
+SELECT user_id, CONCAT(UPPER(LEFT(name, 1)), LCASE(SUBSTRING(name, 2))) AS name
+FROM Users
+ORDER BY user_id;

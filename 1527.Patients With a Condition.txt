@@ -1,0 +1,27 @@
+1527.Patients With a Condition
+Explaination:
+
+Your MySQL query is searching for records in the `Patients` table where the `conditions` column contains the string 'DIAB1'. It's checking for both cases where 'DIAB1' appears at the beginning of the string or somewhere within it.
+
+Here's the breakdown:
+
+```sql
+SELECT * 
+FROM Patients 
+WHERE conditions LIKE ('DIAB1%') 
+OR conditions LIKE ('% DIAB1%');
+```
+
+- `SELECT *`: This selects all columns from the `Patients` table.
+- `FROM Patients`: This specifies that the data is being retrieved from the `Patients` table.
+- `WHERE conditions LIKE ('DIAB1%') OR conditions LIKE ('% DIAB1%')`: This filters the rows to include only those where the `conditions` column contains the string 'DIAB1' at the beginning (`DIAB1%`) or anywhere within the string (`% DIAB1%`).
+
+Overall, this query will return records from the `Patients` table where the `conditions` column contains the string 'DIAB1' in either the beginning or somewhere within the string.
+
+Solution:
+
+# Write your MySQL query statement below
+SELECT * 
+FROM Patients 
+WHERE conditions LIKE ('DIAB1%') 
+OR conditions LIKE ('% DIAB1%');

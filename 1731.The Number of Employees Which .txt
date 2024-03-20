@@ -1,0 +1,38 @@
+1731.The Number of Employees Which Report to Each Employee
+Explaination:
+
+Sure, let me break down the query for you:
+
+1. **SELECT statement**: 
+   - It selects columns `employee_id` and `name` from the `Employees` table for the reporting manager (`emp1`), 
+   - It also calculates two values:
+     - `COUNT(emp2.employee_id)` which counts the number of reports each manager has (using the `emp2` alias), and 
+     - `ROUND(AVG(emp2.age))` which calculates the average age of the reports (again using the `emp2` alias).
+
+2. **FROM clause**:
+   - It specifies that we are selecting data from the `Employees` table and aliases it as `emp1`.
+
+3. **INNER JOIN clause**:
+   - It joins the `Employees` table with itself using the alias `emp2`. 
+   - The join condition is `emp1.employee_id = emp2.reports_to`, meaning it matches the `employee_id` of the manager (`emp1`) with the `reports_to` column of the employees who report to that manager (`emp2`).
+
+4. **GROUP BY clause**:
+   - It groups the results by the `employee_id` of the manager (`emp1`). This ensures that each row in the result represents a unique manager.
+
+5. **ORDER BY clause**:
+   - It orders the result set by the `employee_id` of the manager (`emp1`), ensuring the output is sorted based on the manager's ID.
+
+Overall, this query retrieves data about managers (`emp1`) and their reports, including the count of reports and the average age of those reports, then it groups the results by the manager's ID and orders them accordingly.
+
+Solution:
+
+# Write your MySQL query statement below
+SELECT
+    emp1.employee_id,
+    emp1.name,
+    COUNT(emp2.employee_id) AS reports_count,
+    ROUND(AVG(emp2.age)) AS average_age
+FROM Employees emp1
+INNER JOIN Employees emp2 ON emp1.employee_id = emp2.reports_to
+GROUP BY emp1.employee_id
+ORDER BY emp1.employee_id

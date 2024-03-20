@@ -1,0 +1,49 @@
+1204.Last Person to Fit in the Bus
+Explaination:
+
+This MySQL query retrieves the name of the person whose turn is served next based on the given conditions. It joins the `Queue` table with itself to compare the turns and weights, and then groups the results by turn, filtering by the total weight constraint.
+
+Here's the breakdown:
+
+```sql
+SELECT q1.person_name
+```
+- This selects the name of the person from the `Queue`.
+
+```sql
+FROM Queue q1 JOIN Queue q2 ON q1.turn >= q2.turn
+```
+- This performs a self-join of the `Queue` table (aliased as `q1` and `q2`) based on the condition that `q1`'s turn is greater than or equal to `q2`'s turn.
+
+```sql
+GROUP BY q1.turn
+```
+- It groups the results by `q1`'s turn.
+
+```sql
+HAVING SUM(q2.weight) <= 1000
+```
+- It filters the grouped results, ensuring that the sum of weights served up to this turn (from `q2`) does not exceed 1000.
+
+```sql
+ORDER BY SUM(q2.weight) DESC
+```
+- It orders the results based on the sum of weights served, in descending order.
+
+```sql
+LIMIT 1
+```
+- It limits the result to one row, effectively selecting the person whose turn is served next and satisfies the weight constraint.
+
+Overall, this query identifies the person whose turn is next to be served based on the turn order and ensures that the total weight served up to that point does not exceed 1000.
+
+Solution:
+
+# Write your MySQL query statement below
+SELECT 
+    q1.person_name
+FROM Queue q1 JOIN Queue q2 ON q1.turn >= q2.turn
+GROUP BY q1.turn
+HAVING SUM(q2.weight) <= 1000
+ORDER BY SUM(q2.weight) DESC
+LIMIT 1
