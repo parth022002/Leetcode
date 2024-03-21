@@ -1,0 +1,51 @@
+206.Reverse Linked List
+Explaination:
+
+The provided code defines a class `Solution` with a method `reverseList` which takes a singly-linked list `head` as input and reverses it.
+
+Here's how the code works:
+
+1. It initializes three pointers `prev`, `curr`, and `nextNode`.
+2. It traverses the linked list starting from the head.
+3. Inside the loop, it rearranges the pointers such that each node's `next` points to the previous node.
+4. After rearranging pointers for each node, it updates `prev` to the current node, `curr` to the next node, and `nextNode` to the next node after `curr`.
+5. Finally, it returns the `prev` pointer, which now points to the new head of the reversed linked list.
+
+There's a redundant line in the code: `return prev` appears twice at the end of the function, you should remove one of them.
+
+Here's the corrected version:
+
+```python
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        prev = None
+        curr = head
+        nextNode = None
+        while curr:
+            nextNode = curr.next
+            curr.next = prev
+            prev = curr
+            curr = nextNode
+        return prev
+```
+
+This implementation should correctly reverse the given singly-linked list.
+
+Solution:
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        prev = None
+        curr = head
+        nextNode = None
+        while curr:
+            nextNode = curr.next
+            curr.next = prev
+            prev = curr
+            curr = nextNode
+        return prev

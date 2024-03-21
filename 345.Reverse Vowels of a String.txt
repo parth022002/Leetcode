@@ -1,0 +1,37 @@
+345.Reverse Vowels of a String
+Explaination:
+
+This code defines a class `Solution` with a method `reverseVowels`. This method takes a string `s` as input and returns a string with its vowels reversed while maintaining the positions of non-vowel characters.
+
+Here's how the code works:
+
+1. It converts the input string `s` into a list of characters so that it can be modified. This is done to overcome the immutability of strings.
+2. It initializes two pointers, `left` and `right`, to keep track of the positions of characters in the string.
+3. It defines a set `vowels` containing all lowercase and uppercase vowels.
+4. It enters a loop that continues until `left` is less than `right`.
+5. Within the loop, it advances `left` and `right` pointers to the positions of the next vowel from the left and right ends of the string, respectively.
+6. It swaps the vowels found at `left` and `right` positions.
+7. It advances `left` pointer to the next position and decreases `right` pointer by one, preparing for the next iteration.
+8. After the loop finishes, it converts the modified list of characters back into a string using `join` method and returns the result.
+
+The code successfully reverses the vowels in the input string while keeping the positions of non-vowel characters intact. It has a time complexity of O(n), where n is the length of the input string.
+
+Solution:
+
+class Solution:
+    def reverseVowels(self, s: str) -> str:
+        s = list(s)
+        n = len(s)
+        left = 0
+        right = n - 1
+        vowels = set('aeiouAEIOU')
+        while left < right:
+            while left < right and s[left] not in vowels:
+                left += 1
+            while left < right and s[right] not in vowels:
+                right -= 1
+            s[left], s[right] = s[right], s[left]
+            left += 1
+            right -= 1
+        s=''.join(s)
+        return s
