@@ -1,0 +1,44 @@
+234.Palindrome Linked List
+Explanation:
+
+This code defines a solution class with a method `isPalindrome` which determines whether a singly linked list is a palindrome. A linked list is considered a palindrome if it reads the same forwards and backwards.
+
+The algorithm works as follows:
+
+1. Traverse the linked list and store the values of each node in a list.
+2. Initialize two pointers, one starting from the beginning of the list and the other starting from the end of the list.
+3. Compare values pointed to by the two pointers. If they match, move both pointers towards the center of the list.
+4. Repeat step 3 until the pointers meet or cross each other.
+5. If the pointers have not crossed each other, it means the linked list is a palindrome.
+
+Here's a breakdown of the code:
+
+- The `isPalindrome` method takes the head of the linked list as input and returns a boolean indicating whether the linked list is a palindrome.
+- Inside the method, it initializes an empty list `list_vals` to store the values of the nodes in the linked list.
+- It then iterates through the linked list, appending the values of each node to the `list_vals`.
+- After traversing the entire linked list, it initializes two pointers `left` and `right` to check for palindromic properties.
+- It compares elements at positions `left` and `right` in the `list_vals`. If they match, it increments `left` and decrements `right`. This process continues until `left` is greater than or equal to `right` or until a mismatch is found.
+- Finally, it returns whether `left` is greater than or equal to `right`, which indicates whether the linked list is a palindrome.
+
+There's a logical error in the last line of the code (`return left >= right`). It should be `return left > right` because if they are equal, the comparison is unnecessary and it should still return `True`.
+
+Soltuion:
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def isPalindrome(self, head: Optional[ListNode]) -> bool:
+        list_vals = []
+        while head:
+            list_vals.append(head.val)
+            head = head.next
+
+        left, right = 0, len(list_vals) - 1
+        while left < right and list_vals[left] == list_vals[right]:
+            left += 1
+            right -= 1
+        return left >= right
+        
