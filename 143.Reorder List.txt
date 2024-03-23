@@ -1,0 +1,68 @@
+143.Reorder List
+Explaination:
+
+This code defines a class `Solution` with a method `reorderList` to reorder a singly-linked list in place. The function reorders the list such that nodes from the second half are inserted alternatively between the nodes of the first half.
+
+Here's how the code works:
+
+1. It first checks if the given linked list is empty or contains only one node. If so, it returns without any modification as there is no need to reorder.
+
+2. Then, it finds the middle of the linked list using the slow and fast pointer technique. The slow pointer moves one step at a time, while the fast pointer moves two steps at a time. When the fast pointer reaches the end of the list, the slow pointer points to the middle of the list.
+
+3. It splits the linked list into two halves. The first half remains unchanged, while the second half starts from the node next to the middle node.
+
+4. The code then reverses the second half of the linked list. This is achieved by iteratively reversing the next pointers of the nodes in the second half.
+
+5. Finally, it merges the first half and the reversed second half alternately by adjusting the next pointers. This is done by taking nodes from both halves alternately and updating their next pointers.
+
+This algorithm ensures that the reordered list has nodes alternatively from the first half and the reversed second half.
+
+The code does not explicitly return anything because it modifies the given linked list in place as per the problem's requirement.
+
+Solution:
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+class Solution:
+    def reorderList(self, head: Optional[ListNode]) -> None:
+        """
+        Do not return anything, modify head in-place instead.
+        """
+        if not head or not head.next:
+            return
+        
+        # Step 1: Find the middle of the linked list
+        slow, fast = head, head
+        while fast.next and fast.next.next:
+            slow = slow.next
+            fast = fast.next.next
+        
+        # Split the linked list into two halves
+        second_half = slow.next
+        slow.next = None
+        
+        # Step 2: Reverse the second half of the linked list
+        prev = None
+        current = second_half
+        while current:
+            next_node = current.next
+            current.next = prev
+            prev = current
+            current = next_node
+        second_half = prev
+        
+        # Step 3: Merge the first half and the reversed second half alternately
+        first_half = head
+        while second_half:
+            next_first = first_half.next
+            next_second = second_half.next
+            
+            first_half.next = second_half
+            second_half.next = next_first
+            
+            first_half = next_first
+            second_half = next_second
