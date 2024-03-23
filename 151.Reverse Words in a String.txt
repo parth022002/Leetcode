@@ -1,0 +1,17 @@
+151.Reverse Words in a String
+Explaination:
+
+The provided Python code defines a class `Solution` with a method `reverseWords`. This method takes a string `s` as input and returns the string with the words reversed. Here's how it works:
+
+1. `s.split()`: This splits the input string `s` into a list of words, using whitespace as the delimiter.
+2. `reversed(...)`: This reverses the list of words obtained from the split operation.
+3. `" ".join(...)`: This joins the reversed list of words back into a single string, with each word separated by a single whitespace.
+
+So, essentially, the method `reverseWords` reverses the order of words in the input string `s`.
+
+Solution:
+
+class Solution:
+    def reverseWords(self, s: str) -> str:
+        return " ".join(reversed(s.split()))
+        
