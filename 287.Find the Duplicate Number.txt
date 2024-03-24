@@ -1,0 +1,32 @@
+287.Find the Duplicate Number
+Explaination:
+
+This Python code defines a class `Solution` with a method `findDuplicate`. This method takes a list of integers `nums` as input and aims to find a duplicate number in the list. Here's a step-by-step explanation of how it works:
+
+1. Two pointers, `slow` and `fast`, are initialized with the value at the first index of `nums`.
+2. In a loop, `slow` iterates one step at a time (`slow = nums[slow]`), while `fast` iterates two steps at a time (`fast = nums[nums[fast]]`), until they meet at the same index in the list.
+   - This loop detects the existence of a cycle in the list, indicating the presence of a duplicate element.
+3. After the first loop, the `slow` and `fast` pointers have met at a common index where the cycle begins.
+4. Then, a new pointer `fast` is initialized with the value at the first index of `nums`, and both `slow` and `fast` move at the same pace (one step at a time) until they meet again.
+   - This loop detects the start of the cycle, which is the duplicate element in the list.
+5. Once `slow` and `fast` meet again, the method returns the value where they meet, which represents the duplicate element.
+
+This algorithm is known as Floyd's Tortoise and Hare (Cycle Detection Algorithm) and is commonly used to detect cycles in linked lists but can also be applied in this context to find duplicate elements in an array.
+
+Solution:
+
+class Solution:
+    def findDuplicate(self, nums: List[int]) -> int:
+        slow = nums[0]
+        fast = nums[0]
+        while True:
+            slow = nums[slow]
+            fast = nums[nums[fast]]
+            if slow == fast:
+                break
+
+        fast = nums[0]
+        while slow != fast:
+            slow = nums[slow]
+            fast = nums[fast]
+        return slow
