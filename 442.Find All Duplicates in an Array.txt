@@ -1,0 +1,40 @@
+442.Find All Duplicates in an Array.
+Explaination:
+
+The provided code is a Python solution to the problem of finding duplicates in an array of integers. It follows a particular approach utilizing the fact that the numbers in the array are between 1 and n (where n is the length of the array). Here's how it works:
+
+1. It initializes an empty list `result` to store the duplicates found.
+2. It gets the length of the input array `nums`.
+3. It iterates through each element in the array using a for loop.
+4. For each element `nums[i]`, it takes its absolute value `num`.
+5. It then calculates the index `idx` by subtracting 1 from the absolute value of the number (since the numbers are between 1 and n).
+6. If the number at index `idx` in the `nums` array is negative, it means that `num` has been encountered before, and hence, it's a duplicate. It appends `num` to the `result` list.
+7. Regardless of whether the number at index `idx` is negative or positive, it multiplies it by -1. This marks the number as encountered.
+8. Finally, it returns the list of duplicates found.
+
+This algorithm modifies the input array in-place to keep track of whether a number has been seen before. By negating the value at the index corresponding to the number encountered, it effectively flags that the number has been encountered.
+
+Here's a breakdown of the code's time complexity:
+
+- The loop iterating through each element in the array takes O(n) time, where n is the length of the array.
+- Within the loop, each operation (taking absolute value, calculating index, checking and updating the number at the index) is constant time.
+- Therefore, the overall time complexity of the algorithm is O(n).
+
+The space complexity is O(1) since the result list is the only additional space used, and its size is dependent on the number of duplicates found, which cannot exceed the length of the input array.
+
+Solution:
+
+class Solution:
+    def findDuplicates(self, nums: List[int]) -> List[int]:
+        result = []
+        n = len(nums)
+        for i in range(n):
+            num = abs(nums[i])
+            idx = num - 1
+            if nums[idx] < 0:
+                result.append(num)
+            nums[idx] *= -1
+        return result
+
+
+        
