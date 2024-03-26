@@ -1,0 +1,35 @@
+41.First Missing Value
+Explaination:
+
+This Python code defines a class `Solution` with a method `firstMissingPositive` that takes a list of integers `nums` as input and returns the first missing positive integer. Let's break down how the method works:
+
+1. It initializes an empty dictionary `mp` to store whether a number is present in the input list `nums`.
+2. It calculates the maximum value present in the list `nums`. The `default=0` argument in the `max` function ensures that if the list is empty, the maximum value is considered as 0.
+3. It then iterates through each number in the list `nums`. For each number encountered, it sets the corresponding key in the dictionary `mp` to `True`, indicating that the number is present.
+4. Next, it iterates from 1 up to `maximum` (exclusive). For each integer `i` in this range, it checks if `i` is not present in the dictionary `mp`. If `i` is not present, it means `i` is the first missing positive integer, so it returns `i`.
+5. If all integers from 1 up to `maximum - 1` are present in `nums`, it means the first missing positive integer must be `maximum + 1`. However, if `maximum` is less than 0 (indicating that all numbers in `nums` are negative), it returns 1 as the first missing positive integer.
+6. If there are no missing positive integers, it returns `maximum + 1`.
+
+This algorithm essentially uses a dictionary to mark the presence of each positive integer from the input list. Then, it iterates over the positive integers starting from 1, checking for their presence in the dictionary. The first missing positive integer is returned once found.
+
+Here's the breakdown of the time complexity:
+
+- Finding the maximum value in the list takes O(n) time, where n is the length of the list.
+- Constructing the dictionary `mp` also takes O(n) time.
+- The second loop iterates up to `maximum`, which can be at most O(n) since `maximum` is the maximum value in the list.
+- Therefore, the overall time complexity of the algorithm is O(n).
+
+The space complexity of the algorithm is also O(n) because of the dictionary `mp`, which can hold at most n distinct positive integers from the input list.
+
+Solution:
+
+class Solution:
+    def firstMissingPositive(self, nums: List[int]) -> int:
+        mp = {}
+        maximum = max(nums, default=0)
+        for num in nums:
+            mp[num] = True
+        for i in range(1, maximum):
+            if  i not in mp:
+                return i
+        return 1 if maximum < 0 else maximum + 1
