@@ -1,0 +1,60 @@
+713.Subarray Product Less Than k
+Explaination:
+
+This code appears to be a solution for the "Number of Subarrays with Product Less Than K" problem. The problem requires finding the number of contiguous subarrays within a given array `nums` whose product is less than a given integer `k`.
+
+Here's a brief explanation of how the code works:
+
+1. It initializes variables `left`, `right`, `product`, and `count`.
+2. It iterates through the array using `right` pointer, multiplying the current product by the number at the `right` index.
+3. When the product exceeds or equals `k`, it starts shrinking the window from the left until the product becomes less than `k`.
+4. At each step, it counts the number of valid subarrays and updates the count.
+5. It returns the count at the end.
+
+This solution is efficient with a time complexity of O(n) where n is the length of the `nums` array.
+
+However, there seems to be a small issue in the counting logic. Here's the corrected version:
+
+```python
+from typing import List
+
+class Solution:
+    def numSubarrayProductLessThanK(self, nums: List[int], k: int) -> int:
+        if k <= 1:
+            return 0
+
+        left, right, product, count = 0, 0, 1, 0
+        n = len(nums)
+
+        while right < n:
+            product *= nums[right]
+            while product >= k:
+                product //= nums[left]
+                left += 1
+            count += right - left + 1  # Update the count for valid subarrays
+            right += 1
+
+        return count
+```
+
+In this corrected version, `count` is updated with `(right - left + 1)` at each step within the while loop. This properly accounts for all valid subarrays ending at the current `right` pointer.
+
+Solution:
+
+class Solution:
+    def numSubarrayProductLessThanK(self, nums: List[int], k: int) -> int:
+        if k <= 1:
+            return 0
+
+        left, right, product, count = 0, 0, 1, 0
+        n = len(nums)
+
+        while right < n:
+            product *= nums[right]
+            while product >= k:
+                product //= nums[left]
+                left += 1
+            count += 1 + (right - left)
+            right += 1
+
+        return count
