@@ -1,0 +1,27 @@
+334.increasing Triplet Subsequence
+Explaination:
+
+This code is an implementation of the "Increasing Triplet Subsequence" problem. Let's break down the code:
+
+1. `first` and `second` are initialized to positive infinity. These variables will store the first and second elements of the increasing triplet subsequence.
+2. The loop iterates over each element `n` in the input list `nums`.
+3. If the current element `n` is less than or equal to `first`, `first` is updated to `n`.
+4. If the current element `n` is greater than `first` but less than or equal to `second`, `second` is updated to `n`.
+5. If the current element `n` is greater than both `first` and `second`, it means we've found an increasing triplet subsequence `[first, second, n]`, and the function returns `True`.
+6. If the loop completes without finding an increasing triplet subsequence, the function returns `False`.
+
+This algorithm efficiently finds an increasing triplet subsequence in linear time complexity (`O(n)`), where `n` is the length of the input list `nums`. The idea is to track the smallest two elements (`first` and `second`) that could potentially form a triplet subsequence. If we encounter a third element larger than both `first` and `second`, we return `True`. Otherwise, we return `False` indicating that no such triplet subsequence exists.
+
+Solution:
+
+class Solution:
+    def increasingTriplet(self, nums: List[int]) -> bool:
+        first = second = float('inf') 
+        for n in nums: 
+            if n <= first: 
+                first = n
+            elif n <= second:
+                second = n
+            else:
+                return True
+        return False
