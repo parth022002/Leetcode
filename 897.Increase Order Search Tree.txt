@@ -1,0 +1,55 @@
+897.Increase Order Search Tree
+Explanation:
+
+This Python code defines a class `Solution` with a method `increasingBST`. This method takes the root of a binary tree (`root`) as input and returns the root of a new binary search tree (BST) where the values are rearranged in increasing order.
+
+Here's how the code works:
+
+1. **In-order Traversal:**
+   - The code first initializes an empty list `vals`. 
+   - It defines an inner function `inord(node)` for in-order traversal of the binary tree. In this traversal, the nodes are visited in non-decreasing order.
+   - Inside the `inord` function:
+     - If the node is `None`, it returns, as there's no node to process.
+     - It recursively calls `inord` on the left child of the current node.
+     - It appends the value of the current node to the list `vals`.
+     - It recursively calls `inord` on the right child of the current node.
+
+2. **In-order Traversal Execution:**
+   - The `inord` function is called with the root of the binary tree (`root`). This populates the list `vals` with the values of the nodes in increasing order.
+
+3. **Creating New Binary Search Tree:**
+   - The code then creates a new binary search tree by iterating over the values in `vals`.
+   - It initializes a new tree with the first value in `vals`.
+   - It then iterates over the remaining values in `vals`, adding each value as the right child of the current node and updating the current node to the newly added node.
+
+4. **Return:**
+   - Finally, it returns the root of the new binary search tree.
+
+Overall, this method performs an in-order traversal of the input binary tree to extract its values in increasing order. Then, it constructs a new binary search tree using these values, ensuring that the tree satisfies the properties of a binary search tree where the value of each node is greater than the values of its left sub-tree and less than the values of its right sub-tree.
+
+Solution:
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def increasingBST(self, root: TreeNode) -> TreeNode:
+        vals = []
+
+        def inord(node):
+            if not node:
+                return 
+            inord(node.left)
+            vals.append(node.val)
+            inord(node.right)
+
+        inord(root)
+        tree = TreeNode(vals[0])
+        tmp = tree
+        for i in vals[1:]:
+            tmp.right = TreeNode(val=i)
+            tmp = tmp.right
+        return tree

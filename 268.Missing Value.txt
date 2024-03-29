@@ -1,0 +1,25 @@
+268.Missing Value
+Explanation:
+
+This Python code defines a class `Solution` with a method `missingNumber`. This method takes a list of integers `nums` as input and returns the missing number in the sequence `[0, 1, 2, ..., n]`, where `n` is the length of the list `nums`.
+
+Here's a step-by-step explanation of the code:
+
+1. `n = len(nums)`: It calculates the length of the input list `nums`.
+
+2. `Tsum = (n * (n + 1)) // 2`: It calculates the sum of numbers from `0` to `n` using the formula for the sum of an arithmetic series. This is the expected sum if all numbers from `0` to `n` were present in the list.
+
+3. `actual_sum = sum(nums)`: It calculates the sum of all elements present in the list `nums`.
+
+4. `return Tsum - actual_sum`: It returns the difference between the expected sum (`Tsum`) and the actual sum (`actual_sum`). This difference represents the missing number in the sequence.
+
+Overall, the method efficiently finds the missing number in the sequence `[0, 1, 2, ..., n]` by calculating the expected sum of the sequence and subtracting the sum of elements present in the list `nums`. The result is the missing number.
+
+Solution:
+
+class Solution:
+    def missingNumber(self, nums: List[int]) -> int:
+        n = len(nums)
+        Tsum = (n * (n + 1)) // 2
+        actual_sum = sum(nums)
+        return Tsum - actual_sum

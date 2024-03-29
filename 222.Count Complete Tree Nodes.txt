@@ -1,0 +1,42 @@
+222.Count Complete Tree Nodes
+Explanation:
+
+This Python code defines a class `Solution` with a method `countNodes`. This method takes the root of a binary tree (`root`) as input and returns the total number of nodes in the binary tree.
+
+Here's how the code works:
+
+1. **Base Case:**
+   - The code first checks if the `root` is `None`. If it is, it means the tree is empty, so it returns `0` indicating that there are no nodes in the tree.
+
+2. **Recursive Counting:**
+   - If the `root` is not `None`, it initializes a variable `count` to `1`. This `1` represents the current node.
+   - It then checks if the left child of the current node (`root.left`) is not `None`. If it's not `None`, it recursively calls the `countNodes` function with the left child of the current node and adds the returned count to the `count` variable.
+   - Similarly, it checks if the right child of the current node (`root.right`) is not `None`. If it's not `None`, it recursively calls the `countNodes` function with the right child of the current node and adds the returned count to the `count` variable.
+
+3. **Return Count:**
+   - Finally, it returns the total count of nodes in the binary tree.
+
+This method effectively counts the nodes in the binary tree by recursively traversing each node and adding `1` for each encountered node. It traverses both the left and right subtrees recursively and accumulates the counts. Finally, it returns the total count of nodes.
+
+Solution:
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def countNodes(self, root: Optional[TreeNode]) -> int:
+        if not root:
+            return 0
+
+        count = 1
+
+        if root.left is not None:
+            count += self.countNodes(root.left)
+        if root.right is not None:
+            count += self.countNodes(root.right)
+
+        return count
+        
