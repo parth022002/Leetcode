@@ -1,0 +1,25 @@
+58.Length of last Word
+Explaination:
+
+This Python code defines a class `Solution` with a method `lengthOfLastWord` which takes a string `s` as input and returns the length of the last word in the string. Here's a step-by-step explanation of the code:
+
+1. `words = s.strip().split()`: This line first removes any leading and trailing whitespace from the input string `s` using the `strip()` method. Then, it splits the string into a list of words using whitespace as the delimiter, using the `split()` method. The result is stored in the `words` variable.
+
+2. `if not words:`: This line checks if the `words` list is empty. If the input string contains only whitespace or is empty, `words` will be an empty list.
+
+3. `return 0`: If the `words` list is empty (i.e., there are no words in the string), the method returns 0, indicating that there are no words in the string, hence the length of the last word is 0.
+
+4. `return len(words[-1])`: If the `words` list is not empty, this line returns the length of the last word in the list. `words[-1]` accesses the last element of the list, which is the last word in the string, and `len(words[-1])` calculates its length. This length is then returned as the result of the method.
+
+In summary, the `lengthOfLastWord` method returns the length of the last word in the input string `s`, or 0 if the string contains no words (e.g., only whitespace).
+
+Solution:
+
+class Solution:
+    def lengthOfLastWord(self, s: str) -> int:
+        words = s.strip().split()
+
+        if not words:
+            return 0
+
+        return len(words[-1])
