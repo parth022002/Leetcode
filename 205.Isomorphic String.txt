@@ -1,0 +1,45 @@
+205.Isomorphic String
+Explaination:
+
+This Python code defines a class `Solution` with a method `isIsomorphic` to determine if two strings `s` and `t` are isomorphic. Two strings are considered isomorphic if all occurrences of each character in string `s` can be replaced with another character to get `t`, while preserving the order. 
+
+Here's the explanation of the code:
+
+1. `indexS = [0] * 200` and `indexT = [0] * 200`: These lines initialize two lists, `indexS` and `indexT`, each containing 200 elements initialized to 0. These lists will be used to store the last seen index of each character in strings `s` and `t` respectively. The reason for using 200 is to accommodate the ASCII range of characters (0 to 127).
+
+2. `length = len(s)`: This line calculates the length of the input string `s`. 
+
+3. `if length != len(t): return False`: This checks if the lengths of both strings `s` and `t` are equal. If they're not, the function returns `False`, indicating that the strings cannot be isomorphic.
+
+4. `for i in range(length):`: This loop iterates through each character index `i` from 0 to `length - 1` in the strings `s` and `t`.
+
+5. `if indexS[ord(s[i])] != indexT[ord(t[i])]: return False`: This condition checks if the last seen index of the current character in `s` (`ord(s[i])`) is not equal to the last seen index of the current character in `t` (`ord(t[i])`). If they are not equal, it means that the current characters in `s` and `t` cannot be mapped to each other, so the function returns `False`.
+
+6. `indexS[ord(s[i])] = i + 1` and `indexT[ord(t[i])] = i + 1`: These lines update the last seen index of the current character in `s` and `t` respectively to the current index `i + 1`.
+
+7. After iterating through all characters in both strings without finding any discrepancies, the function returns `True`, indicating that the strings are isomorphic.
+
+In summary, this code efficiently determines if two strings are isomorphic by using two lists to keep track of the last seen index of characters in both strings and comparing them.
+
+
+Solution:
+
+class Solution:
+
+    def isIsomorphic(self, s: str, t: str) -> bool:
+        indexS = [0] * 200
+        indexT = [0] * 200
+
+        length = len(s)
+
+        if length != len(t):
+            return False
+        
+        for i in range(length):
+            if indexS[ord(s[i])] != indexT[ord(t[i])]:
+                return False
+            
+            indexS[ord(s[i])] = i + 1
+            indexT[ord(t[i])] = i + 1
+
+        return True
