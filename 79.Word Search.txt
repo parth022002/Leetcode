@@ -1,0 +1,46 @@
+79.Word Search
+Explaination:
+
+This Python code defines a class `Solution` with a method `exist` that checks if a given word can be formed by a sequence of adjacent cells on a 2D board. The approach uses depth-first search (DFS) to explore all possible paths starting from each cell on the board.
+
+Here's a breakdown of how the code works:
+
+1. The `dfs` function is a recursive helper function that performs DFS to search for the word on the board starting from a given position `(i, j)`. It takes the current board state, the target word, the current indices `(i, j)`, and the current index in the word `idx` as arguments.
+
+2. In the `dfs` function:
+   - It checks if the current position `(i, j)` is out of bounds or if the character at `(i, j)` does not match the character in the word at the corresponding index `idx`. If any of these conditions are met, it returns `False`, indicating that this path cannot lead to the formation of the word.
+   - If `idx` reaches the length of the word minus 1, it means that the entire word has been found, so it returns `True`.
+   - It temporarily replaces the character at `(i, j)` with `'*'` to mark it as visited.
+   - It recursively explores all four neighboring cells (up, down, left, right) to check if the adjacent cells can form the rest of the word. It uses logical OR (`or`) to combine the results of these recursive calls.
+   - After the recursive calls, it restores the original character at `(i, j)` and returns the result.
+
+3. The `exist` method iterates through each cell of the board. For each cell `(i, j)`, it calls the `dfs` function to check if the word can be formed starting from that cell. If `dfs` returns `True`, it means the word exists on the board, so the method returns `True`. If no cell leads to the formation of the word, the method returns `False`.
+
+This solution effectively searches for the existence of the word on the board using DFS, considering all possible starting positions.
+
+Solution:
+
+class Solution:
+    def exist(self, board: List[List[str]], word: str) -> bool:
+        def dfs(board, word, i, j, idx):
+            if i<0 or i>= len(board) or j < 0 or j >= len(board[0]) or board[i][j] != word[idx]:
+                return False
+            
+            if idx == len(word) - 1:
+                return True
+            
+            tmp = board[i][j]
+            board[i][j] = '*'
+
+            res = dfs(board, word, i + 1, j, idx + 1) or dfs(board, word, i - 1, j, idx + 1) or dfs(board, word, i, j + 1, idx + 1) or dfs(board, word, i, j - 1, idx + 1)
+            
+            board[i][j] = tmp
+            return res
+
+        for i in range(len(board)):
+            for j in range(len(board[0])):
+                if dfs(board, word, i, j, 0):
+                    return True
+
+        return False
+        
