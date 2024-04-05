@@ -1,0 +1,37 @@
+1544.Make The String Great
+Explaination:
+
+This Python code defines a class `Solution` with a method `makeGood` that takes a string `s` as input and returns a modified string according to certain rules. Let's break down the code step by step:
+
+1. `stack = []`: Initialize an empty list named `stack`. This will be used as a stack data structure to keep track of characters.
+
+2. `for char in s:`: Iterate through each character in the input string `s`.
+
+3. `if stack and abs(ord(char) - ord(stack[-1])) == 32:`: This condition checks whether the stack is not empty (`stack`) and whether the absolute difference between the ASCII values of the current character `char` and the top character of the stack `stack[-1]` is 32. 
+
+    - The `ord()` function is used to get the ASCII value of a character.
+    - The condition `abs(ord(char) - ord(stack[-1])) == 32` checks whether the characters are a case-insensitive match, meaning they are the same character with different cases (e.g., 'a' and 'A', 'b' and 'B').
+    - If the condition is true, it means that the current character and the top character of the stack are case-insensitive pairs, and they should be removed from the stack.
+
+4. `stack.pop()`: If the condition in step 3 is true, pop (remove) the top character from the stack since it forms a pair with the current character.
+
+5. `else:`: If the condition in step 3 is false, meaning the current character does not form a case-insensitive pair with the top character of the stack:
+
+    - Append the current character to the stack.
+
+6. `return ''.join(stack)`: After iterating through all characters in the input string `s`, join the characters in the stack into a string and return it. This string represents the modified version of the input string with all case-insensitive pairs removed.
+
+Overall, this code effectively removes adjacent characters in the input string that form case-insensitive pairs (e.g., 'aA', 'bB', 'cC') until no such pairs remain, and returns the modified string.
+
+Solution:
+
+class Solution:
+    def makeGood(self, s: str) -> str:
+        stack = []
+        for char in s:
+            if stack and abs(ord(char) - ord(stack[-1])) == 32:
+                stack.pop()
+            else:
+                stack.append(char)
+
+        return ''.join(stack)
