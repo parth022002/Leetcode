@@ -1,0 +1,42 @@
+1249.Minimum Remove to Make Valid Parentheses
+Explaination:
+
+This Python code defines a class `Solution` with a method `minRemoveToMakeValid`, which takes a string `s` as input and returns a modified string. The goal of the method is to remove the minimum number of parentheses from the string `s` to make it a valid string. A string is considered valid if for every open parenthesis '(' there is a corresponding closing parenthesis ')', and the parentheses are properly nested.
+
+Here's a breakdown of how the code works:
+
+1. It initializes a counter `openParenthesesCount` to keep track of the number of open parentheses encountered.
+2. It converts the input string `s` into a list `arr`.
+3. It iterates through each character in the list `arr` using a for loop.
+   - If the character is an open parenthesis '(', it increments `openParenthesesCount`.
+   - If the character is a closing parenthesis ')':
+     - If there are no corresponding open parentheses encountered before, it replaces the closing parenthesis with '*' to mark it for removal.
+     - Otherwise, it decrements `openParenthesesCount` to match the closing parenthesis with an open one.
+4. It iterates through the list in reverse order.
+   - If there are still unmatched open parentheses left (`openParenthesesCount > 0`) and encounters an open parenthesis, it replaces it with '*' and decrements `openParenthesesCount`.
+5. Finally, it joins all characters in the modified list `arr`, excluding the '*' characters, and returns the resulting string.
+
+The code effectively removes the minimum number of parentheses required to make the input string valid.
+
+Solution:
+
+class Solution:
+    def minRemoveToMakeValid(self, s: str) -> str:
+        openParenthesesCount = 0
+        arr = list(s)
+
+        for i in range(len(arr)):
+            if arr[i] == '(':
+                openParenthesesCount +=1
+            elif arr[i] == ')':
+                if openParenthesesCount == 0:
+                    arr[i] = '*'
+                else:
+                    openParenthesesCount -= 1
+
+        for i in range(len(arr) - 1, -1, -1):
+            if openParenthesesCount > 0 and arr[i] == '(':
+                arr[i] = '*'
+                openParenthesesCount -= 1
+
+        return ''.join ( c for c in arr if c != '*')
