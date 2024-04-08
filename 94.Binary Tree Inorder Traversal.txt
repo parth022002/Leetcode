@@ -1,0 +1,43 @@
+94.Binary Tree Inorder Traversal
+Explanation:
+
+This code defines a class `Solution` with a method `inorderTraversal` that performs an inorder traversal of a binary tree and returns the values of the nodes visited in a list.
+
+Here's how the code works:
+
+1. It initializes an empty list `res` to store the result (inorder traversal).
+2. It initializes an empty stack `stack` to assist in the traversal.
+3. It sets the current node `node` to the root of the binary tree.
+4. It enters a loop that continues as long as `node` is not `None` or `stack` is not empty.
+5. Inside the loop, it traverses to the leftmost node of the current subtree by repeatedly pushing nodes onto the stack until reaching the leftmost leaf node.
+6. Once the leftmost node is reached (or when the stack becomes empty), it pops a node from the stack, appends its value to the result list `res`, and moves to its right child.
+7. If the popped node has a right child, the algorithm moves to the right child and repeats steps 5 and 6 for the subtree rooted at that node.
+8. Once all nodes are processed, the loop terminates, and the method returns the result list `res` containing the values of the nodes visited in inorder traversal.
+
+This algorithm efficiently performs an inorder traversal of the binary tree using a stack-based iterative approach, avoiding recursion. It traverses the left subtree first, then visits the current node, and finally traverses the right subtree.
+
+Solution:
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def inorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        res = []
+        stack = []
+        node = root
+
+        while node or stack:
+            while node:
+                stack.append(node)
+                node = node.left
+
+            node = stack.pop()
+            res.append(node.val)
+            node = node.right
+
+        return res
+ 
