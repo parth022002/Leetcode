@@ -1,0 +1,36 @@
+678.Valid Parenthesis String
+Explanation:
+
+This code defines a class `Solution` with a method `checkValidString` that checks whether a given string `s` consisting of `'('`, `')'`, and `'*'` characters represents a valid string of parentheses.
+
+Here's how the algorithm works:
+
+- It iterates through each character `c` in the string `s`.
+- For each character:
+  - If `c` is `'('`, it increments both `leftMin` and `leftMax`, representing the count of open parentheses.
+  - If `c` is `')'`, it decrements both `leftMin` and `leftMax`, representing the count of open parentheses being closed.
+  - If `c` is `' * '`, it could be treated as an open parenthesis `'('`, a closing parenthesis `')'`, or an empty string `''`. Therefore, it increments `leftMax` and decrements `leftMin`.
+- If at any point `leftMax` becomes negative, it means there are more closing parentheses than open parentheses encountered, which violates the order. In this case, the function returns `False`.
+- If `leftMin` becomes negative at any point, it's set back to 0, as negative `leftMin` implies more closing parentheses than open parentheses in the processed substring so far.
+- Finally, after processing all characters, if `leftMin` is 0, it signifies that all open parentheses have been properly matched and closed. The function returns `True`; otherwise, it returns `False`.
+
+This algorithm efficiently checks for valid parentheses in the string by maintaining counts of unmatched open parentheses (`leftMin` and `leftMax`). If the counts become negative at any point, it indicates an invalid parentheses order. Otherwise, if `leftMin` is 0 after processing the entire string, it signifies that all parentheses have been properly matched and closed. Thus, the string is considered valid.
+
+Solution:
+
+class Solution:
+    def checkValidString(self, s: str) -> bool:
+        leftMin, leftMax = 0, 0
+
+        for c in s:
+            if c == "(":
+                leftMin, leftMax = leftMin + 1, leftMax + 1
+            elif c == ")":
+                leftMin, leftMax = leftMin - 1, leftMax - 1
+            else:
+                leftMin, leftMax = leftMin - 1, leftMax + 1
+            if leftMax < 0:
+                return False
+            if leftMin < 0:
+                leftMin = 0
+        return leftMin == 0        

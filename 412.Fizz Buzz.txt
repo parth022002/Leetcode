@@ -1,0 +1,39 @@
+412.Fizz Buzz
+Explanation:
+
+The provided code defines a class `Solution` with a method `fizzBuzz` that takes an integer `n` and returns a list of strings based on the following rules:
+
+- If the number is divisible by 3, the string "Fizz" is added to the list.
+- If the number is divisible by 5, the string "Buzz" is added to the list.
+- If the number is divisible by both 3 and 5, the string "FizzBuzz" is added to the list.
+- If none of the above conditions are met, the string representation of the number is added to the list.
+
+Here's how the code works:
+
+1. It initializes an empty list `output` to store the resulting strings.
+2. It iterates through numbers from 1 to `n` (inclusive) using a loop.
+3. For each number `i`, it checks if it's divisible by 3, by 5, or both.
+4. If `i` is divisible by both 3 and 5, it appends "FizzBuzz" to the `output` list.
+5. If `i` is divisible only by 3, it appends "Fizz" to the `output` list.
+6. If `i` is divisible only by 5, it appends "Buzz" to the `output` list.
+7. If `i` is not divisible by either 3 or 5, it appends the string representation of `i` to the `output` list.
+8. After iterating through all numbers, it returns the `output` list containing the resulting strings.
+
+This implementation correctly follows the rules of the FizzBuzz game and efficiently generates the output list based on the input `n`. There are no apparent issues with this implementation.
+
+Solution:
+
+class Solution:
+    def fizzBuzz(self, n: int) -> List[str]:
+        output = []
+        for i in range(1, n+1):
+            if i % 3 == 0:
+                ans = "Fizz"
+                if i % 5 == 0:
+                    ans += "Buzz"
+            elif i % 5 == 0:
+                ans = "Buzz"
+            else:
+                ans = str(i)
+            output.append(ans)
+        return output

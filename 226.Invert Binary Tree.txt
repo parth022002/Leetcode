@@ -1,0 +1,60 @@
+226.Invert Binary Tree
+Explaination:
+
+The provided code defines a Python class `Solution` with a method `invertTree`, which takes a binary tree node `root` and returns its inverted binary tree. The inversion involves swapping the left and right children of each node in the tree.
+
+Here's how the code works:
+
+1. It checks if the current node `root` is `None`. If it is, it returns `None`, indicating the end of the tree.
+2. If `root` is not `None`, it swaps its left and right children.
+3. It then recursively calls `invertTree` on the left and right children of the current node.
+4. Finally, it returns the modified `root`.
+
+This code successfully inverts the given binary tree recursively. However, note that there is a small issue: if `root` is `None`, it should return `None` directly without attempting to access its left and right children. This will prevent unnecessary recursion and also handle the case where an empty tree is passed.
+
+Here's the corrected version:
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution:
+    def invertTree(self, root: TreeNode) -> TreeNode:
+        if not root:
+            return None
+        
+        tmp = root.left
+        root.left = self.invertTree(root.right)
+        root.right = self.invertTree(tmp)
+        
+        return root
+```
+
+This version ensures that if `root` is `None`, it returns `None` directly without any further processing.
+
+Solution:
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def invertTree(self, root:TreeNode) -> TreeNode:
+        if not root:
+            return None
+        
+        tmp = root.left
+        root.left = root.right
+        root.right = tmp
+        
+        self.invertTree(root.left)
+        self.invertTree(root.right)
+
+        return root
+        

@@ -1,0 +1,25 @@
+1672.Richest Customer Wealth
+Explanation:
+
+The provided code defines a class `Solution` with a method `maximumWealth` that takes a list of lists `accounts`, where each inner list represents the wealth of a customer, and returns the maximum wealth among all customers.
+
+Here's how the code works:
+
+1. It initializes a variable `highest_sum` to store the maximum wealth encountered so far, initially set to 0.
+2. It iterates over each `account` in the list of `accounts`.
+3. For each `account`, it computes the sum of wealth (`current_sum`) using the `sum()` function.
+4. It checks if the `current_sum` is greater than the `highest_sum`. If it is, it updates `highest_sum` to `current_sum`.
+5. After iterating through all accounts, it returns the `highest_sum`, which represents the maximum wealth among all customers.
+
+This implementation efficiently computes the maximum wealth by iterating through the list of accounts only once and updating the maximum sum as it encounters higher sums. There are no apparent issues with this implementation.
+
+Solution:
+
+class Solution:
+    def maximumWealth(self, accounts: List[List[int]]) -> int:
+        highest_sum = 0
+        for account in accounts:
+            current_sum = sum(account)
+            if highest_sum < current_sum:
+                highest_sum = current_sum
+        return highest_sum

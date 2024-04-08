@@ -1,0 +1,25 @@
+1480.Running Sum of 1d Array
+Explanation:
+
+The provided code defines a class `Solution` with a method `runningSum` that takes a list of integers `nums` and returns a list where each element is the running sum of the corresponding elements in the input list `nums`.
+
+Here's how the code works:
+
+1. It initializes a variable `a` to store the running sum, initially set to 0.
+2. It initializes an empty list `lst` to store the running sums.
+3. It iterates over each element `i` in the input list `nums`.
+4. For each element `i`, it adds `i` to the running sum `a` and appends the updated running sum to the list `lst`.
+5. Finally, it returns the list `lst` containing the running sums.
+
+This code is straightforward and correctly computes the running sum of the input list. There are no apparent issues with this implementation. It efficiently computes the running sum using a single pass through the input list.
+
+Solution:
+
+class Solution:
+    def runningSum(self, nums: List[int]) -> List[int]:
+        a = 0
+        lst = []
+        for i in nums:
+            a = a + i
+            lst.append(a)
+        return lst

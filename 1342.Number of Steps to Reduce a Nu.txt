@@ -1,0 +1,27 @@
+1342.Number of Steps to Reduce a Number to Zero
+Explanation:
+
+This code defines a class `Solution` with a method `numberOfSteps` that calculates the number of steps required to reduce a given number `num` to zero according to the following rules:
+
+- If `num` is even, divide it by 2.
+- If `num` is odd, subtract 1 from it.
+
+Here's how the code works:
+
+1. It initializes a variable `ct` (short for count) to 0, which will be used to keep track of the number of steps.
+2. It enters a `while` loop that continues as long as `num` is not zero.
+3. Inside the loop, it checks if `num` is even (i.e., divisible by 2). If it is, it divides `num` by 2 using the floor division operator `//`. If `num` is odd, it subtracts 1 from it.
+4. For each iteration of the loop, it increments `ct` by 1.
+5. Once `num` becomes 0, the loop terminates, and the method returns the final value of `ct`, which represents the number of steps taken to reduce `num` to 0.
+
+This algorithm efficiently computes the number of steps required to reduce a given number to zero according to the specified rules. It repeatedly applies the rules in a loop until the number becomes zero, incrementing a counter (`ct`) with each step. Finally, it returns the count of steps taken.
+
+Solution:
+
+class Solution:
+    def numberOfSteps(self, num: int) -> int:
+        ct = 0
+        while num:
+            num = num // 2 if num % 2 == 0 else num - 1
+            ct += 1
+        return ct

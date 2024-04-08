@@ -1,0 +1,47 @@
+2236.Root Equals Sum of Children
+Explanation:
+
+The provided code defines a class `Solution` with a method `checkTree` that takes a binary tree node `root` and checks if the value of the current node is equal to the sum of the values of its left and right children. It returns `True` if this condition is met and `False` otherwise.
+
+However, there are a few issues with this implementation:
+
+1. It doesn't handle the case where `root` is `None`. If `root` is `None`, accessing its attributes will raise an error. We need to handle this case to avoid runtime errors.
+2. It assumes that `root` always has both left and right children. This may not be the case, especially for leaf nodes.
+3. It doesn't handle the recursive calls properly. It should recursively call `checkTree` on the left and right children of the current node.
+
+Here's a corrected version of the code:
+
+```python
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+
+class Solution:
+    def checkTree(self, root: Optional[TreeNode]) -> bool:
+        if not root:
+            return True  # An empty tree is considered balanced
+        
+        left_val = root.left.val if root.left else 0
+        right_val = root.right.val if root.right else 0
+        
+        return root.val == left_val + right_val \
+               and self.checkTree(root.left) \
+               and self.checkTree(root.right)
+```
+
+This implementation checks if the current node `root` is `None` and returns `True` if it is, indicating that an empty tree is balanced. Then it computes the values of left and right children only if they exist. Finally, it recursively calls `checkTree` on the left and right children, and returns `True` only if all conditions are met recursively.
+
+Solution:
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def checkTree(self, root: Optional[TreeNode]) -> bool:
+       return root.val == root.left.val + root.right.val

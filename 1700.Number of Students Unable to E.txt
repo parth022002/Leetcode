@@ -1,0 +1,32 @@
+1700.Number of Students Unable to Eat Lunch
+Explanation:
+
+This code defines a class `Solution` with a method `countStudents` that takes two lists `students` and `sandwiches`, where `students` represents the preferences of students (1 for preferring a sandwich with meat and 0 for preferring a sandwich without meat), and `sandwiches` represents the types of sandwiches available. The method returns the number of students who cannot eat their preferred sandwich.
+
+Here's how the code works:
+
+1. It initializes a variable `res` to the length of the `students` list, representing the initial count of students.
+2. It creates a `Counter` object `cnt` from the `students` list, which counts the occurrences of each preference.
+3. It iterates through each sandwich `s` in the `sandwiches` list.
+4. For each sandwich:
+   - If the preference count for the current sandwich `s` in `cnt` is greater than 0, it means there are students who prefer this sandwich. In this case, it decrements `res` by 1 to indicate one student has been satisfied, and it decrements the count of preference for this sandwich in `cnt`.
+   - If the count of preference for the current sandwich `s` in `cnt` is 0, it means no student prefers this sandwich, and the loop breaks, returning the remaining count of students (`res`).
+5. After iterating through all sandwiches, it returns the remaining count of students (`res`).
+
+This algorithm efficiently counts the number of students who cannot eat their preferred sandwich by iterating through the sandwiches and decrementing the count of preferences for each sandwich as students are satisfied. If at any point, a sandwich type runs out before satisfying all students, the function returns the remaining count of students. Otherwise, it returns 0, indicating all students have been satisfied.
+
+Solution:
+
+class Solution:
+    def countStudents(self, students: List[int], sandwiches: List[int]) -> int:
+        res = len(students)
+        cnt = Counter(students)
+
+        for s in sandwiches:
+            if cnt[s] > 0:
+                res -= 1
+                cnt[s] -= 1
+            else:
+                return res
+
+        return res
