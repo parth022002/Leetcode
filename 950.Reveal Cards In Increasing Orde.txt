@@ -1,0 +1,44 @@
+950.Reveal Cards In Increasing Order
+Explanation:
+
+This code implements a solution to the "Reveal Cards In Increasing Order" problem. Here's a breakdown of how it works:
+
+- The `deckRevealedIncreasing` method takes a list of integers `deck` as input and returns a list of integers representing the deck of cards after revealing them in increasing order.
+
+- First, the `deck` list is sorted in increasing order.
+
+- We initialize a list `result` of length `n`, where `n` is the length of the deck. This list will store the revealed cards in the correct order.
+
+- We also initialize a `deque` called `indices` containing integers from `0` to `n-1`. This deque represents the indices of the cards in the resulting deck.
+
+- Next, we iterate over each card in the sorted deck.
+  
+- For each card, we pop the leftmost index from the `indices` deque. This index corresponds to the position where we will reveal the current card in the resulting deck.
+  
+- We place the current card at the position indicated by the popped index in the `result` list.
+  
+- If there are still indices left in the `indices` deque (indicating there are more cards to reveal), we rotate the deque by popping the leftmost index and appending it to the right end of the deque.
+  
+- After iterating through all the cards, the `result` list will contain the revealed cards in increasing order, as required by the problem statement.
+
+- Finally, we return the `result` list containing the revealed cards.
+
+This approach effectively reveals the cards in increasing order by simulating the process of revealing the cards according to the specified rules.
+
+Solution:
+
+class Solution:
+    def deckRevealedIncreasing(self, deck: List[int]) -> List[int]:
+        deck.sort()
+
+        n = len(deck)
+        result = [0] * n
+        indices = deque(range(n))
+
+        for card in deck:
+            idx = indices.popleft()
+            result[idx] = card
+            if indices:
+                indices.append(indices.popleft())
+
+        return result

@@ -1,0 +1,49 @@
+101.Symmetric Tree
+Explanation:
+
+This code defines a class `Solution` with a method `isSymmetric` which determines whether a binary tree is symmetric. Here's a breakdown of how it works:
+
+- The `isSymmetric` method takes the root of a binary tree as input parameter.
+
+- The method begins with a check to see if the root is `None`. If the root is `None`, the tree is considered symmetric (as an empty tree is symmetric), so it returns `True`.
+
+- Inside the `isSymmetric` method, there's a nested function called `IsTrue` which checks whether two subtrees are symmetric.
+
+- The `IsTrue` function takes two nodes `left` and `right` as arguments and recursively compares corresponding nodes in the subtrees.
+
+- If both `left` and `right` are `None`, it means the corresponding subtrees are symmetric, so it returns `True`.
+
+- If either `left` or `right` is `None` (but not both), it means the subtrees are different in structure, so it returns `False`.
+
+- If both `left` and `right` are not `None`, but their values are different, it returns `False`.
+
+- If none of the above conditions are met, it recursively calls the `IsTrue` function on the left and right subtrees of both trees (`left.left` and `right.right`, `left.right` and `right.left`).
+
+- Finally, the `isSymmetric` method returns the result of the `IsTrue` function called with the left and right subtrees of the input tree's root node, which indicates whether the entire tree is symmetric.
+
+This approach efficiently determines whether a binary tree is symmetric by performing a recursive comparison of corresponding nodes in its left and right subtrees. If all corresponding nodes are identical, the tree is considered symmetric; otherwise, it is not symmetric.
+
+Solution:
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isSymmetric(self, root: Optional[TreeNode]) -> bool:
+        if root==None:
+            return True
+        def IsTrue(left,right):
+            if left==None and right==None:
+                return True
+
+            if (left!=None and right==None) or (left==None and right!=None):
+                return False
+
+            if left.val!=right.val:    
+                return False
+
+            return IsTrue(left.left,right.right) and IsTrue(left.right,right.left)
+        return IsTrue(root.left, root.right)
