@@ -1,0 +1,63 @@
+85.Maximal Rectangle
+Explanation:
+
+This code seems to implement a solution to the "Maximal Rectangle" problem, which involves finding the largest rectangular area containing only 1s in a binary matrix. Let's break down the code:
+
+- The `maximalRectangle` method takes a 2D list `matrix` representing the binary matrix as input and returns an integer representing the area of the largest rectangle.
+
+- It first checks if the matrix is empty. If it is, it returns 0.
+
+- It initializes variables `rows` and `cols` to store the number of rows and columns in the matrix, respectively.
+
+- It initializes `max_area` to store the maximum area found so far.
+
+- It iterates over each row in the matrix:
+  - It initializes a `heights` array with zeros, where each element corresponds to the height of the rectangle ending at the current column in the current row.
+  - It calculates the heights of rectangles for the current row based on consecutive '1's using a dynamic programming approach.
+  
+- Within the loop over each row:
+  - It uses a stack-based approach to calculate the maximum area. It iterates over each column index:
+    - If the current height (`heights[i]`) is less than the height of the previous column (`heights[stack[-1]]`), it pops the index from the stack and calculates the area.
+    - It updates `max_area` if the calculated area is greater than the current maximum.
+    - Finally, it appends the current column index to the stack.
+
+- After the loop, it handles the case where the stack is not empty, calculating areas for the remaining indices.
+
+- It returns `max_area`, which holds the maximum area found.
+
+This algorithm efficiently finds the maximum area of a rectangle containing only 1s in the binary matrix.
+
+Solution:
+
+class Solution:
+    def maximalRectangle(self, matrix: List[List[str]]) -> int:
+        if not matrix:
+            return 0
+        
+        rows, cols = len(matrix), len(matrix[0])
+        max_area = 0
+        
+        for row in matrix:
+            heights = [0] * cols  # Initialize heights array with zeros
+            
+            for i in range(cols):
+                heights[i] = heights[i] + 1 if row[i] == '1' else 0
+            
+            # Calculate max area using stack
+            stack = []
+            for i in range(cols):
+                while stack and heights[stack[-1]] > heights[i]:
+                    height = heights[stack.pop()]
+                    width = i - stack[-1] if stack else i
+                    area = height * width
+                    max_area = max(max_area, area)
+                stack.append(i)
+                
+            # Handle the case where the stack is not empty
+            while stack:
+                height = heights[stack.pop()]
+                width = cols - stack[-1] if stack else cols
+                area = height * width
+                max_area = max(max_area, area)
+
+        return max_area

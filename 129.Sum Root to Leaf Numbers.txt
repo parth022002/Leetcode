@@ -1,0 +1,40 @@
+129.Sum Root to Leaf Numbers
+Explanation:
+
+This Python code is a solution to the problem of finding the sum of all root-to-leaf numbers in a binary tree. 
+
+Here's a breakdown of how the code works:
+
+- The `TreeNode` class represents a node in a binary tree. It has a value (`val`) and left and right child nodes (`left` and `right`).
+- The `sumNumbers` function takes a binary tree root node (`root`) as input and returns an integer representing the sum of all root-to-leaf numbers.
+- Within the `sumNumbers` function, there's a nested function `dfs` (depth-first search) that performs a recursive traversal of the binary tree.
+- The `dfs` function takes two parameters: `node` (the current node being visited) and `path` (the value constructed from the root to the current node).
+- If the current node is a leaf node (i.e., it has no left or right children), the value constructed from the root to the leaf is added to the `ans` variable.
+- The `dfs` function is called recursively for the left and right children of the current node, with the updated `path` value.
+- Finally, the `sumNumbers` function initializes the `ans` variable to 0, calls the `dfs` function starting from the root node with an initial `path` value of 0, and returns the `ans`.
+
+This algorithm efficiently computes the sum of all root-to-leaf numbers by performing a depth-first search traversal of the binary tree.
+
+Solution:
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def sumNumbers(self, root: Optional[TreeNode]) -> int:
+        def dfs(node, path):
+            nonlocal ans
+            if not node:
+                return
+            if not node.left and not node.right:
+                ans += path * 10 + node.val
+
+            dfs(node.left, path * 10 + node.val)
+            dfs(node.right, path * 10 + node.val)
+
+        ans = 0
+        dfs(root, 0)
+        return ans

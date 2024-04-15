@@ -1,0 +1,37 @@
+404.Sum of Left Leaves
+Explanation:
+
+This code defines a class `Solution` with a method `sumOfLeftLeaves` that calculates the sum of all left leaves in a binary tree.
+
+Here's a breakdown of the code:
+
+- The `sumOfLeftLeaves` method takes in a binary tree node `root` as input and returns an integer representing the sum of the values of all left leaves in the tree.
+
+- Inside the method, there's a nested function `f` defined. This function takes two parameters: `root` and `isLeft`. It recursively traverses the binary tree and calculates the sum of the values of left leaves.
+
+- Within the `f` function:
+  - If the current node is `None` (indicating an empty node), it returns 0.
+  - If the current node is a leaf node (i.e., it has no children) and it's a left node (`isLeft` is `True`), it returns the value of that leaf node.
+  - Otherwise, it recursively calls itself for the left and right children of the current node and sums up the results.
+
+- Finally, the `sumOfLeftLeaves` method is called with the root of the binary tree passed as an argument to the nested function `f`, with `isLeft` initially set to `False`.
+
+Overall, this function uses a depth-first search approach to traverse the binary tree and calculates the sum of values of left leaves.
+
+Solution:
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def sumOfLeftLeaves(self, root: Optional[TreeNode]) -> int:
+        def f(root, isLeft):
+            if not root:
+                return 0
+            if not root.left and not root.right and isLeft:
+                return root.val
+            return f(root.left, True) + f(root.right, False)
+        return f(root,False)
