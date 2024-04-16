@@ -1,0 +1,48 @@
+623.Add One Row to Tree
+Explanation:
+
+This code seems to be implementing a solution to a problem where you're required to add a row of nodes with a specific value at a certain depth in a binary tree. Here's a breakdown of how it works:
+
+1. The `addOneRow` function takes in three parameters: the root of the binary tree (`root`), the value of the nodes to be added (`val`), and the depth at which the nodes should be added (`depth`).
+
+2. Inside `addOneRow`, there's a nested function `dfs` (depth-first search), which recursively traverses the binary tree until it reaches the desired depth.
+
+3. If the current depth is greater than 2, the `dfs` function continues traversing down the tree, decrementing the depth.
+
+4. If the depth becomes 2, it means we've reached the level just above where the new row needs to be added. At this point, it inserts new nodes with the specified value (`val`) as children of the current node. It preserves the existing subtree structure by assigning the existing left and right subtrees as children of the new nodes.
+
+5. Finally, if the desired depth is 1, it means we need to add the new row as the new root of the tree, with the existing root becoming the left child of the new root. This is handled outside the `dfs` function.
+
+6. The `addOneRow` function then calls `dfs` with the provided parameters and returns the modified root of the tree.
+
+Overall, the code looks like it should correctly add a row of nodes with the specified value at the given depth in the binary tree. However, one potential improvement could be adding proper type hints for the TreeNode class and the return types of the functions for better readability and type safety.
+
+Solution:
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def addOneRow(self, root: Optional[TreeNode], val: int, depth: int) -> Optional[TreeNode]:
+        def dfs(root, val, depth):
+            if root == None:
+                return 
+
+            if depth > 2:
+                dfs(root.left, val, depth-1)
+                dfs(root.right, val, depth-1)
+            else:
+                ptr = root.left
+                root.left = TreeNode(val, ptr, None)
+
+                ptr = root.right
+                root.right = TreeNode(val, None, ptr)
+        if depth == 1:
+            ptr = TreeNode(val, root, None)
+            return ptr
+        dfs(root, val, depth)
+        return root
+        
