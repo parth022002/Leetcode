@@ -1,0 +1,59 @@
+988.Smallest String Starting From Leaf
+Explanation:
+
+This code seems to define a solution for finding the lexicographically smallest string that ends at a leaf in a binary tree. Let's break down the function:
+
+- `smallestFromLeaf`: This is the main function that takes a binary tree's root node as input and returns the lexicographically smallest string.
+- `helper`: This is a recursive function that traverses the binary tree and constructs the string by appending characters as it goes down the tree. It takes two parameters: the current node (`root`) and the current string constructed so far (`cur`).
+    - It first checks if the current node is `None`, and if so, it returns.
+    - It appends the character represented by the current node's value to the `cur` string.
+    - If both left and right children exist, it recursively calls `helper` on both children and returns the minimum of the results.
+    - If only the left child exists, it recursively calls `helper` on the left child and returns the result.
+    - If only the right child exists, it recursively calls `helper` on the right child and returns the result.
+    - If neither left nor right child exists (i.e., it's a leaf node), it returns the constructed string (`cur`).
+- Finally, it calls `helper` with the root node and an empty string as arguments to start the traversal.
+
+There's a small issue in the code: when there are both left and right children, it should append the result of recursive calls to `cur`, not directly return them. Here's the corrected version:
+
+```python
+class Solution:
+    def smallestFromLeaf(self, root: Optional[TreeNode]) -> str:
+        def helper(root, cur):
+            if not root:
+                return 
+            cur = chr(ord('a') + root.val) + cur
+            if root.left and root.right:
+                return min(helper(root.left, cur), helper(root.right, cur))
+
+            if root.left:
+                return helper(root.left, cur)
+            if root.right:
+                return helper(root.right, cur)
+            return cur
+        return helper(root, "")
+```
+
+This corrected version should work properly.
+
+Solution:
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def smallestFromLeaf(self, root: Optional[TreeNode]) -> str:
+        def helper(root, cur):
+            if not root:
+                return 
+            cur = chr(ord('a') + root.val) + cur
+            if root.left and root.right:
+                return min(helper(root.left, cur), helper(root.right, cur))
+
+            if root.left:
+                return helper(root.left, cur)
+            if root.right:
+                return helper(root.right, cur)
+            return cur
+        return helper(root, "")
