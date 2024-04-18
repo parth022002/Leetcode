@@ -1,0 +1,45 @@
+463.Island Perimeter
+Explanation:
+
+This Python code defines a class `Solution` with a method `islandPerimeter` that calculates the perimeter of an island represented by a 2D grid. The function uses a depth-first search (DFS) algorithm to traverse the island cells.
+
+Here's a breakdown of how it works:
+
+- The `islandPerimeter` method takes a 2D grid (`grid`) representing the island, where `grid[i][j]` is `1` if the cell is part of the island and `0` if it's water.
+
+- It initializes `rows` and `cols` with the dimensions of the grid and sets `perimeter` to `0`.
+
+- The `dfs` function is defined inside the `islandPerimeter` method. It recursively calculates the perimeter of the island starting from a given cell `(r, c)`.
+
+- Within `dfs`, if the current cell is out of bounds or it represents water (`0`), it returns `1` to indicate a boundary. If the cell has already been visited (`grid[r][c] == -1`), it returns `0`. Otherwise, it marks the cell as visited by setting its value to `-1` and recursively explores its neighboring cells in all four directions.
+
+- The outer loop iterates over each cell in the grid. If a cell represents land (`1`), the `dfs` function is called from that cell to calculate the perimeter of the island it belongs to, and the result is added to the `perimeter` variable.
+
+- Finally, the total perimeter of all islands is returned.
+
+This implementation effectively traverses each cell of the island exactly once, resulting in a time complexity of O(rows * cols), where rows and cols are the dimensions of the grid.
+
+Solution:
+
+class Solution:
+    def islandPerimeter(self, grid: List[List[int]]) -> int:
+        rows, cols = len(grid), len(grid[0])
+        perimeter = 0
+
+        def dfs(r, c):
+            if r < 0 or r >= rows or c < 0 or c >= cols or grid[r][c] == 0:
+                return 1
+            if grid[r][c] == -1:
+                return 0
+            grid[r][c] = -1
+            return (dfs(r + 1, c) +
+                    dfs(r - 1, c) +
+                    dfs(r, c + 1) +
+                    dfs(r, c - 1))
+
+        for r in range(rows):
+            for c in range(cols):
+                if grid[r][c] == 1:
+                    perimeter += dfs(r, c)
+
+        return perimeter
