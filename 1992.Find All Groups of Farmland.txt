@@ -1,0 +1,56 @@
+1992.Find All Groups of Farmland
+Explanation:
+
+Certainly! Let's break down how the `findFarmland` function works:
+
+1. **DFS Function (`dfs`)**:
+   - This function takes two parameters, `x` and `y`, representing the coordinates of the starting position for DFS.
+   - It initializes a stack with the starting position and variables to track the minimum and maximum row and column coordinates of the farmland.
+   - The starting cell is marked as visited by setting its value to `0`.
+   - While the stack is not empty, the function pops a cell `(cur_x, cur_y)` from the stack and explores its neighbors.
+   - For each neighbor, if it's within the boundaries of the grid and represents farmland (cell value is `1`), it is added to the stack, marked as visited, and the minimum and maximum coordinates are updated accordingly.
+   - Finally, it returns a tuple containing the coordinates of the farmland boundaries `(min_row, min_col, max_row, max_col)`.
+
+2. **Main Function** (`findFarmland`):
+   - It initializes variables `rows`, `cols`, and an empty list `result`.
+   - It iterates through each cell in the `land` grid using nested loops.
+   - If a cell represents farmland (cell value is `1`), it initiates a DFS from that cell using the `dfs` function.
+   - The function returns the boundaries of the farmland as a list `[min_row, min_col, max_row, max_col]`, which is appended to the `result` list.
+   - Once all farmland areas are identified, the function returns the `result` list containing the boundaries of all farmland areas found.
+
+This implementation effectively finds farmland areas by exploring each cell in the grid using DFS, marking visited cells to avoid redundant exploration, and recording the boundaries of each farmland area encountered.
+
+Solution:
+
+class Solution:
+    def findFarmland(self, land: List[List[int]]) -> List[List[int]]:
+        def dfs(x, y):
+            stack = [(x, y)]
+            min_row, min_col = x, y
+            max_row, max_col = x, y
+            land[x][y] = 0  # Marking the cell as visited
+            
+            while stack:
+                cur_x, cur_y = stack.pop()
+                for dx, dy in [(-1, 0), (1, 0), (0, -1), (0, 1)]:
+                    nx, ny = cur_x + dx, cur_y + dy
+                    if 0 <= nx < rows and 0 <= ny < cols and land[nx][ny] == 1:
+                        stack.append((nx, ny))
+                        land[nx][ny] = 0  # Marking the cell as visited
+                        min_row = min(min_row, nx)
+                        min_col = min(min_col, ny)
+                        max_row = max(max_row, nx)
+                        max_col = max(max_col, ny)
+            
+            return (min_row, min_col, max_row, max_col)
+        
+        rows, cols = len(land), len(land[0])
+        result = []
+        
+        for i in range(rows):
+            for j in range(cols):
+                if land[i][j] == 1:
+                    min_row, min_col, max_row, max_col = dfs(i, j)
+                    result.append([min_row, min_col, max_row, max_col])
+        
+        return result
