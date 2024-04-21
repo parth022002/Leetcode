@@ -1,0 +1,52 @@
+1971.Find if Path Exists inin Graph
+Explanation:
+
+It looks like you have a Python class `Solution` with a method `validPath` that determines whether there is a valid path from a given source node to a destination node in an undirected graph represented by its edges. Here's a breakdown of what the code does:
+
+1. The `validPath` method takes four parameters:
+   - `n`: the number of nodes in the graph.
+   - `edges`: a list of edges, where each edge is represented by a pair of nodes `[u, v]`.
+   - `source`: the source node from which to start the path.
+   - `destination`: the destination node to reach.
+
+2. Inside the method, a defaultdict `graph` is created to represent the graph. Each key in the dictionary represents a node, and the corresponding value is a list of adjacent nodes.
+
+3. The edges are added to the graph by iterating through the list of edges and appending the adjacent nodes to the appropriate keys in the `graph`.
+
+4. The method `dfs` (depth-first search) is defined to recursively search for a valid path from the source node to the destination node. It takes two parameters:
+   - `node`: the current node being visited.
+   - `visited`: a set to keep track of visited nodes to avoid infinite loops.
+
+5. If the current `node` equals the `destination`, the method returns `True`, indicating that a valid path has been found.
+
+6. Otherwise, the `node` is added to the `visited` set to mark it as visited.
+
+7. The method then recursively calls itself for each neighbor of the current `node` that has not been visited yet. If any of these recursive calls return `True`, indicating a valid path, the method returns `True`.
+
+8. If no valid path is found after exploring all neighbors, the method returns `False`.
+
+9. Finally, the `validPath` method is called with the `source` node and an empty set `visited`, and the result is returned.
+
+Overall, the code effectively uses depth-first search to determine whether there is a valid path from the source to the destination node in the given graph.
+
+Solution:
+
+class Solution:
+    def validPath(self, n: int, edges: List[List[int]], source: int, destination: int) -> bool:
+        graph = collections.defaultdict(list)
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+        
+        def dfs(node, visited):
+            if node == destination:
+                return True
+            visited.add(node)
+            for neighbor in graph[node]:
+                if neighbor not in visited:
+                    if dfs(neighbor, visited):
+                        return True
+            return False
+        
+        visited = set()
+        return dfs(source, visited)      
