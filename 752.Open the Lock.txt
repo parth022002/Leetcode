@@ -1,0 +1,47 @@
+752.Open the Lock
+Explanation:
+
+This Python code appears to be a solution for the "openLock" problem, where you need to find the minimum number of turns required to unlock a lock by rotating its digits. The lock has four wheels, each with digits from 0 to 9. Initially, all the wheels are set to '0000', and there are certain dead ends where the lock cannot be opened. The function `openLock` takes a list of dead ends and the target combination as input and returns the minimum number of turns needed to reach the target combination.
+
+Here's a breakdown of how the code works:
+
+1. It converts the list of dead ends into a set for efficient lookup.
+2. It checks if the initial combination '0000' is a dead end. If it is, it returns -1 because the lock cannot be opened.
+3. It initializes a queue with a tuple containing the initial combination '0000' and the number of steps taken to reach it (which is 0).
+4. It initializes a set called `visited` to keep track of the combinations visited to avoid revisiting them.
+5. It enters a while loop that continues until the queue is empty.
+6. Inside the loop, it dequeues a combination and the number of steps taken to reach it.
+7. If the dequeued combination matches the target, it returns the number of steps taken to reach it.
+8. Otherwise, it generates all possible combinations that can be obtained by rotating each wheel of the lock by one digit in both directions (either adding 1 or subtracting 1 modulo 10).
+9. For each new combination generated, if it hasn't been visited before and is not a dead end, it adds it to the queue with the number of steps incremented by 1 and marks it as visited.
+10. If the loop completes without finding the target combination, it returns -1, indicating that the target combination cannot be reached.
+
+This solution uses breadth-first search (BFS) to find the shortest path from the initial combination to the target combination. The algorithm explores all possible combinations in a systematic manner, ensuring that the shortest path is found.
+
+Solution:
+
+class Solution:
+    def openLock(self, deadends: List[str], target: str) -> int:
+        deadends = set(deadends)
+        if '0000' in deadends:
+            return -1
+        
+        queue = deque([('0000', 0)])
+        visited = {'0000'}
+        
+        while queue:
+            cur, step = queue.popleft()
+            if cur == target:
+                return step
+            
+            for i in range(4):
+                for d in [-1, 1]:
+                    new_state = list(cur)
+                    new_state[i] = str((int(cur[i]) + d) % 10)
+                    new_state = ''.join(new_state)
+                    
+                    if new_state not in visited and new_state not in deadends:
+                        queue.append((new_state, step + 1))
+                        visited.add(new_state)
+        
+        return -1
