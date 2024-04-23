@@ -1,0 +1,58 @@
+310.Minimum Height Trees
+Explanation:
+
+This Python code defines a class `Solution` with a method `findMinHeightTrees` that finds the minimum height trees (MHTs) in a given undirected graph represented by the number of nodes `n` and a list of edges `edges`. 
+
+Here's a step-by-step explanation of the code:
+
+1. **Base Case Check**: If there's only one node (`n == 1`), the tree consists only of that node, so it returns a list containing that node `[0]`.
+
+2. **Initialization**: 
+   - It initializes an adjacency list (`adjacency_list`) to represent the graph and a list (`degree`) to store the degree of each node. 
+   - Each node's degree is initially set to 0.
+   - It populates the adjacency list and updates the degree of each node based on the edges provided.
+
+3. **Finding Leaves**:
+   - It initializes a queue named `leaves` with the indices of nodes that are leaves (nodes with degree 1).
+   
+4. **Trimming Leaves**:
+   - It iteratively removes leaves from the graph until only 1 or 2 nodes are left (since MHTs can have at most two roots).
+   - In each iteration, it removes the leaves from the `leaves` queue, decreases the degree of their neighbors, and if any neighbor becomes a leaf after this removal, it adds it to the `leaves` queue for the next iteration.
+   - It keeps track of the number of remaining nodes (`remaining_nodes`) to know when to stop.
+
+5. **Return**:
+   - Finally, it returns the remaining nodes in the `leaves` queue, which represent the roots of the MHTs.
+
+This algorithm effectively trims away the leaves iteratively until only the nodes that could potentially be the root(s) of the MHT(s) remain.
+
+Solution:
+class Solution:
+    def findMinHeightTrees(self, n: int, edges: List[List[int]]) -> List[int]:
+        if n == 1:
+            return [0]
+        
+        # Initialize the adjacency list and degree of each node
+        adjacency_list = defaultdict(list)
+        degree = [0] * n
+        for u, v in edges:
+            adjacency_list[u].append(v)
+            adjacency_list[v].append(u)
+            degree[u] += 1
+            degree[v] += 1
+        
+        # Initialize leaves queue
+        leaves = deque([i for i in range(n) if degree[i] == 1])
+        
+        # Trim leaves until 2 or fewer nodes remain
+        remaining_nodes = n
+        while remaining_nodes > 2:
+            leaves_count = len(leaves)
+            remaining_nodes -= leaves_count
+            for _ in range(leaves_count):
+                leaf = leaves.popleft()
+                for neighbor in adjacency_list[leaf]:
+                    degree[neighbor] -= 1
+                    if degree[neighbor] == 1:
+                        leaves.append(neighbor)
+        
+        return list(leaves)
