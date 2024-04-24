@@ -1,0 +1,30 @@
+1137.N-th Tribonacci Number
+Explanation:
+
+It seems like you've implemented a solution to calculate the nth term of the Tribonacci sequence using iterative approach. This solution efficiently calculates the Tribonacci numbers without using recursion. The variables `a`, `b`, and `c` are used to keep track of the last three terms of the sequence.
+
+- Initially, `a`, `b`, and `c` are set to 0, 1, and 1 respectively, since these are the starting values of the Tribonacci sequence.
+- Then, in the loop, for each iteration, the next term is calculated by adding the last three terms (`a`, `b`, and `c`).
+- After calculating the next term, the values of `a`, `b`, and `c` are updated to prepare for the next iteration.
+- Finally, the value of `c` (which holds the nth Tribonacci number) is returned.
+
+This solution has a time complexity of O(n) since it iterates over the range from 3 to n, calculating each Tribonacci number in constant time. It's a good approach for efficiently computing Tribonacci numbers for large values of n.
+
+Solution:
+
+class Solution:
+    def tribonacci(self, n: int) -> int:
+        if n == 0:
+            return 0
+        elif n == 1 or n == 2:
+            return 1
+        
+        a, b, c = 0, 1, 1
+        
+        for i in range(3, n + 1):
+            next_trib = a + b + c
+            a = b
+            b = c
+            c = next_trib
+        
+        return c
