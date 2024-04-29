@@ -1,0 +1,46 @@
+834.Sum of Distance in Tree
+Explanation:
+
+This code seems to be implementing a solution to find the sum of distances in a tree for each node. It's essentially a tree traversal problem.
+
+Here's a breakdown of the code:
+
+1. It creates a defaultdict `graph` to represent the tree structure. It iterates through the `edges` list and adds edges to the graph for both directions (since it's an undirected graph).
+2. It initializes two lists, `count` and `res`, both of length `n`, where `n` is the number of nodes in the tree. `count` stores the number of nodes in the subtree rooted at each node, and `res` will store the sum of distances for each node.
+3. It defines a depth-first search (DFS) function `dfs` to traverse the tree and calculate `count` and `res` for each node. This function recursively visits each node's children, updating `count` and `res` accordingly.
+4. It then defines another DFS function `dfs2` to update the `res` values for each node by considering the parent node's `res` value and the count of nodes in the subtree.
+5. It calls `dfs` with the root node (assuming it's 0) to start the traversal.
+6. It then calls `dfs2` with the root node to update `res` for each node.
+7. Finally, it returns the `res` list, which contains the sum of distances for each node in the tree.
+
+Overall, this code effectively calculates the sum of distances for each node in the tree using a depth-first traversal approach.
+
+Solution:
+
+class Solution:
+    def sumOfDistancesInTree(self, n: int, edges: List[List[int]]) -> List[int]:
+        graph = defaultdict(list)
+        for u, v in edges:
+            graph[u].append(v)
+            graph[v].append(u)
+
+        count = [1] * n
+        res = [0] * n
+
+        def dfs(node, parent):
+            for child in graph[node]:
+                if child != parent:
+                    dfs(child, node)
+                    count[node] += count[child]
+                    res[node] += res[child] + count[child]
+
+        def dfs2(node, parent):
+            for child in graph[node]:
+                if child != parent:
+                    res[child] = res[node] - count[child] + (n - count[child])
+                    dfs2(child, node)
+
+        dfs(0, -1)
+        dfs2(0, -1)
+        
+        return res

@@ -1,0 +1,41 @@
+2997.Minimum Number of Operations to Make Array XOR Equal to k
+Explanation:
+
+This code appears to be implementing a solution to find the minimum number of operations required to make the XOR of all elements in a subarray equal to zero, given an array `nums` and an integer `k`.
+
+Here's a breakdown of the code:
+
+1. It initializes `final_xor` to 0, which will store the XOR of all integers in the array.
+2. It iterates through the elements of the `nums` array and calculates the XOR of all elements, storing the result in `final_xor`.
+3. It initializes `count` to 0, which will count the number of operations required.
+4. It enters a loop that continues until both `k` and `final_xor` become zero.
+5. Within the loop, it checks if the rightmost bits of `k` and `final_xor` are different. If they are, it increments `count` by 1.
+6. It then shifts `k` and `final_xor` to the right by 1 bit (equivalent to dividing by 2) to remove the rightmost bit.
+
+Finally, it returns the value of `count`, which represents the minimum number of operations needed to make the XOR of all elements in a subarray equal to zero.
+
+This solution leverages the property of XOR where a number XOR itself equals 0, hence the approach to check for differences in the rightmost bits to determine the operations needed.
+
+Solution:
+
+class Solution:
+    def minOperations(self, nums: List[int], k: int) -> int:
+        final_xor = 0
+        # XOR of all integers in the array.
+        for n in nums:
+            final_xor = final_xor ^ n
+
+        count = 0
+        # Keep iterating until both k and final_xor becomes zero.
+        while k or final_xor:
+            # k % 2 returns the rightmost bit in k,
+            # final_xor % 2 returns the rightmost bit in final_xor.
+            # Increment counter, if the bits don't match.
+            if (k % 2) != (final_xor % 2):
+                count += 1
+
+            # Remove the last bit from both integers.
+            k //= 2
+            final_xor //= 2
+
+        return count

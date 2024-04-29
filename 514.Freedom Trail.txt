@@ -1,0 +1,54 @@
+514.Freedom Trail
+Explanation:
+
+This code appears to be implementing a dynamic programming solution to solve the problem of finding the minimum number of steps required to spell out a given string `key` from a circular `ring`.
+
+Here's a breakdown of the code:
+
+1. It imports the `defaultdict` class from the `collections` module.
+
+2. It defines a class `Solution` with a method `findRotateSteps` which takes two arguments, `ring` and `key`, and returns the minimum number of steps required to spell out `key` from `ring`.
+
+3. Within `findRotateSteps`:
+   - It initializes a dictionary `memo` to store the results of subproblems.
+   - It initializes a `defaultdict` called `positions` to store the positions of each character in the `ring`.
+   - It populates the `positions` dictionary by iterating over the characters in the `ring` and storing their indices.
+   - It then returns the result of calling the `helper` function with initial parameters.
+
+4. The `helper` function is a recursive function that calculates the minimum number of steps required to spell out the remaining part of the `key` starting from index `in_index` with the ring in position `pos`.
+   - It checks if the result for the current state `(in_index, pos)` is already computed and stored in `memo`, if so, it returns the result from `memo`.
+   - It initializes `min_steps` to infinity.
+   - It iterates over the positions of the character `key[in_index]` in the `ring`.
+   - For each position, it calculates the steps needed to move from the current position to this position (`i`) on the ring, considering both clockwise and counterclockwise directions.
+   - It recursively calls the `helper` function for the next character in `key` with the new position `i` and adds the steps taken for this character to the minimum steps required.
+   - It updates the `memo` with the result for the current state `(in_index, pos)`.
+   - It returns the minimum steps required for spelling out the remaining part of the `key` from the current state.
+
+Overall, this code uses dynamic programming and memoization to efficiently solve the problem of finding the minimum steps required to spell out a given string from a circular ring.
+
+Solution:
+
+from collections import defaultdict
+
+class Solution:
+    def findRotateSteps(self, ring: str, key: str) -> int:
+        memo = {}
+        positions = defaultdict(list)
+        for i, c in enumerate(ring):
+            positions[c].append(i)
+        return self.helper(0, 0, positions, key, ring, memo)
+    
+    def helper(self, in_index, pos, positions, key, ring, memo):
+        if in_index == len(key):
+            return 0
+        if (in_index, pos) in memo:
+            return memo[(in_index, pos)]
+        min_steps = float('inf')
+        for i in positions[key[in_index]]:
+            if i >= pos:
+                steps = min(i - pos, pos + len(ring) - i)
+            else:
+                steps = min(pos - i, i + len(ring) - pos)
+            min_steps = min(min_steps, steps + self.helper(in_index + 1, i, positions, key, ring, memo))
+        memo[(in_index, pos)] = min_steps + 1
+        return min_steps + 1

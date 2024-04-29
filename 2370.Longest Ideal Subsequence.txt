@@ -1,0 +1,43 @@
+2370.Longest Ideal Subsequence
+Explanation:
+
+This code appears to be implementing a dynamic programming solution to find the length of the longest "ideal" string that can be obtained from the given string `s` with at most `k` changes allowed.
+
+Here's a breakdown of the code:
+
+1. It initializes a list `dp` of length 27 (representing the lowercase English alphabet plus one extra slot for the zero-index) with all elements initialized to 0. This list will store the lengths of the longest "ideal" strings that can be obtained ending at each character position.
+
+2. It gets the length of the input string `s` and assigns it to `n`.
+
+3. It iterates through the characters of the string `s` in reverse order, starting from the last character:
+   - For each character `cc`, it calculates its index in the alphabet (0-indexed) by subtracting the ASCII value of 'a' from the ASCII value of the character.
+   - It initializes `maxi` to negative infinity to keep track of the maximum length of the "ideal" string that can be obtained ending at the current character.
+   - It calculates the range of indices for the characters that can be changed to obtain the "ideal" string, ensuring not to go out of bounds (between `left` and `right`).
+   - It iterates through this range of indices and updates `maxi` to the maximum length of the "ideal" string that can be obtained by changing characters within this range.
+   - It updates the `dp` list at index `idx` (corresponding to the current character) with `maxi + 1`, representing the length of the longest "ideal" string ending at the current character position.
+
+4. Finally, it returns the maximum value in the `dp` list, which represents the length of the longest "ideal" string that can be obtained from the input string `s`.
+
+This algorithm effectively utilizes dynamic programming to find the length of the longest "ideal" string while considering the constraints on the number of changes allowed (`k`).
+
+Solution:
+
+class Solution:
+    def longestIdealString(self, s: str, k: int) -> int:
+        dp = [0] * 27
+        n = len(s)
+
+        for i in range(n - 1, -1, -1):
+            cc = s[i]
+            idx = ord(cc) - ord('a')
+            maxi = float('-inf')
+
+            left = max((idx - k), 0)
+            right = min((idx + k), 26)
+
+            for j in range(left, right + 1):
+                maxi = max(maxi, dp[j])
+
+            dp[idx] = maxi + 1
+
+        return max(dp)

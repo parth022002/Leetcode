@@ -1,0 +1,45 @@
+1289.Minimum Falling Path Sum II
+Explanation:
+
+This code is implementing a dynamic programming solution to find the minimum falling path sum in a given grid.
+
+Here's how the code works:
+
+1. It initializes the variables `n` as the length of the grid and `res` (result) to positive infinity. It also initializes a 2D array `dp` to store the minimum falling path sum values.
+
+2. It initializes the first row of `dp` with the values from the first row of the `grid`.
+
+3. It iterates through each row of the grid starting from the second row:
+   - For each cell in the current row, it calculates the minimum falling path sum considering the previous row's values. It does so by iterating through each cell in the previous row and finding the minimum path sum from those cells to the current cell in consideration.
+   - It updates the `dp` array with the calculated minimum path sum for each cell in the current row.
+
+4. After updating the `dp` array, it iterates through the last row of `dp` to find the minimum falling path sum (`res`).
+
+5. Finally, it returns the minimum falling path sum.
+
+This algorithm effectively finds the minimum falling path sum by dynamically calculating and storing the minimum path sum for each cell in the grid.
+
+Solution:
+
+class Solution:
+    def minFallingPathSum(self, grid: List[List[int]]) -> int:
+        n, res = len(grid), float('inf')
+        dp = [[-1] * n for _ in range(n)]
+
+        for j in range(n):
+            dp[0][j] = grid[0][j]
+
+        for i in range(1, n):
+            for j in range(n):
+                temp = float('inf')
+
+                for k in range(n):
+                    if j != k:
+                        temp = min(temp, grid[i][j] + dp[i - 1][k])
+
+                dp[i][j] = temp
+
+        for j in range(n):
+            res = min(res, dp[n - 1][j])
+
+        return res
