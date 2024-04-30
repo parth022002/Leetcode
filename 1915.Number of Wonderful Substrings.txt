@@ -1,0 +1,39 @@
+1915.Number of Wonderful Substrings
+Explanation:
+
+This code seems to be solving a problem related to counting wonderful substrings in a given word. A "wonderful substring" here likely means a substring in which the count of each character is odd.
+
+Here's a breakdown of what the code does:
+
+1. It initializes an array `count` with 1024 zeros, which corresponds to the range of possible XOR values when considering substrings of the input word.
+
+2. It initializes variables `result` to store the total count of wonderful substrings, `prefix_xor` to keep track of the XOR value of the prefix, and sets `count[prefix_xor]` to 1, indicating that an empty string (prefix with XOR value 0) is counted once.
+
+3. It iterates through each character in the input word.
+
+4. For each character, it calculates its index relative to 'a' and updates `prefix_xor` by XORing it with the appropriate bit shifted to represent the current character.
+
+5. It updates `result` by adding the count of substrings with the current `prefix_xor`. Additionally, it iterates through each bit (10 bits in total since we are working with 1024) and adds the count of substrings with `prefix_xor` XORed with each bit flipped. This accounts for all possible substrings that could be formed.
+
+6. Finally, it increments the count of the current `prefix_xor` in the `count` array.
+
+The approach seems to be using the property of XOR to efficiently count substrings with odd counts of each character. It's an interesting algorithmic technique.
+
+Solution:
+
+class Solution:
+    def wonderfulSubstrings(self, word: str) -> int:
+        count = [0] * 1024  # 2^10 to store XOR values
+        result = 0
+        prefix_xor = 0
+        count[prefix_xor] = 1
+        
+        for char in word:
+            char_index = ord(char) - ord('a')
+            prefix_xor ^= 1 << char_index
+            result += count[prefix_xor]
+            for i in range(10):
+                result += count[prefix_xor ^ (1 << i)]
+            count[prefix_xor] += 1
+        
+        return result
