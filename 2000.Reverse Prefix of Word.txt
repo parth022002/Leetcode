@@ -1,0 +1,28 @@
+2000.Reverse Prefix of Word
+Explanation:
+
+Certainly! Let's break down the code:
+
+1. The `reversePrefix` method takes two arguments: `word`, which is a string, and `ch`, which is also a string representing a single character.
+  
+2. It first checks if the character `ch` is not present in the word using the `not in` operator. If `ch` is not found in the `word`, it means there's no prefix to reverse, so the method returns the original word.
+
+3. If `ch` is found in the `word`, the method proceeds to find the index of the first occurrence of `ch` using the `index` method.
+
+4. It then constructs the reversed prefix by slicing the `word` from the beginning up to (and including) the index of `ch`, and reversing it using the step `-1`.
+
+5. Next, it constructs the suffix by slicing the `word` starting from the character immediately after `ch` up to the end of the `word`.
+
+6. Finally, it concatenates the reversed prefix and the suffix using the `+` operator and returns the result.
+
+This code effectively reverses the prefix of the word up to the specified character `ch`. If `ch` is not found in the word, it returns the original word unchanged.
+
+Solution:
+
+class Solution:
+    def reversePrefix(self, word: str, ch: str) -> str:
+        if ch not in word:
+            return word
+        indexCh = word.index(ch)
+        return word[indexCh::-1] + word[indexCh+1::]
+        
