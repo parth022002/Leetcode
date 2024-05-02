@@ -1,0 +1,50 @@
+2441.Largest Positive Integer That Exists With Its
+Explanation:
+
+Certainly! Let's break down the corrected code step by step:
+
+1. **Sorting the list**: `nums.sort()`
+   - We start by sorting the list of numbers in ascending order. This will help us in efficiently finding the negative counterpart of each positive number later on.
+
+2. **Initializing variables**: 
+   ```python
+   n = len(nums)
+   max_k = -1
+   ```
+   - We store the length of the list in `n`. 
+   - `max_k` is initialized to `-1`. This variable will keep track of the maximum number that satisfies the condition.
+
+3. **Iterating through the sorted list in reverse**:
+   ```python
+   for i in range(n-1, 0, -1):
+   ```
+   - We start the loop from `n-1` and go down to `1`, since we want to compare each number with the numbers before it. We stop at `1` because we don't need to compare the first number with any preceding number.
+
+4. **Checking for positive numbers with negative counterparts**:
+   ```python
+   if nums[i] > 0 and nums[i] == nums[i-1]:
+       max_k = max(max_k, nums[i])
+   elif nums[i] > 0 and -nums[i] in nums[:i]:
+       max_k = max(max_k, nums[i])
+   ```
+   - We first check if the current number (`nums[i]`) is positive (`nums[i] > 0`) and if it has a duplicate preceding it (`nums[i] == nums[i-1]`). If both conditions are met, we update `max_k` if necessary.
+   - If the above condition is not met, we check if the current number is positive (`nums[i] > 0`) and if its negative counterpart (`-nums[i]`) is present in the part of the list before the current number (`nums[:i]`). If both conditions are met, we update `max_k` if necessary.
+
+5. **Returning the result**:
+   ```python
+   return max_k
+   ```
+   - After iterating through the list, we return the maximum number (`max_k`) that satisfies the condition. If no such number is found, `-1` is returned.
+
+This revised implementation ensures that duplicates are handled correctly, and the maximum number satisfying the condition is returned.
+
+Solution:
+
+class Solution:
+    def findMaxK(self, nums: List[int]) -> int:
+        nums.sort()
+        n = len(nums)
+        for i in range(n-1, -1, -1):
+            if nums[i] > 0 and -nums[i] in nums:
+                return nums[i]
+        return -1  # If no such pair found
