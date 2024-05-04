@@ -1,0 +1,41 @@
+165.Compare Version numbers
+Explanation:
+
+This code seems to be implementing a function to compare two version numbers represented as strings. It splits the versions into their components, compares each component, and returns 1 if the first version is greater, -1 if the second version is greater, and 0 if they are equal.
+
+Here's a breakdown of what the code does:
+
+1. It defines a helper function `helper` that takes a string `s` and an index `idx` as input and returns a list containing the numerical value parsed from the string and the index where parsing stopped.
+2. It initializes variables `i` and `j` to 0 to track the current position in the version strings `version1` and `version2`, respectively.
+3. It enters a while loop that continues until either `i` is less than the length of `version1` or `j` is less than the length of `version2`.
+4. Inside the loop, it uses the helper function to parse the next component of `version1` into `v1` and the next component of `version2` into `v2`.
+5. It compares `v1` and `v2`. If `v1` is greater than `v2`, it returns 1. If `v1` is less than `v2`, it returns -1.
+6. If none of the above conditions are met, it continues to the next iteration of the loop.
+7. If the loop completes without returning, it means both versions are equal, so it returns 0.
+
+The code appears to be logically correct, but there's a potential issue if one version number is longer than the other. In such a case, the shorter version will be exhausted first, but the loop will continue, leading to incorrect results. You could fix this by adjusting the loop condition or by explicitly handling cases where one version is longer than the other.
+
+Solution:
+
+class Solution:
+    def compareVersion(self, version1: str, version2: str) -> int:
+        def helper(s: str, idx: int) -> List[int]:
+            num = 0
+            while idx < len(s):
+                if s[idx] == '.':
+                    break
+                else:
+                    num = num * 10 + int(s[idx])
+                idx += 1
+            return [num, idx+1]
+
+        i = j = 0
+        while(i < len(version1) or j < len(version2)):
+            v1, i = helper(version1, i)
+            v2, j = helper(version2, j)
+            if v1 > v2:
+                return 1
+            elif v1 < v2:
+                return -1
+
+        return 0

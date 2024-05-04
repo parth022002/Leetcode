@@ -1,0 +1,33 @@
+881.Boats to Save People
+Explanation:
+
+This code seems to be solving a problem related to rescuing people using boats. The goal appears to be to determine the minimum number of boats needed to rescue all the people, given their weights and the weight limit of each boat.
+
+Here's a breakdown of what the code does:
+
+1. It sorts the list of people's weights in ascending order.
+2. It initializes variables `res` (result) to 0 and `l`, `r` (left and right pointers) to the start and end of the sorted list, respectively.
+3. It enters a while loop where `l` is less than or equal to `r`.
+4. Inside the loop, it calculates the remaining weight that can be accommodated in the boat after adding the person at index `r` to it.
+5. It decrements `r` and increments `res`.
+6. If the remaining weight (`remain`) is enough to accommodate the person at index `l`, it increments `l`.
+7. Finally, it returns the result (`res`), which represents the minimum number of boats required.
+
+Overall, the code seems to implement a greedy approach by trying to fit as many people as possible in each boat while respecting the weight limit. However, I would suggest adding some comments to explain the logic for better readability. Additionally, some test cases could be helpful to ensure the correctness of the implementation.
+
+Solution:
+
+class Solution:
+    def numRescueBoats(self, people: List[int], limit: int) -> int:
+        people.sort()
+
+        res = 0
+        l ,r = 0, len(people) - 1
+        while l <= r:
+            remain = limit - people[r]
+            r-= 1
+            res += 1
+            if l <= r and remain >= people[l]:
+                l += 1
+        return res
+
