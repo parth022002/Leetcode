@@ -1,0 +1,42 @@
+237.Delete Node in a Linked List
+Explanation:
+
+Sure, I'd be happy to explain the `deleteNode` method in this implementation.
+
+1. **Method Signature**:
+   ```python
+   def deleteNode(self, node):
+   ```
+   This method belongs to the `Solution` class and takes two arguments: `self`, which refers to the instance of the class, and `node`, which represents the node to be deleted from the linked list.
+
+2. **Updating Node Values and Pointers**:
+   ```python
+   node.val = node.next.val
+   node.next = node.next.next
+   ```
+   - `node.val = node.next.val`: This line updates the value of the current node (`node`) to be the value of the next node (`node.next`). Essentially, it copies the value of the next node to the current node.
+   - `node.next = node.next.next`: This line updates the `next` pointer of the current node (`node`) to skip over the next node (`node.next`) and point directly to the node after that (`node.next.next`). This effectively removes the next node from the linked list.
+
+3. **Effect of the Method**:
+   By performing these two operations, the method effectively removes the node immediately following the given `node` from the linked list. It does so by copying the value of the next node into the current node and then bypassing the next node by updating the `next` pointer of the current node.
+
+4. **Assumptions**:
+   - This method assumes that the input `node` is not the tail node of the linked list. If the input node is the tail node (i.e., it has no next node), this method will not work correctly because it doesn't handle updating the `next` pointer of the node before the tail.
+
+5. **Time Complexity**:
+   The time complexity of this method is O(1), as it involves only a constant number of operations regardless of the size of the linked list.
+
+If you have any further questions or need clarification on any aspect, feel free to ask!
+
+Solution:
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, x):
+#         self.val = x
+#         self.next = None
+
+class Solution:
+    def deleteNode(self, node):
+        node.val = node.next.val
+        node.next = node.next.next
