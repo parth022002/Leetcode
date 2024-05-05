@@ -1,0 +1,56 @@
+443.String compression
+Explanation:
+
+This Python function `compress` seems to be aiming to compress a list of characters by replacing consecutive repeated characters with the character followed by the number of repetitions.
+
+Let's go through the implementation step by step:
+
+1. **Initialization**:
+   - `ans = 0`: This variable is initialized to keep track of the current index in the compressed list.
+   - `i = 0`: This variable is initialized to keep track of the current index in the original list (`chars`).
+
+2. **Outer Loop**:
+   ```python
+   while i < len(chars):
+   ```
+   This loop iterates over the characters in the `chars` list.
+
+3. **Inner Loop**:
+   ```python
+   while i < len(chars) and chars[i] == letter:
+   ```
+   This loop counts the consecutive occurrences of the current character (`letter`) starting from the current index (`i`). It increments `i` until a different character is encountered or until the end of the list is reached.
+
+4. **Compression**:
+   - `chars[ans] = letter`: The current character (`letter`) is placed at the position indicated by `ans` in the compressed list.
+   - `ans += 1`: `ans` is incremented to move to the next position in the compressed list.
+   - If the count of the current character is greater than 1:
+     - The digits of the count are converted to strings, and each digit is added to the compressed list sequentially.
+
+5. **Returning the Length**:
+   Finally, the function returns the value of `ans`, which represents the length of the compressed list.
+
+This implementation seems correct for compressing the characters in the list as described. It traverses the list once, so its time complexity is linear in the length of the input list.
+
+If you have any further questions or need clarification on any part of the code, feel free to ask!
+
+Solution:
+
+class Solution:
+    def compress(self, chars: List[str]) -> int:
+        ans = 0
+        i = 0
+
+        while i < len(chars):
+            letter = chars[i]
+            count = 0 
+            while i < len(chars) and chars[i] == letter:
+                count += 1
+                i += 1
+            chars[ans] = letter
+            ans += 1
+            if count >1:
+                for c in str(count):
+                    chars[ans] = c
+                    ans += 1
+        return ans
