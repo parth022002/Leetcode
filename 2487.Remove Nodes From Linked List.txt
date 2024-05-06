@@ -1,0 +1,45 @@
+2487.Remove Nodes From Linked List
+Explanation:
+
+This Python solution implements a recursive function to remove nodes from a singly-linked list where the node's value is smaller than the value of the next greater node.
+
+Here's a breakdown of the code:
+
+1. **Function Signature**:
+   - `def removeNodes(self, head: Optional[ListNode]) -> Optional[ListNode]:`
+     - The function takes in a ListNode `head` as input and returns a ListNode.
+     - `head` is the head of the linked list.
+
+2. **Base Case**:
+   - `if not head: return None`: If the `head` is None, indicating an empty list, return None.
+
+3. **Recursion**:
+   - `node = head`: Initialize a variable `node` to the head of the current linked list.
+   - `nxt_greater = self.removeNodes(node.next)`: Recursively call the `removeNodes` function with the next node in the list. This will give us the next greater node.
+
+4. **Node Removal**:
+   - `node.next = nxt_greater`: Set the `next` pointer of the current node to `nxt_greater`.
+   - `if not nxt_greater or node.val >= nxt_greater.val: return node`: If `nxt_greater` is None or the value of the current node is greater than or equal to the value of the next greater node, return the current node.
+   - If the value of the current node is smaller than the value of the next greater node, the current node should be removed. Thus, return `nxt_greater` which effectively removes the current node from the list.
+
+This solution effectively removes nodes from the linked list where the node's value is smaller than the value of the next greater node, ensuring that the resulting list is in non-decreasing order.
+
+Solution:
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def removeNodes(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        if not head:
+            return None
+        node = head
+        # Gives next greater node
+        nxt_greater = self.removeNodes(node.next)
+
+        node.next = nxt_greater
+        if not nxt_greater or node.val >= nxt_greater.val:
+            return node
+        return nxt_greater
