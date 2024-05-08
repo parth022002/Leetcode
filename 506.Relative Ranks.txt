@@ -1,0 +1,39 @@
+506.Relative Ranks
+Explanation:
+
+This code defines a class `Solution` with a method `findRelativeRanks` that takes a list of integers `score` representing scores of athletes and returns a list of strings indicating their ranks.
+
+Here's how it works:
+
+1. It creates a dictionary `score_map` where the keys are the scores and the values are the indices of those scores in the original list.
+2. It sorts the `score` list in descending order.
+3. It initializes a list `result` with empty strings, with the same length as the sorted `score` list.
+4. It iterates over the sorted `score` list, and for each score:
+   - If it's the highest score (`i == 0`), it assigns "Gold Medal" to the corresponding position in the `result` list.
+   - If it's the second highest score (`i == 1`), it assigns "Silver Medal".
+   - If it's the third highest score (`i == 2`), it assigns "Bronze Medal".
+   - For all other scores, it assigns their ranks as strings.
+5. It returns the `result` list.
+
+This code assumes that there are no duplicate scores. If there are duplicate scores, it may not assign ranks correctly. Additionally, it has a time complexity of O(n log n) due to sorting, where n is the number of elements in the `score` list. If you need to handle duplicate scores or improve time complexity, you might need to tweak the logic.
+
+Solution:
+
+class Solution:
+    def findRelativeRanks(self, score: List[int]) -> List[str]:
+        score_map = {score[i]: i for i in range(len(score))}
+
+        score.sort(reverse=True)
+
+        result = ["" for _ in range(len(score))]
+        for i in range(len(score)):
+            if i == 0:
+                result[score_map[score[i]]] = "Gold Medal"
+            elif i == 1:
+                result[score_map[score[i]]] = "Silver Medal"
+            elif i == 2:
+                result[score_map[score[i]]] = "Bronze Medal"
+            else:
+                result[score_map[score[i]]] = str(i + 1)
+        
+        return result
