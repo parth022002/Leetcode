@@ -1,0 +1,67 @@
+786.K-th Smallest Prime Fraction
+Explanation:
+
+It looks like you're implementing a solution to find the kth smallest prime fraction from a sorted array `arr` of prime integers. Your approach seems to be using binary search along with some calculations to find the fraction.
+
+Here's a brief overview of what your code is doing:
+
+1. Initialize the left and right boundaries for binary search (`left` and `right`) to be 0 and 1 respectively.
+2. While the left boundary is less than or equal to the right boundary, perform binary search.
+3. In each iteration of the binary search:
+   - Calculate the mid-point.
+   - Iterate through the array to find the fractions that are less than or equal to the mid-point.
+   - Count the total number of such fractions (`total`).
+   - Keep track of the maximum fraction (`maxFrac`) and its numerator and denominator.
+   - Adjust the boundaries of the binary search based on the value of `total`.
+4. Once the binary search ends, return the maximum fraction found.
+
+Your implementation seems correct in terms of the algorithmic approach. However, I noticed a small error in the calculation of the `mid` value. When performing division for the mid-point calculation, you should use floor division (`//`) instead of regular division (`/`) to ensure you get an integer value.
+
+Here's the corrected line:
+
+```python
+mid = left + (right - left) // 2
+```
+
+This ensures that `mid` remains an integer, which is necessary for indexing the array.
+
+Also, make sure to import `List` from `typing` module to fix the issue with `List[int]` in the function signature. Here's the corrected import statement:
+
+```python
+from typing import List
+```
+
+With these adjustments, your code should work correctly.
+
+Solution:
+
+class Solution:
+    def kthSmallestPrimeFraction(self, arr: List[int], k: int) -> List[int]:
+        n = len(arr)
+        left, right = 0, 1
+        res = []
+
+        while left <= right:
+            mid = left + (right - left) / 2
+            j, total, num, den = 1, 0, 0, 0
+            maxFrac = 0
+            for i in range(n):
+                while j < n and arr[i] >= arr[j] * mid:
+                    j += 1
+                
+                total += n - j
+
+                if j < n and maxFrac < arr[i] * 1.0 / arr[j]:
+                    maxFrac = arr[i] * 1.0 / arr[j]
+                    num, den = i, j
+
+            if total == k:
+                res = [arr[num], arr[den]]
+                break
+
+            if total > k:
+                right = mid
+            else:
+                left = mid
+
+        return res
