@@ -1,0 +1,38 @@
+857.Minimum Cost to Hire K Worker
+Explanation:
+
+This code appears to implement a solution to the "Minimum Cost to Hire K Workers" problem. In this problem, there are workers with certain qualities and corresponding wage demands. You want to hire exactly K workers to minimize the total cost, where the cost is defined as the sum of wages divided by the quality of each worker.
+
+Here's a brief explanation of the code:
+
+- It calculates the wage-to-quality ratio for each worker and sorts them in ascending order based on this ratio.
+- It then iterates over these ratios, maintaining a priority queue (`high_quality_workers`) to keep track of the highest quality workers encountered so far.
+- It keeps track of the total quality of the selected workers (`total_quality`) and updates it as it considers adding or removing workers.
+- When the number of workers in `high_quality_workers` exceeds K, it removes the worker with the highest quality.
+- Once it has exactly K workers, it calculates the total cost for these workers and updates `min_cost` if necessary.
+- Finally, it returns the minimum cost found.
+
+This solution optimally finds the minimum cost in O(n log n) time complexity, where n is the number of workers. However, it uses a priority queue, which adds an extra O(log n) factor to the time complexity. Overall, it's an efficient solution to the problem.
+
+Solution:
+
+class Solution:
+    def mincostToHireWorkers(self, quality: List[int], wage: List[int], k: int) -> float:
+        wage_quality_ratio = [(w / q, q) for w, q in zip(wage, quality)]
+        wage_quality_ratio.sort()
+
+        high_quality_workers = []
+        total_quality = 0
+        min_cost = float('inf')
+
+        for ratio, quality in wage_quality_ratio:
+            total_quality += quality
+            heapq.heappush(high_quality_workers, -quality)
+
+            if len(high_quality_workers) > k:
+                total_quality += heapq.heappop(high_quality_workers)
+
+            if len(high_quality_workers) == k:
+                min_cost = min(min_cost, total_quality * ratio)
+
+        return min_cost
