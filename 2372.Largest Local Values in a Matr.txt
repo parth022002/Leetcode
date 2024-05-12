@@ -1,0 +1,44 @@
+2372.Largest Local Values in a Matrix
+Explanation:
+
+This Python code defines a class `Solution` with a method `largestLocal` that takes a 2D list (`grid`) of integers as input and returns another 2D list of integers.
+
+Here's a breakdown of what the method does:
+
+1. It initializes two variables, `n` which is the length of the input grid, and `res` which will store the result.
+
+2. It iterates over the inner part of the grid, excluding the border cells (the range starts from 1 and ends at `n - 1`). This is done using nested `for` loops.
+
+3. For each inner cell, it initializes an empty list `temp_row` which will store the maximum value found in the surrounding 3x3 subgrid centered at the current cell.
+
+4. It then iterates over the surrounding 3x3 subgrid centered at the current cell using nested `for` loops.
+
+5. Within the innermost loop, it updates the variable `temp` to the maximum value found in the surrounding 3x3 subgrid by iterating over each cell in the subgrid and taking the maximum value.
+
+6. After finding the maximum value in the surrounding subgrid, it appends this value to the `temp_row` list.
+
+7. Once all the values for the current row are computed, it appends `temp_row` to the `res` list, effectively building the result grid row by row.
+
+8. Finally, it returns the `res` list containing the result grid.
+
+In essence, this method calculates the largest value in the 3x3 subgrid centered at each inner cell of the input grid and constructs a new grid containing these largest values.
+
+Solution:
+
+class Solution:
+    def largestLocal(self, grid: List[List[int]]) -> List[List[int]]:
+        n, res = len(grid), []
+
+        for i in range(1, n - 1):
+            temp_row = []
+            for j in range(1, n - 1):
+                temp = 0
+
+                for k in range(i - 1, i + 2):
+                    for l in range(j - 1, j + 2):
+                        temp = max(temp, grid[k][l])
+
+                temp_row.append(temp)
+            res.append(temp_row)
+
+        return res
