@@ -1,0 +1,62 @@
+1219.Path with Maximum Gold
+Explanation:
+
+It seems like you've implemented a solution for a problem related to finding the maximum amount of gold you can collect, given a grid where each cell contains a certain amount of gold (or none). Your code utilizes depth-first search (DFS) to explore the grid and find the maximum amount of gold that can be collected starting from each cell.
+
+Here's a brief overview of the code:
+
+1. The `getMaximumGold` method takes a grid of integers as input and returns an integer representing the maximum amount of gold that can be collected.
+
+2. Inside `getMaximumGold`, the dimensions of the grid are obtained (number of rows and columns).
+
+3. The `inBound` function checks if a given row and column index is within the bounds of the grid.
+
+4. The `dfs` function implements depth-first search. It recursively explores the grid from a given cell, accumulating gold along the way. It returns the maximum amount of gold that can be collected starting from that cell.
+
+5. Within the `dfs` function:
+   - It checks if the current cell is out of bounds, already visited, or contains no gold. If any of these conditions are met, it returns 0.
+   - It marks the current cell as visited and recursively explores its neighboring cells (left, right, up, down).
+   - It removes the current cell from the set of visited cells after exploring all possible paths from it.
+   - It returns the sum of gold in the current cell and the maximum amount of gold collected from its neighbors.
+
+6. The `maxGold` variable is initialized to 0, which will store the maximum amount of gold collected.
+
+7. The nested loops iterate through each cell in the grid. If a cell contains gold and has not been visited, DFS is performed from that cell to find the maximum amount of gold that can be collected starting from it. The maximum value found is updated in the `maxGold` variable.
+
+8. Finally, the `maxGold` value is returned as the result.
+
+Your implementation looks correct for solving the problem using DFS. If you have any specific questions or concerns about this code, feel free to ask!
+
+Solution:
+
+class Solution:
+    def getMaximumGold(self, grid: List[List[int]]) -> int:
+        nRows, nCols = len(grid), len(grid[0])
+        visited = set()
+
+        def inBound(row, col):
+            return 0 <= row < nRows and 0 <= col < nCols
+
+        def dfs(row, col):
+            if not inBound(row, col) or (row, col) in visited or grid[row][col] == 0:
+                return 0
+
+            visited.add((row, col))
+
+            left = dfs(row, col - 1)
+            right = dfs(row, col + 1)
+            up = dfs(row - 1, col)
+            down = dfs(row + 1, col)
+
+            visited.remove((row, col))
+
+            return grid[row][col] + max(left, right, up, down)
+
+        maxGold = 0
+
+        for row in range(nRows):
+            for col in range(nCols):
+                if grid[row][col] and (row, col) not in visited:
+                    maxGold = max(maxGold, dfs(row, col))
+
+        return maxGold

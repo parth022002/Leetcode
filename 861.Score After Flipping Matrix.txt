@@ -1,0 +1,47 @@
+861.Score After Flipping Matrix
+Explanation:
+
+It appears you've implemented a solution for a problem related to maximizing the score of a binary matrix by toggling rows and columns. Your code calculates the maximum score achievable by flipping rows and columns of the given binary matrix.
+
+Here's a breakdown of your code:
+
+1. The `matrixScore` method takes a 2D grid (list of lists) of integers representing a binary matrix and returns an integer representing the maximum score achievable.
+
+2. It initializes variables `n` and `m` to store the number of rows and columns in the grid, respectively.
+
+3. It initializes the variable `res` to store the result, starting with the score obtained by setting the leftmost bit of each row to 1 (since flipping rows will always increase the score). This is achieved by `(1 << (m - 1)) * n`, where `<<` is the left shift operator.
+
+4. It iterates over each column index `j` (except the first column) from 1 to `m - 1`.
+
+5. For each column, it calculates the value `val` as `1 << (m - 1 - j)`, which corresponds to the contribution of flipping the current column to the score.
+
+6. It initializes `set_count` to count the number of rows that have the same value in the current column as in the first column.
+
+7. It iterates over each row index `i` and increments `set_count` if the value in the current column matches the value in the first column for that row.
+
+8. After iterating over all rows, it calculates the maximum score contribution for flipping the current column by taking the maximum of `set_count` and `n - set_count` (the number of rows minus `set_count`).
+
+9. It updates `res` by adding the score contribution for the current column (`max(set_count, n - set_count) * val`).
+
+10. After iterating over all columns, it returns the final result stored in `res`.
+
+Your implementation seems correct for the problem of maximizing the score of a binary matrix. If you have any specific questions or need further clarification, feel free to ask!
+
+Solution:
+
+class Solution:
+    def matrixScore(self, grid: List[List[int]]) -> int:
+        n, m = len(grid), len(grid[0])
+        res = (1 << (m - 1)) * n
+
+        for j in range(1, m):
+            val = 1 << (m - 1 - j)
+            set_count = 0
+
+            for i in range(n):
+                if grid[i][j] == grid[i][0]:
+                    set_count += 1
+
+            res += max(set_count, n - set_count) * val
+
+        return res
