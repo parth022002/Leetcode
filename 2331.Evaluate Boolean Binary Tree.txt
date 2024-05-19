@@ -1,0 +1,50 @@
+2331.Evaluate Boolean Binary Tree
+Explanation:
+
+It seems like you have provided a Python solution for evaluating a boolean expression represented as a binary tree. This solution defines a `Solution` class with a method `evaluateTree` which takes the root of the binary tree as input and returns a boolean indicating the result of the expression.
+
+The solution uses a recursive helper function `calc` to traverse the tree and evaluate the expression. It checks if the current node is a leaf node (i.e., it has no children), in which case it returns the boolean value of the node. If the node has children, it recursively evaluates the left and right subtrees and performs the corresponding boolean operation based on the node's value (which represents the operation: `2` for OR and `3` for AND).
+
+There's error handling included in case the input tree is not properly constructed or contains invalid node values.
+
+Overall, it looks like a well-structured solution for evaluating boolean expression trees. If you have any specific questions or need further assistance with this code, feel free to ask!
+
+Solution:
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def evaluateTree(self, root: Optional[TreeNode]) -> bool:
+        """
+        Evaluates the boolean expression tree.
+
+        :param root: The root of the boolean expression tree.
+        :return: The result of the boolean expression.
+        """
+        def calc(node: TreeNode) -> bool:
+            """
+            Recursive helper function to evaluate the tree.
+            """
+            if node is None:
+                raise ValueError("Node is None")  # or return False, depending on the requirement
+
+            if node.left is None and node.right is None:
+                # Leaf node, return the value
+                return node.val == 1
+
+            left = calc(node.left)
+            right = calc(node.right)
+
+            # Use a dictionary to map node values to their corresponding operations
+            operations = {2: lambda l, r: l or r, 3: lambda l, r: l and r}
+            if node.val not in operations:
+                raise ValueError("Invalid node value")
+
+            return operations[node.val](left, right)
+
+        return calc(root)
+        

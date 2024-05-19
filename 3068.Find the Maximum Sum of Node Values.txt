@@ -1,0 +1,102 @@
+3068.Find the Maximum Sum of Node Values
+Explanation:
+
+Let's break down the `maximumValueSum` function in detail:
+
+### Inputs:
+1. `nums`: A list of integers representing the values of nodes.
+2. `k`: An integer used in the XOR operation.
+3. `edges`: A list of lists representing edges between nodes (not used in the current function).
+
+### Goal:
+To maximize the sum of node values after performing the XOR operation with `k` on some of the node values.
+
+### Steps in the function:
+
+1. **Initialize Variables:**
+   - `totalSum` to hold the sum of the current node values.
+   - `count` to count how many node values were increased by the XOR operation.
+   - `positiveMin` to keep track of the smallest net positive change caused by the XOR operation.
+   - `negativeMax` to keep track of the largest net negative change caused by the XOR operation.
+
+2. **Iterate Through Node Values:**
+   - For each node value in `nums`, compute the value after XOR with `k`:
+     ```python
+     nodeValAfterOperation = nodeValue ^ k
+     ```
+   - Calculate the net change caused by this operation:
+     ```python
+     netChange = nodeValAfterOperation - nodeValue
+     ```
+   - Add the original node value to `totalSum`.
+
+3. **Evaluate the Net Change:**
+   - If the net change is positive:
+     - Update `positiveMin` to be the minimum of the current `positiveMin` and the `netChange`.
+     - Add the net change to `totalSum` because it increases the total sum.
+     - Increment the `count` by 1.
+   - If the net change is negative:
+     - Update `negativeMax` to be the maximum of the current `negativeMax` and the `netChange`.
+
+4. **Final Adjustment:**
+   - If the count of positive net changes (`count`) is even, return `totalSum` as is.
+   - If `count` is odd, return the maximum of:
+     - `totalSum - positiveMin`: This effectively "undoes" the smallest positive change to make the count even.
+     - `totalSum + negativeMax`: This effectively "adds back" the largest negative change to make the count even.
+
+### Explanation with Examples:
+
+1. **Example with Even Positive Changes:**
+   ```python
+   nums = [1, 2, 3], k = 2
+   ```
+   - After XOR:
+     - 1 ^ 2 = 3 (net change = 2)
+     - 2 ^ 2 = 0 (net change = -2)
+     - 3 ^ 2 = 1 (net change = -2)
+   - Positive changes count is 1, which is odd.
+   - To make it even, consider `totalSum - positiveMin` or `totalSum + negativeMax`.
+
+2. **Example with Odd Positive Changes:**
+   ```python
+   nums = [5, 7, 9], k = 3
+   ```
+   - After XOR:
+     - 5 ^ 3 = 6 (net change = 1)
+     - 7 ^ 3 = 4 (net change = -3)
+     - 9 ^ 3 = 10 (net change = 1)
+   - Positive changes count is 2, which is even.
+   - Return `totalSum` as is.
+
+### Edge Cases:
+- If no net positive changes are found, `positiveMin` remains `float("inf")`, ensuring the condition for subtracting `positiveMin` is not used incorrectly.
+- Similarly, if no net negative changes are found, `negativeMax` remains `float("-inf")`.
+
+### Conclusion:
+This approach ensures the maximum possible sum of node values after performing XOR operations and balancing the sum adjustments to keep the number of positive changes even.
+
+Solution:
+
+class Solution:
+    def maximumValueSum(self, nums: List[int], k: int, edges: List[List[int]]) -> int:
+        totalSum = 0
+        count = 0
+        positiveMin = float("inf")
+        negativeMax = float("-inf")
+
+        for nodeValue in nums:
+            nodeValAfterOperation = nodeValue ^ k
+
+            totalSum += nodeValue
+            netChange = nodeValAfterOperation - nodeValue
+
+            if netChange > 0:
+                positiveMin = min(positiveMin, netChange)
+                totalSum += netChange
+                count += 1
+            else:
+                negativeMax = max(negativeMax, netChange)
+
+        if count % 2 == 0:
+            return totalSum
+        return max(totalSum - positiveMin, totalSum + negativeMax)

@@ -1,0 +1,111 @@
+979.Distribute Coins in Binary Tree
+Explanation:
+
+The `distributeCoins` function solves the problem of distributing coins in a binary tree such that each node ends up with exactly one coin. The function returns the minimum number of moves required to achieve this distribution. Let's break down the code step by step:
+
+### Problem Description:
+- Each node in the binary tree has a certain number of coins.
+- Each node should end up with exactly one coin.
+- In one move, you can move a coin from one node to its parent or to one of its children.
+
+### Goal:
+To determine the minimum number of moves required to distribute the coins such that each node has exactly one coin.
+
+### Approach:
+The approach is based on a Depth-First Search (DFS) traversal of the tree. The idea is to calculate the excess or deficit of coins at each node and propagate this excess or deficit to its parent, keeping track of the total number of moves needed.
+
+### Code Explanation:
+```python
+class Solution:
+    def distributeCoins(self, root: Optional[TreeNode]) -> int:
+        # Helper function for DFS traversal and coin distribution.
+        def f(root, parent):
+            if root == None:
+                return 0
+            # Recursively calculate moves for left and right subtrees.
+            moves = f(root.left, root) + f(root.right, root)
+            # Calculate the excess/deficit of coins at this node.
+            x = root.val - 1
+            # If the current node has a parent, transfer the excess/deficit to the parent.
+            if parent != None:
+                parent.val += x
+            # The number of moves needed is the absolute value of the excess/deficit.
+            moves += abs(x)
+            return moves
+        
+        # Start the DFS traversal from the root with no parent.
+        return f(root, None)
+```
+
+### Detailed Steps:
+1. **DFS Traversal (`f` function):**
+   - The function `f` takes two arguments: `root` (the current node) and `parent` (the parent of the current node).
+   - If the current node is `None`, it returns 0 since there are no coins to move.
+
+2. **Recursive Calculation:**
+   - The function recursively calculates the number of moves required for the left and right subtrees:
+     ```python
+     moves = f(root.left, root) + f(root.right, root)
+     ```
+
+3. **Excess/Deficit Calculation:**
+   - For the current node, calculate the excess or deficit of coins:
+     ```python
+     x = root.val - 1
+     ```
+   - If `x` is positive, the node has more coins than needed. If `x` is negative, the node has fewer coins than needed.
+
+4. **Propagate to Parent:**
+   - If the current node has a parent, propagate the excess/deficit to the parent:
+     ```python
+     if parent != None:
+         parent.val += x
+     ```
+
+5. **Count Moves:**
+   - The number of moves required at the current node is the absolute value of the excess/deficit:
+     ```python
+     moves += abs(x)
+     ```
+
+6. **Return Result:**
+   - The total number of moves is accumulated and returned:
+     ```python
+     return f(root, None)
+     ```
+
+### Example:
+Consider the binary tree:
+```
+      3
+     / \
+    0   0
+```
+- The root has 3 coins, and both children have 0 coins.
+- The function will perform the following steps:
+  - Move 1 coin from the root to the left child.
+  - Move 1 coin from the root to the right child.
+- The total number of moves is 2.
+
+### Conclusion:
+This approach efficiently calculates the minimum number of moves required to distribute the coins by using a DFS traversal and propagating the excess or deficit of coins to the parent nodes, thereby ensuring each node ends up with exactly one coin.
+
+Solution:
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def distributeCoins(self, root: Optional[TreeNode]) -> int:
+        #move coins to parent DFS
+        def f(root, parent):
+            if root==None: return 0
+            moves=f(root.left, root)+f(root.right, root)
+            x=root.val-1
+            if parent!=None: parent.val+=x
+            moves+=abs(x)
+            return moves
+        return f(root, None)
