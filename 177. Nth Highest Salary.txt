@@ -1,0 +1,47 @@
+177. Nth Highest Salary
+Explanation:
+
+To create the `getNthHighestSalary` function in MySQL, you can use the provided logic with slight modifications to ensure it works correctly. Below is the corrected and complete SQL code to create this function:
+
+```sql
+DELIMITER $$
+
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+    DECLARE result INT;
+    SET N = N - 1;
+
+    SELECT DISTINCT salary INTO result 
+    FROM Employee 
+    ORDER BY salary DESC 
+    LIMIT N, 1;
+
+    RETURN result;
+END$$
+
+DELIMITER ;
+```
+
+### Explanation:
+1. **DELIMITER $$**: Changes the delimiter from `;` to `$$` to allow the function body to contain semicolons without ending the function definition prematurely.
+2. **CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT**: Defines the function with an integer parameter `N` and specifies that it returns an integer.
+3. **DECLARE result INT**: Declares a variable `result` to store the salary.
+4. **SET N = N - 1**: Adjusts `N` because MySQL's `LIMIT` clause is zero-based (i.e., `LIMIT 0, 1` returns the first row).
+5. **SELECT DISTINCT salary INTO result**: Selects the `N`th highest distinct salary into the `result` variable.
+6. **ORDER BY salary DESC**: Orders the salaries in descending order.
+7. **LIMIT N, 1**: Skips the first `N` salaries and returns the next one.
+8. **RETURN result**: Returns the value stored in `result`.
+9. **DELIMITER ;**: Resets the delimiter back to `;`.
+
+This function will correctly return the `N`th highest distinct salary from the `Employee` table.
+
+Solution:
+
+CREATE FUNCTION getNthHighestSalary(N INT) RETURNS INT
+BEGIN
+    set N = N - 1 ;
+    RETURN (
+        select distinct salary from Employee order by salary desc limit N, 1 
+  );
+END
+

@@ -1,0 +1,115 @@
+131.Palindrome Partitioning
+Explanation:
+
+Sure, let's break down the solution step by step to understand how it partitions a string into all possible palindromic substrings using backtracking.
+
+### Solution Breakdown
+
+1. **Helper Function `is_palindrome(sub)`**:
+   - This function checks if a given substring `sub` is a palindrome.
+   - A string is a palindrome if it reads the same forwards and backwards.
+   - It achieves this by comparing the substring to its reverse (`sub[::-1]`).
+
+2. **Backtracking Function `backtrack(start, path)`**:
+   - This is a recursive function that tries to build all possible partitions of the string starting from the index `start`.
+   - `start`: The starting index for the current substring being considered.
+   - `path`: A list that stores the current sequence of palindromic substrings.
+
+3. **Base Case**:
+   - If `start` equals the length of the string `s`, it means we have considered all characters in the string.
+   - The current `path`, which contains a valid partition of palindromic substrings, is added to the `result` list.
+
+4. **Recursive Case**:
+   - Iterate over possible end positions for the current substring, from `start + 1` to `len(s) + 1`.
+   - For each end position `end`, extract the substring `s[start:end]`.
+   - Check if this substring is a palindrome using the `is_palindrome` function.
+   - If it is a palindrome, recursively call `backtrack` with the updated start position `end` and the updated path `path + [s[start:end]]`.
+
+5. **Initialization and Result**:
+   - An empty list `result` is initialized to store all valid partitions.
+   - The `backtrack` function is initially called with `start = 0` and an empty path `[]`.
+   - The function returns the `result` list containing all possible palindromic partitions of the input string `s`.
+
+### Example Walkthrough
+
+Let's go through an example with `s = "aab"` to see how the algorithm works:
+
+1. **Initial Call**:
+   - `backtrack(0, [])`: Start from index 0 with an empty path.
+
+2. **First Level of Recursion**:
+   - Consider substrings starting at index 0:
+     - Substring `s[0:1] = "a"` is a palindrome. Call `backtrack(1, ["a"])`.
+     - Substring `s[0:2] = "aa"` is a palindrome. Call `backtrack(2, ["aa"])`.
+     - Substring `s[0:3] = "aab"` is not a palindrome. Skip.
+
+3. **Second Level of Recursion** (for `path = ["a"]`):
+   - Consider substrings starting at index 1:
+     - Substring `s[1:2] = "a"` is a palindrome. Call `backtrack(2, ["a", "a"])`.
+     - Substring `s[1:3] = "ab"` is not a palindrome. Skip.
+
+4. **Third Level of Recursion** (for `path = ["a", "a"]`):
+   - Consider substrings starting at index 2:
+     - Substring `s[2:3] = "b"` is a palindrome. Call `backtrack(3, ["a", "a", "b"])`.
+
+5. **Base Case Reached** (for `path = ["a", "a", "b"]`):
+   - Index 3 is the end of the string. Add `["a", "a", "b"]` to `result`.
+
+6. **Backtrack to Second Level** (for `path = ["aa"]`):
+   - Consider substrings starting at index 2:
+     - Substring `s[2:3] = "b"` is a palindrome. Call `backtrack(3, ["aa", "b"])`.
+
+7. **Base Case Reached** (for `path = ["aa", "b"]`):
+   - Index 3 is the end of the string. Add `["aa", "b"]` to `result`.
+
+### Final Result
+
+After exploring all possible paths and backtracking to consider all substrings, the final `result` list contains:
+- `["a", "a", "b"]`
+- `["aa", "b"]`
+
+These are all the possible partitions of the string "aab" into palindromic substrings.
+
+### Code
+
+```python
+from typing import List
+
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        def is_palindrome(sub):
+            return sub == sub[::-1]
+
+        def backtrack(start, path):
+            if start == len(s):
+                result.append(path[:])
+                return
+            for end in range(start + 1, len(s) + 1):
+                if is_palindrome(s[start:end]):
+                    backtrack(end, path + [s[start:end]])
+
+        result = []
+        backtrack(0, [])
+        return result
+```
+
+This code correctly partitions the string into all possible palindromic substrings using a backtracking approach.
+
+Solution:
+
+class Solution:
+    def partition(self, s: str) -> List[List[str]]:
+        def is_palindrome(sub):
+            return sub == sub[::-1]
+
+        def backtrack(start, path):
+            if start == len(s):
+                result.append(path[:])
+                return
+            for end in range(start + 1, len(s) + 1):
+                if is_palindrome(s[start:end]):
+                    backtrack(end, path + [s[start:end]])
+
+        result = []
+        backtrack(0, [])
+        return result
