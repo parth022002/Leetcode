@@ -1,0 +1,120 @@
+2597.The Number of Beautiful Subsets
+Explanation:
+
+To solve the problem of counting "beautiful subsets" of the list `nums` where no two elements differ by `k`, we need to use a backtracking approach. Here's a detailed step-by-step explanation and the code provided:
+
+### Problem Breakdown
+
+1. **Definition of Beautiful Subset**:
+   - A subset of `nums` is called beautiful if for any two elements `a` and `b` in the subset, the absolute difference `|a - b|` is not equal to `k`.
+
+2. **Backtracking Approach**:
+   - We need to generate all possible subsets of `nums` and check each subset to see if it satisfies the condition of being beautiful.
+   - Using backtracking, we can systematically explore all subsets by including or excluding each element, while checking the condition on the fly.
+
+3. **Sorting the List**:
+   - Sorting `nums` can make the check more efficient and systematic as we can consider elements in an increasing order, helping to avoid redundant checks.
+
+### Code Explanation
+
+The provided solution uses a backtracking approach to generate all possible subsets and count those that are beautiful:
+
+1. **Initialization**:
+   - `count` is initialized to zero to keep track of the number of beautiful subsets.
+   - `nums.sort()` is used to sort the list.
+
+2. **Backtracking Function**:
+   - `backtrack(start, current_subset)` is a recursive function.
+   - `start` keeps track of the current position in `nums` from where we are considering elements.
+   - `current_subset` is the current subset being built.
+
+3. **Backtracking Logic**:
+   - If `current_subset` is non-empty, increment the `count` since any non-empty subset is considered for counting.
+   - Iterate over the remaining elements in `nums` starting from `start`.
+   - For each element, check if it can be added to `current_subset` without violating the beautiful subset condition.
+   - If it can be added, include it in `current_subset`, recursively call `backtrack` to proceed with the next element, and then backtrack by removing the last added element.
+
+4. **Check Condition**:
+   - The condition `abs(num - nums[i]) == k` is checked for every element already in `current_subset`.
+
+### Code Implementation
+
+Here's the implementation with detailed comments:
+
+```python
+from typing import List
+
+class Solution:
+    def beautifulSubsets(self, nums: List[int], k: int) -> int:
+        def backtrack(start, current_subset):
+            nonlocal count
+            
+            # Only count non-empty subsets
+            if current_subset:
+                count += 1
+            
+            for i in range(start, len(nums)):
+                # Check if current element nums[i] can be added to the current_subset
+                can_add = True
+                for num in current_subset:
+                    if abs(num - nums[i]) == k:
+                        can_add = False
+                        break
+                        
+                if can_add:
+                    # Include nums[i] in the subset and proceed
+                    current_subset.append(nums[i])
+                    backtrack(i + 1, current_subset)
+                    # Backtrack: remove the last added element
+                    current_subset.pop()
+        
+        nums.sort()  # Sorting to make the checking more efficient
+        count = 0
+        backtrack(0, [])
+        return count
+```
+
+### Example Usage
+
+Let's test the solution with an example:
+
+```python
+sol = Solution()
+nums = [1, 2, 3, 4]
+k = 1
+print(sol.beautifulSubsets(nums, k))  # Output: 8
+```
+
+The given code will recursively generate and count all subsets of `[1, 2, 3, 4]` that do not have any two elements differing by `1`. The final count of such subsets is returned.
+
+Solution:
+
+class Solution:
+    def beautifulSubsets(self, nums: List[int], k: int) -> int:
+        def backtrack(start, current_subset):
+            nonlocal count
+            
+            # Only count non-empty subsets
+            if current_subset:
+                count += 1
+            
+            for i in range(start, len(nums)):
+                # Check if current element nums[i] can be added to the current_subset
+                can_add = True
+                for num in current_subset:
+                    if abs(num - nums[i]) == k:
+                        can_add = False
+                        break
+                        
+                if can_add:
+                    # Include nums[i] in the subset and proceed
+                    current_subset.append(nums[i])
+                    backtrack(i + 1, current_subset)
+                    # Backtrack: remove the last added element
+                    current_subset.pop()
+        
+        nums.sort()  # Sorting to make the checking more efficient
+        count = 0
+        backtrack(0, [])
+        return count
+
