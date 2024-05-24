@@ -1,0 +1,104 @@
+1255.Maximum Score Words Formed by Letters
+Explanation:
+
+Sure, let's go through the provided code step by step to understand its functionality and logic.
+
+### Method: `maxScoreWords`
+This method is the entry point of the solution.
+
+1. **Initialize Count Arrays**:
+   ```python
+   count = [0] * 26
+   letters_count = [0] * 26
+   ```
+   - `count` array: This keeps track of the number of each letter available in the input `letters`.
+   - `letters_count` array: This is used during backtracking to keep track of the letters used so far.
+
+2. **Count Letters**:
+   ```python
+   for c in letters:
+       count[ord(c) - ord('a')] += 1
+   ```
+   - This loop fills the `count` array with the frequency of each letter in the `letters` list. `ord(c) - ord('a')` converts a character to its corresponding index (0 for 'a', 1 for 'b', ..., 25 for 'z').
+
+3. **Initialize Answer and Start Backtracking**:
+   ```python
+   self.ans = 0
+   self.backtracking(words, score, count, letters_count, 0, 0)
+   return self.ans
+   ```
+   - `self.ans`: This stores the maximum score found.
+   - `self.backtracking(...)`: This starts the recursive backtracking process.
+
+### Method: `backtracking`
+This method performs the backtracking to explore all possible combinations of words.
+
+1. **Check Letter Count Validity**:
+   ```python
+   for i in range(26):
+       if letters_count[i] > count[i]:
+           return
+   ```
+   - This loop checks if any letter in `letters_count` exceeds its corresponding count in `count`. If it does, it returns immediately, indicating an invalid combination of letters.
+
+2. **Update Maximum Score**:
+   ```python
+   self.ans = max(self.ans, temp)
+   ```
+   - Updates `self.ans` with the maximum of the current score (`temp`) and the previously recorded maximum score.
+
+3. **Iterate Over Words**:
+   ```python
+   for i in range(pos, len(words)):
+       for c in words[i]:
+           letters_count[ord(c) - ord('a')] += 1
+           temp += score[ord(c) - ord('a')]
+       
+       self.backtracking(words, score, count, letters_count, i + 1, temp)
+       
+       for c in words[i]:
+           letters_count[ord(c) - ord('a')] -= 1
+           temp -= score[ord(c) - ord('a')]
+   ```
+   - **Outer Loop**: Iterates through the words starting from the current position (`pos`). This ensures that combinations of words are explored.
+   - **Inner Loop (Adding Word)**: Adds the current word's letters to `letters_count` and updates `temp` with the corresponding scores.
+   - **Recursive Call**: Calls `backtracking` recursively to continue exploring further words with the updated letter counts and score.
+   - **Inner Loop (Removing Word)**: After the recursive call, it backtracks by removing the current word's letters from `letters_count` and subtracting the scores from `temp`.
+
+### Summary:
+- The `maxScoreWords` method initializes the necessary data structures and starts the backtracking process.
+- The `backtracking` method recursively explores all possible combinations of words, updating the letter counts and scores, and backtracking when necessary.
+- The solution uses the `count` array to track the available letters and ensures that no invalid combinations of letters are used.
+- The maximum score found during the exploration is stored in `self.ans`, which is returned as the result.
+
+Solution:
+
+class Solution:
+    def maxScoreWords(self, words: List[str], letters: List[str], score: List[int]) -> int:
+        count = [0] * 26
+        letters_count = [0] * 26
+        
+        for c in letters:
+            count[ord(c) - ord('a')] += 1
+        
+        self.ans = 0
+        self.backtracking(words, score, count, letters_count, 0, 0)
+        return self.ans
+    
+    def backtracking(self, words, score, count, letters_count, pos, temp):
+        for i in range(26):
+            if letters_count[i] > count[i]:
+                return
+        
+        self.ans = max(self.ans, temp)
+        
+        for i in range(pos, len(words)):
+            for c in words[i]:
+                letters_count[ord(c) - ord('a')] += 1
+                temp += score[ord(c) - ord('a')]
+            
+            self.backtracking(words, score, count, letters_count, i + 1, temp)
+            
+            for c in words[i]:
+                letters_count[ord(c) - ord('a')] -= 1
+                temp -= score[ord(c) - ord('a')]
