@@ -1,0 +1,126 @@
+140.Word Break II
+Explanation:
+
+The `wordBreak` function aims to find all possible sentences that can be formed by concatenating words from a given dictionary (`wordDict`) such that the concatenated sentence forms the given string `s`.
+
+### Explanation
+
+1. **Conversion of Word Dictionary to Set**:
+   ```python
+   word_set = set(wordDict)
+   ```
+   The dictionary `wordDict` is converted to a set for efficient lookup.
+
+2. **Recursive Helper Function**:
+   ```python
+   return self.wordBreakHelper(s, 0, word_set)
+   ```
+   The main function calls a helper function `wordBreakHelper` starting from the beginning of the string `s` (i.e., `start = 0`).
+
+3. **Helper Function Implementation**:
+   ```python
+   def wordBreakHelper(self, s: str, start: int, word_set: set) -> List[str]:
+       valid_substr = []
+       
+       if start == len(s):
+           valid_substr.append("")
+   ```
+   - `valid_substr` is initialized as an empty list to store valid substrings that form the final sentences.
+   - The base case checks if `start` has reached the end of the string `s`. If it has, it means we have found a valid segmentation, and an empty string is added to `valid_substr`.
+
+4. **Iterating Over Possible Prefixes**:
+   ```python
+       for end in range(start + 1, len(s) + 1):
+           prefix = s[start:end]
+           if prefix in word_set:
+               suffixes = self.wordBreakHelper(s, end, word_set)
+               for suffix in suffixes:
+                   valid_substr.append(prefix + ("" if suffix == "" else " ") + suffix)
+   ```
+   - The loop iterates over possible end indices to form prefixes from the current `start` position.
+   - If a prefix is found in `word_set`, the function recursively calls itself to find valid suffixes starting from the end of the current prefix.
+   - For each suffix returned by the recursive call, a valid sentence is formed by concatenating the prefix with the suffix, adding a space if the suffix is not empty.
+
+5. **Returning the Result**:
+   ```python
+       return valid_substr
+   ```
+   The list of valid sentences formed by the current segmentation is returned.
+
+### Example
+
+Consider the input:
+```python
+s = "catsanddog"
+wordDict = ["cat", "cats", "and", "sand", "dog"]
+```
+
+The function will:
+1. Convert `wordDict` to a set: `{"cat", "cats", "and", "sand", "dog"}`.
+2. Call `wordBreakHelper("catsanddog", 0, word_set)`.
+3. Iterate over prefixes:
+   - "c", "ca" are not in `word_set`.
+   - "cat" is in `word_set`, so it calls `wordBreakHelper("catsanddog", 3, word_set)`.
+4. The process continues recursively:
+   - From index 3, it finds "sand", and recursively calls `wordBreakHelper("catsanddog", 7, word_set)`.
+   - From index 7, it finds "dog" and reaches the end of the string, forming the sentence "cat sand dog".
+   - Similarly, it explores other valid prefixes and forms the sentence "cats and dog".
+
+### Optimizations
+
+To optimize this recursive solution, you can use memoization to store already computed results for specific start indices to avoid redundant calculations.
+
+### Complete Optimized Code with Memoization
+Here's the updated code with memoization:
+
+```python
+from typing import List
+
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> List[str]:
+        word_set = set(wordDict)
+        memo = {}
+        return self.wordBreakHelper(s, 0, word_set, memo)
+    
+    def wordBreakHelper(self, s: str, start: int, word_set: set, memo: dict) -> List[str]:
+        if start in memo:
+            return memo[start]
+        
+        valid_substr = []
+        
+        if start == len(s):
+            valid_substr.append("")
+        
+        for end in range(start + 1, len(s) + 1):
+            prefix = s[start:end]
+            if prefix in word_set:
+                suffixes = self.wordBreakHelper(s, end, word_set, memo)
+                for suffix in suffixes:
+                    valid_substr.append(prefix + ("" if suffix == "" else " ") + suffix)
+        
+        memo[start] = valid_substr
+        return valid_substr
+```
+
+By adding the `memo` dictionary, we store the results of the helper function calls to reuse them when the same start index is encountered again, improving the efficiency of the solution.
+
+Solution:
+
+class Solution:
+    def wordBreak(self, s: str, wordDict: List[str]) -> List[str]:
+        word_set = set(wordDict)
+        return self.wordBreakHelper(s, 0, word_set)
+    
+    def wordBreakHelper(self, s: str, start: int, word_set: set) -> List[str]:
+        valid_substr = []
+        
+        if start == len(s):
+            valid_substr.append("")
+        for end in range(start + 1, len(s) + 1):
+            prefix = s[start:end]
+            if prefix in word_set:
+                suffixes = self.wordBreakHelper(s, end, word_set)
+                for suffix in suffixes:
+                    valid_substr.append(prefix + ("" if suffix == "" else " ") + suffix)
+        
+        return valid_substr

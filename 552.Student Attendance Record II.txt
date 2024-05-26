@@ -1,0 +1,104 @@
+552.Student Attendance Record II
+Explanation:
+
+Sure, let's break down the solution to understand how it works.
+
+### Problem Statement
+We need to calculate the number of valid attendance records of length `n` that a student can have, under the following conditions:
+1. The student can be absent ('A') at most once.
+2. The student can be late ('L') at most two times in a row.
+
+### Approach
+We use dynamic programming (DP) with memoization to solve this problem. The DP state is represented by `temp[cur_ind][count_a][count_l]`, where:
+- `cur_ind` is the current index in the sequence of length `n`.
+- `count_a` is the count of 'A's (absences) so far.
+- `count_l` is the count of consecutive 'L's (lates) so far.
+
+### Steps
+
+1. **Initialization**:
+   ```python
+   temp: list[list[list[int]]] = [
+       [[-1 for _ in range(3)] for _ in range(2)] for _ in range(n)
+   ]  # temp[cur_ind][count_a][count_l]
+   ```
+   Here, `temp` is a 3D list initialized to `-1` to indicate that the state has not been computed yet. The dimensions are `n x 2 x 3` because:
+   - `cur_ind` ranges from `0` to `n-1`.
+   - `count_a` can be `0` or `1` (since at most one 'A' is allowed).
+   - `count_l` can be `0`, `1`, or `2` (since at most two consecutive 'L's are allowed).
+
+2. **Recursive Function with Memoization**:
+   ```python
+   def check_all_records(cur_ind, count_a, count_l) -> int:
+   ```
+   This function recursively calculates the number of valid sequences starting from `cur_ind` with `count_a` absences and `count_l` consecutive lates.
+
+3. **Base Case**:
+   ```python
+   if cur_ind == n:
+       return 1
+   ```
+   If we have reached the end of the sequence (`cur_ind == n`), it means we have found a valid sequence, so we return `1`.
+
+4. **Memoization Check**:
+   ```python
+   if temp[cur_ind][count_a][count_l] != -1:
+       return temp[cur_ind][count_a][count_l]
+   ```
+   If the current state has already been computed, return the cached result.
+
+5. **Recursive Cases**:
+   ```python
+   with_a_next = check_all_records(cur_ind + 1, count_a + 1, 0) if count_a == 0 else 0
+   with_l_next = 0 if count_l == 2 else check_all_records(cur_ind + 1, count_a, count_l + 1)
+   with_p_next = check_all_records(cur_ind + 1, count_a, 0)
+   ```
+   - `with_a_next`: If we add 'A' at `cur_ind`, increment `count_a` and reset `count_l` to `0`. This is only possible if there has been no 'A' before (`count_a == 0`).
+   - `with_l_next`: If we add 'L' at `cur_ind`, increment `count_l`. This is only possible if `count_l` is less than `2`.
+   - `with_p_next`: If we add 'P' at `cur_ind`, reset `count_l` to `0`.
+
+6. **Summing Up the Results**:
+   ```python
+   total = (with_a_next + with_l_next + with_p_next) % MOD
+   temp[cur_ind][count_a][count_l] = total
+   return total
+   ```
+   Calculate the total number of valid sequences by summing up all possibilities (`with_a_next`, `with_l_next`, `with_p_next`) and store the result in the memoization table. Return the result.
+
+7. **Initial Call**:
+   ```python
+   return check_all_records(0, 0, 0)
+   ```
+   Start the recursive calculation from the beginning (`cur_ind = 0`) with no absences (`count_a = 0`) and no consecutive lates (`count_l = 0`).
+
+### Example Usage
+If `n = 2`, the function will compute the number of valid attendance records of length 2.
+
+### Complexity
+The time and space complexity is O(n) as each state is computed once and stored in the memoization table.
+
+This approach ensures that we efficiently calculate the number of valid attendance records by breaking the problem down into smaller subproblems and using memoization to avoid redundant calculations.
+
+Solution:
+
+class Solution:
+    def checkRecord(self, n: int) -> int:
+        temp: list[list[list[int]]] = [
+            [[-1 for _ in range(3)] for _ in range(2)] for _ in range(n)
+        ]  # temp[cur_ind][count_a][count_l]
+        MOD: int = 10**9 + 7
+
+        def check_all_records(cur_ind, count_a, count_l) -> int:
+            if cur_ind == n:
+                return 1
+            if temp[cur_ind][count_a][count_l] != -1:
+                return temp[cur_ind][count_a][count_l]
+            with_a_next: int = check_all_records(cur_ind + 1, count_a + 1, 0) if count_a == 0 else 0
+            with_l_next: int = 0 if count_l == 2 else check_all_records(cur_ind + 1, count_a, count_l + 1)
+            with_p_next: int = check_all_records(cur_ind + 1, count_a, 0)
+            total: int = (with_a_next + with_l_next + with_p_next) % MOD
+
+            temp[cur_ind][count_a][count_l] = total
+            return total
+
+        return check_all_records(0, 0, 0)
