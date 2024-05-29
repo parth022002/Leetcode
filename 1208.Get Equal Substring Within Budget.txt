@@ -1,0 +1,71 @@
+1208.Get Equal Substring Within Budget
+Explanation:
+
+The given code is a solution to the problem of finding the maximum length of a substring that can be transformed from string `s` to string `t` with a given maximum cost `maxCost`. The transformation cost is defined as the sum of the absolute differences between the ASCII values of corresponding characters in the substring.
+
+Here is a step-by-step explanation of how the code works:
+
+1. **Initialization**:
+    - `res` is initialized to `0`. It will store the maximum length of the substring that can be transformed within the given cost.
+    - `cur_cost` is initialized to `0`. It keeps track of the current transformation cost of the substring being considered.
+    - `cur_start` is initialized to `0`. It indicates the starting index of the current substring being considered.
+
+2. **Iterate through the string**:
+    - The `for` loop iterates over the indices of the strings `s` and `t` using `last_ind`, which represents the ending index of the current substring being considered.
+
+3. **Update the current cost**:
+    - For each `last_ind`, the code calculates the cost to transform the character `s[last_ind]` to `t[last_ind]` using `abs(ord(s[last_ind]) - ord(t[last_ind]))`, and adds this cost to `cur_cost`.
+
+4. **Adjust the starting index if the cost exceeds `maxCost`**:
+    - The `while` loop checks if the `cur_cost` exceeds `maxCost`. If it does, the code subtracts the transformation cost of the character at the current starting index `cur_start` from `cur_cost` and increments `cur_start` by `1`. This effectively reduces the size of the current substring from the left until the total cost is within the allowed `maxCost`.
+
+5. **Update the result**:
+    - After adjusting the current substring to ensure `cur_cost` is within `maxCost`, the code checks if the length of the current substring (`last_ind - cur_start + 1`) is greater than `res`. If so, it updates `res` with the new length.
+
+6. **Return the result**:
+    - Finally, after the loop completes, the function returns `res`, which contains the maximum length of the substring that can be transformed within the given `maxCost`.
+
+### Example
+Let's go through a quick example to illustrate the process.
+
+Suppose `s = "abcd"`, `t = "bcdf"`, and `maxCost = 3`.
+
+- Initial state: `res = 0`, `cur_cost = 0`, `cur_start = 0`
+- Iteration 1 (`last_ind = 0`):
+  - `cur_cost += abs(ord('a') - ord('b'))` -> `cur_cost = 1`
+  - `cur_cost <= maxCost`, so update `res = max(res, 1 - 0 + 1)` -> `res = 1`
+- Iteration 2 (`last_ind = 1`):
+  - `cur_cost += abs(ord('b') - ord('c'))` -> `cur_cost = 2`
+  - `cur_cost <= maxCost`, so update `res = max(res, 2 - 0 + 1)` -> `res = 2`
+- Iteration 3 (`last_ind = 2`):
+  - `cur_cost += abs(ord('c') - ord('d'))` -> `cur_cost = 3`
+  - `cur_cost <= maxCost`, so update `res = max(res, 3 - 0 + 1)` -> `res = 3`
+- Iteration 4 (`last_ind = 3`):
+  - `cur_cost += abs(ord('d') - ord('f'))` -> `cur_cost = 5`
+  - `cur_cost > maxCost`, so adjust `cur_start`:
+    - `cur_cost -= abs(ord('a') - ord('b'))` -> `cur_cost = 4`, `cur_start = 1`
+    - `cur_cost > maxCost`, so adjust `cur_start`:
+      - `cur_cost -= abs(ord('b') - ord('c'))` -> `cur_cost = 3`, `cur_start = 2`
+  - `cur_cost <= maxCost`, so update `res = max(res, 3 - 2 + 1)` -> `res = 3`
+
+The final result is `3`, which means the maximum length of the substring that can be transformed within the given `maxCost` is 3.
+
+Solution:
+
+class Solution:
+    def equalSubstring(self, s: str, t: str, maxCost: int) -> int:
+        res: int = 0
+        cur_cost: int = 0
+        cur_start: int = 0
+
+        for last_ind in range(len(s)):
+            cur_cost += abs(ord(s[last_ind]) - ord(t[last_ind]))
+
+            while cur_cost > maxCost:
+                cur_cost -= abs(ord(s[cur_start]) - ord(t[cur_start]))
+                cur_start += 1
+
+            if last_ind - cur_start + 1 > res:
+                res = last_ind - cur_start + 1
+
+        return res
