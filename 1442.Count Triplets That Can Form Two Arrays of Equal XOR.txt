@@ -1,0 +1,87 @@
+1442.Count Triplets That Can Form Two Arrays of Equal XOR
+Explanation:
+
+Certainly! The given code is a Python implementation of a solution to the problem of counting triplets \((i, j, k)\) in an array such that the bitwise XOR of all elements from index \(i\) to \(j\) is equal to the bitwise XOR of all elements from index \(j+1\) to \(k\). Let's go through the code step-by-step.
+
+### Understanding the Problem
+
+Given an array `arr`, you want to count the number of triplets \((i, j, k)\) that satisfy the condition:
+\[ \text{arr}[i] \oplus \text{arr}[i+1] \oplus \ldots \oplus \text{arr}[j] = \text{arr}[j+1] \oplus \text{arr}[j+2] \oplus \ldots \oplus \text{arr}[k] \]
+
+This condition can be simplified using the properties of XOR:
+\[ \text{prefix}[i-1] \oplus \text{prefix}[j] = \text{prefix}[j] \oplus \text{prefix}[k+1] \]
+\[ \text{prefix}[i-1] = \text{prefix}[k+1] \]
+where \(\text{prefix}[i] = \text{arr}[0] \oplus \text{arr}[1] \oplus \ldots \oplus \text{arr}[i]\).
+
+### Code Explanation
+
+1. **Prefix XOR Calculation:**
+
+   ```python
+   prefix = [0] * (n + 1)
+   for i in range(n):
+       prefix[i + 1] = prefix[i] ^ arr[i]
+   ```
+
+   - `prefix` is an array of size `n + 1` where `prefix[i]` stores the XOR of all elements from the start of the array up to index `i-1`.
+   - We initialize `prefix` with zeros and iterate over the array `arr` to populate the `prefix` array.
+
+2. **Counting Triplets:**
+
+   ```python
+   count = 0
+   for i in range(n):
+       for j in range(i + 1, n):
+           if prefix[i] == prefix[j + 1]:
+               count += j - i
+   ```
+
+   - We initialize `count` to zero. This will store the number of valid triplets.
+   - We use two nested loops to iterate over all possible pairs of indices \((i, j)\). Here, `i` ranges from 0 to \(n-1\) and `j` ranges from \(i+1\) to \(n-1\).
+   - For each pair \((i, j)\), we check if `prefix[i]` is equal to `prefix[j + 1]`.
+     - If they are equal, it means the XOR of the subarray from `i` to `j` is equal to the XOR of the subarray from `j+1` to some `k`. 
+     - The number of valid triplets for each pair \((i, j)\) is \(j - i\), and we add this to `count`.
+
+3. **Return the Count:**
+
+   ```python
+   return count
+   ```
+
+   - Finally, we return the total count of valid triplets.
+
+### Example
+
+Consider an example array `arr = [2, 3, 1, 6, 7]`.
+
+- The `prefix` array would be computed as follows:
+  - `prefix[0] = 0`
+  - `prefix[1] = 0 ^ 2 = 2`
+  - `prefix[2] = 2 ^ 3 = 1`
+  - `prefix[3] = 1 ^ 1 = 0`
+  - `prefix[4] = 0 ^ 6 = 6`
+  - `prefix[5] = 6 ^ 7 = 1`
+
+So, `prefix = [0, 2, 1, 0, 6, 1]`.
+
+- The nested loops will then iterate over all pairs \((i, j)\), and count the valid triplets based on the condition `prefix[i] == prefix[j + 1]`.
+
+This solution effectively uses the prefix XOR array to simplify the problem and count the triplets in \(O(n^2)\) time.
+
+Solution:
+
+class Solution:
+    def countTriplets(self, arr: List[int]) -> int:
+        n = len(arr)
+        prefix = [0] * (n + 1)
+        
+        for i in range(n):
+            prefix[i + 1] = prefix[i] ^ arr[i]
+        
+        count = 0
+        for i in range(n):
+            for j in range(i + 1, n):
+                if prefix[i] == prefix[j + 1]:
+                    count += j - i
+        
+        return count
