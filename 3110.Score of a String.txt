@@ -1,0 +1,53 @@
+3110.Score of a String
+Explanation:
+
+Certainly! Let's break down the function `scoreOfString` in the class `Solution` step by step:
+
+### Function Definition
+```python
+def scoreOfString(self, s):
+```
+- This is a method of the `Solution` class.
+- It takes a single argument `s`, which is expected to be a string.
+
+### Function Purpose
+The purpose of this function is to compute the sum of the absolute differences between the ASCII values of consecutive characters in the string `s`.
+
+### Detailed Steps
+1. **Generate Character Pairs**: The function iterates over the string `s` starting from the second character (index 1) to the last character. For each character at position `i`, it looks at the character at position `i-1`.
+2. **Compute Differences**: For each pair of consecutive characters, it calculates the absolute difference between their ASCII values.
+3. **Sum the Differences**: It sums up all these absolute differences to get the final score.
+
+### Code Breakdown
+```python
+return sum(abs(ord(s[i]) - ord(s[i-1])) for i in range(1, len(s)))
+```
+- `range(1, len(s))`: Generates indices from 1 to `len(s)-1`. This ensures we start from the second character and look at the previous character for each iteration.
+- `ord(s[i])`: Converts the character at index `i` to its ASCII value.
+- `ord(s[i-1])`: Converts the character at index `i-1` to its ASCII value.
+- `abs(ord(s[i]) - ord(s[i-1]))`: Computes the absolute difference between the ASCII values of the characters at index `i` and `i-1`.
+- `sum(...)`: Adds up all the computed absolute differences.
+
+### Example
+Let's go through an example:
+
+```python
+s = "abcd"
+```
+- ASCII values of 'a', 'b', 'c', and 'd' are 97, 98, 99, and 100 respectively.
+- The absolute differences are calculated as follows:
+  - |ord('b') - ord('a')| = |98 - 97| = 1
+  - |ord('c') - ord('b')| = |99 - 98| = 1
+  - |ord('d') - ord('c')| = |100 - 99| = 1
+- Summing these differences: 1 + 1 + 1 = 3
+
+So, `scoreOfString("abcd")` will return 3.
+
+### Summary
+The `scoreOfString` function calculates the total score of a string based on the sum of the absolute differences between the ASCII values of consecutive characters in the string. This is done efficiently using a single line of code with a generator expression inside the `sum` function.
+
+Solution:
+
+class Solution(object):
+    def scoreOfString(self, s):
+        return sum(abs(ord(s[i])-ord(s[i-1])) for i in range(1, len(s)))
