@@ -1,0 +1,48 @@
+344.Reverse String
+Explanation:
+
+The provided code defines a class `Solution` with a method `reverseString` that takes a list of characters `s` and reverses it in place. Here's a breakdown of how the method works:
+
+1. **Looping Through the First Half**:
+   The loop runs from `i = 0` to `i = len(s) // 2 - 1`. This is because the list only needs to be traversed halfway to swap all elements.
+
+2. **Swapping Elements**:
+   Inside the loop, elements at positions `i` and `~i` are swapped. The expression `~i` is a bitwise complement operator, which is equivalent to `-(i+1)`. So, `s[~i]` is the element at position `-(i+1)`, which is the corresponding element from the end of the list.
+
+Here's the code with added comments for clarity:
+
+```python
+class Solution:
+    def reverseString(self, s: List[str]) -> None:
+        # Loop through the first half of the list
+        for i in range(len(s) // 2):
+            # Swap the element at index i with the element at index ~i (-(i+1))
+            s[i], s[~i] = s[~i], s[i]
+```
+
+### Example Usage
+
+Let's see how this works with an example:
+
+```python
+s = ["h", "e", "l", "l", "o"]
+Solution().reverseString(s)
+print(s)  # Output: ["o", "l", "l", "e", "h"]
+```
+
+**Explanation**:
+- `i = 0`: Swap `s[0]` and `s[-1]` -> `["o", "e", "l", "l", "h"]`
+- `i = 1`: Swap `s[1]` and `s[-2]` -> `["o", "l", "l", "e", "h"]`
+
+The loop ends after `i = 1` because the list has been traversed halfway.
+
+### Complexity
+- **Time Complexity**: \(O(n)\), where \(n\) is the length of the list. This is because each element is visited and swapped once.
+- **Space Complexity**: \(O(1)\) because the list is modified in place without using extra space.
+
+Solution:
+
+class Solution:
+    def reverseString(self, s: List[str]) -> None:
+        for i in range(len(s)//2):
+            s[i], s[~i] = s[~i], s[i]
