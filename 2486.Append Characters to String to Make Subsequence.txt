@@ -1,0 +1,77 @@
+2486.Append Characters to String to Make Subsequence
+Explanation:
+
+The solution you provided is designed to solve the problem of determining how many characters need to be appended to the end of the string `s` to make it a subsequence of the string `t`. Here's a step-by-step explanation of the code:
+
+1. **Initialization:**
+   - `m` is assigned the length of string `s`.
+   - `n` is assigned the length of string `t`.
+
+2. **Index Pointers:**
+   - Two index pointers, `i` and `j`, are initialized to 0. `i` will traverse string `s` and `j` will traverse string `t`.
+
+3. **While Loop:**
+   - The loop continues until either `i` reaches the end of `s` (i.e., `i < m`) or `j` reaches the end of `t` (i.e., `j < n`).
+
+4. **Character Matching:**
+   - Inside the loop, it checks if the characters at the current indices of `s` and `t` match (`s[i] == t[j]`).
+   - If they match, it means that the character from `t` is found in `s`, so the index `j` is incremented to move to the next character in `t`.
+   - Regardless of whether a match is found or not, `i` is incremented to move to the next character in `s`.
+
+5. **Result Calculation:**
+   - Once the loop ends, it means either all characters of `s` have been checked or all characters of `t` have been matched.
+   - The result is `n - j`, which represents the number of characters in `t` that have not been matched in `s`. These are the characters that need to be appended to `s` to make it a subsequence of `t`.
+
+Here is the solution in code format for better readability:
+
+```python
+class Solution:
+    def appendCharacters(self, s: str, t: str) -> int:
+        m = len(s)
+        n = len(t)
+        
+        i = 0
+        j = 0
+        while i < m and j < n:
+            if s[i] == t[j]:
+                j += 1
+            i += 1
+
+        return n - j
+```
+
+### Example
+Let's see an example to understand how the code works.
+
+Suppose `s = "abc"` and `t = "abdec"`:
+
+1. `m = 3` (length of `s`)
+2. `n = 5` (length of `t`)
+3. Initially, `i = 0` and `j = 0`
+
+The while loop will execute as follows:
+- `i = 0`, `j = 0`: `s[0]` is 'a' and `t[0]` is 'a' (match), so `j` becomes 1, `i` becomes 1
+- `i = 1`, `j = 1`: `s[1]` is 'b' and `t[1]` is 'b' (match), so `j` becomes 2, `i` becomes 2
+- `i = 2`, `j = 2`: `s[2]` is 'c' and `t[2]` is 'd' (no match), so `i` becomes 3
+
+The loop exits because `i < m` condition fails.
+
+Result: `n - j` = `5 - 2` = 3. Therefore, 3 characters need to be appended to `s` to make it a subsequence of `t`.
+
+This code efficiently solves the problem with a time complexity of O(m + n) by using a two-pointer technique.
+
+Solution:
+
+class Solution:
+    def appendCharacters(self, s: str, t: str) -> int:
+        m = len(s)
+        n = len(t)
+        
+        i = 0
+        j = 0
+        while i < m and j < n:
+            if s[i] == t[j]:
+                j += 1
+            i += 1
+
+        return n - j
