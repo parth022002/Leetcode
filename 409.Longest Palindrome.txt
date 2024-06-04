@@ -1,0 +1,153 @@
+409.Longest Palindrome
+Explanation:
+
+Certainly! The code provided is a solution to the problem of finding the length of the longest palindrome that can be built with the letters in a given string `s`. Let's go through the code step-by-step to understand its logic and identify any issues.
+
+### Step-by-step Explanation:
+
+1. **Initialization**:
+    - Two lists `lowerCase` and `upperCase`, each of size 26 (for each letter in the English alphabet), are initialized to 0. These will be used to count the occurrences of each lowercase and uppercase letter in the string `s`.
+
+    ```python
+    lowerCase = [0] * 26
+    upperCase = [0] * 26
+    ```
+
+2. **Counting Character Frequencies**:
+    - The code iterates through each character in the string `s`. For each character `c`, it checks if `c` is a lowercase letter (by comparing the ASCII value of `c` with 97, the ASCII value of 'a'). If `c` is a lowercase letter, it increments the corresponding index in `lowerCase`. Otherwise, it increments the corresponding index in `upperCase`.
+
+    ```python
+    for c in s:
+        if ord(c) - 97 >= 0:
+            lowerCase[ord(c) - 97] += 1
+        else:
+            upperCase[ord(c) - 65] += 1
+    ```
+
+3. **Building the Palindrome**:
+    - The variable `ans` is initialized to 0. This will store the length of the longest palindrome.
+    - The variable `isFirstOdd` is used to track whether an odd count has already been used in the palindrome center. 
+
+    ```python
+    ans = 0
+    isFirstOdd = False
+    ```
+
+4. **Processing Lowercase Letters**:
+    - The code then iterates over each frequency in `lowerCase`.
+    - If a frequency is even, it is directly added to `ans`.
+    - If a frequency is odd, it checks if `isFirstOdd` is False (i.e., no odd frequency has been used as the center of the palindrome yet). If so, it adds the entire odd frequency to `ans` and sets `isFirstOdd` to True. If an odd frequency has already been used, it adds the largest even number less than the current odd frequency to `ans` (i.e., `frequency - 1`).
+
+    ```python
+    for i in range(26):
+        if lowerCase[i] % 2 == 0:
+            ans += lowerCase[i]
+        else:
+            if not isFirstOdd:
+                ans += lowerCase[i]
+                isFirstOdd = True
+            else:
+                ans += lowerCase[i] - 1
+    ```
+
+5. **Processing Uppercase Letters**:
+    - The same logic is applied to `upperCase` as was applied to `lowerCase`.
+
+    ```python
+    for i in range(26):
+        if upperCase[i] % 2 == 0:
+            ans += upperCase[i]
+        else:
+            if not isFirstOdd:
+                ans += upperCase[i]
+                isFirstOdd = True
+            else:
+                ans += upperCase[i] - 1
+    ```
+
+6. **Returning the Result**:
+    - Finally, the code returns `ans`, which holds the length of the longest palindrome that can be formed with the characters in `s`.
+
+### Correction:
+
+There is a minor typo in the return statement. Instead of `return and`, it should be `return ans`.
+
+Here is the corrected code:
+
+```python
+class Solution:
+    def longestPalindrome(self, s: str) -> int:
+        lowerCase = [0] * 26
+        upperCase = [0] * 26
+        
+        for c in s:
+            if ord(c) - 97 >= 0:
+                lowerCase[ord(c) - 97] += 1
+            else:
+                upperCase[ord(c) - 65] += 1
+                
+        ans = 0
+        isFirstOdd = False
+        
+        for i in range(26):
+            if lowerCase[i] % 2 == 0:
+                ans += lowerCase[i]
+            else:
+                if not isFirstOdd:
+                    ans += lowerCase[i]
+                    isFirstOdd = True
+                else:
+                    ans += lowerCase[i] - 1
+        
+        for i in range(26):
+            if upperCase[i] % 2 == 0:
+                ans += upperCase[i]
+            else:
+                if not isFirstOdd:
+                    ans += upperCase[i]
+                    isFirstOdd = True
+                else:
+                    ans += upperCase[i] - 1
+        
+        return ans
+```
+
+This solution correctly computes the length of the longest palindrome that can be constructed from the given string `s`.
+
+Solution:
+
+class Solution:
+    def longestPalindrome(self, s: str) -> int:
+        lowerCase = [0] * 26
+        upperCase = [0] * 26
+        
+        for c in s:
+            if ord(c) - 97 >= 0:
+                lowerCase[ord(c) - 97] += 1
+            else:
+                upperCase[ord(c) - 65] += 1
+                
+        ans = 0
+        isFirstOdd = False
+        
+        for i in range(26):
+            if lowerCase[i] % 2 == 0:
+                ans += lowerCase[i]
+            else:
+                if not isFirstOdd:
+                    ans += lowerCase[i]
+                    isFirstOdd = True
+                else:
+                    ans += lowerCase[i] - 1
+        
+        for i in range(26):
+            if upperCase[i] % 2 == 0:
+                ans += upperCase[i]
+            else:
+                if not isFirstOdd:
+                    ans += upperCase[i]
+                    isFirstOdd = True
+                else:
+                    ans += upperCase[i] - 1
+        
+        return ans
