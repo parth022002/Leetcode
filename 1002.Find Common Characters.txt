@@ -1,0 +1,91 @@
+1002.Find Common Characters
+Explanation:
+
+Sure! Let's break down how this `commonChars` method works step-by-step.
+
+### Problem Statement
+The goal of the `commonChars` method is to find all characters that appear in each string within a given list of strings `words`. Each character in the result should appear as many times as it shows up in the word where it appears the fewest number of times.
+
+### Method Explanation
+1. **Initialize a Frequency Array**:
+   ```python
+   frequency = [float('inf')] * 26
+   ```
+   - This `frequency` array will track the minimum frequency of each character (a to z) across all words.
+   - `float('inf')` is used as an initial value to ensure that any actual frequency count will be lower and thus replace the initial value.
+
+2. **Iterate Through Each Word**:
+   ```python
+   for word in words:
+       freq = [0] * 26
+       for char in word:
+           freq[ord(char) - ord('a')] += 1
+       for i in range(26):
+           frequency[i] = min(frequency[i], freq[i])
+   ```
+   - For each word, create a temporary frequency array `freq` to count the occurrences of each character in that word.
+   - `ord(char) - ord('a')` converts a character to an index (0 for 'a', 1 for 'b', etc.).
+   - After counting the characters in the current word, update the global `frequency` array to keep track of the minimum count of each character seen so far.
+
+3. **Build the Result List**:
+   ```python
+   result = []
+   for i in range(26):
+       result.extend([chr(i + ord('a'))] * frequency[i])
+   ```
+   - Initialize an empty list `result`.
+   - Iterate over the `frequency` array and for each character, add it to the result list the number of times it appears in the `frequency` array.
+
+4. **Return the Result**:
+   ```python
+   return result
+   ```
+   - Finally, return the `result` list which contains all characters that are common in all words, each appearing the minimum number of times it was counted in any word.
+
+### Example Walkthrough
+Let's consider an example to see how the code works:
+
+```python
+words = ["bella", "label", "roller"]
+```
+
+- Initialize `frequency` to `[inf, inf, inf, ..., inf]` (26 times).
+- For "bella":
+  - `freq` becomes `[1, 1, 0, 0, 1, 0, ..., 0]` (1 'b', 1 'e', 2 'l', 1 'a').
+  - Update `frequency` to `[1, 1, 0, 0, 1, 0, ..., 0]`.
+- For "label":
+  - `freq` becomes `[1, 1, 0, 0, 1, 0, ..., 0]` (1 'l', 1 'a', 1 'b', 1 'e', 1 'l').
+  - Update `frequency` to `[1, 1, 0, 0, 1, 0, ..., 0]`.
+- For "roller":
+  - `freq` becomes `[0, 0, 0, 0, 1, 0, ..., 0]` (1 'r', 1 'o', 2 'l', 1 'e').
+  - Update `frequency` to `[0, 0, 0, 0, 1, 0, ..., 0]`.
+
+After processing all words, the `frequency` array is `[0, 0, 0, 0, 1, 0, ..., 0]`.
+
+- Construct `result`:
+  - Add 'l' twice and 'e' once (based on the frequency counts).
+
+The result is:
+```python
+['e', 'l', 'l']
+```
+
+This shows the characters that appear in each word in the list, considering the minimum occurrence across all words.
+
+Solution:
+
+class Solution:
+    def commonChars(self, words: List[str]) -> List[str]:
+        frequency = [float('inf')] * 26
+        for word in words:
+            freq = [0] * 26
+            for char in word:
+                freq[ord(char) - ord('a')] += 1
+            for i in range(26):
+                frequency[i] = min(frequency[i], freq[i])
+        
+        result = []
+        for i in range(26):
+            result.extend([chr(i + ord('a'))] * frequency[i])
+        
+        return result
