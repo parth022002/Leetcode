@@ -1,0 +1,98 @@
+846.Hand of Straights
+Explanation:
+
+The `isNStraightHand` function is designed to determine if a given hand of cards can be divided into groups of a specified size, where each group forms a consecutive sequence. Let's break down the function step by step:
+
+### Function Definition and Input Parameters
+
+- **Function Name**: `isNStraightHand`
+- **Parameters**:
+  - `hand`: A list of integers representing the cards.
+  - `groupSize`: An integer representing the size of each group.
+
+### Steps and Logic
+
+1. **Check Group Size Compatibility**:
+    ```python
+    if len(hand) % groupSize != 0:
+        return False
+    ```
+    - If the total number of cards in the hand is not divisible by the group size, it is impossible to divide the hand into groups of the specified size. Thus, the function returns `False`.
+
+2. **Count Card Occurrences**:
+    ```python
+    card_count = Counter(hand)
+    ```
+    - A `Counter` from the `collections` module is used to count the occurrences of each card in the hand. This helps to keep track of how many of each card we have.
+
+3. **Sort the Cards**:
+    ```python
+    sorted_cards = sorted(card_count.keys())
+    ```
+    - The keys of the `Counter` (the unique cards) are sorted. This helps in processing the cards in ascending order, which is necessary to form consecutive sequences.
+
+4. **Form Consecutive Groups**:
+    ```python
+    for card in sorted_cards:
+        if card_count[card] > 0:
+            count = card_count[card]
+            for i in range(groupSize):
+                if card_count[card + i] < count:
+                    return False
+                card_count[card + i] -= count
+    ```
+    - Iterate over each unique card in the sorted list.
+    - For each card that is still available (i.e., `card_count[card] > 0`), attempt to form a group starting from this card.
+    - The `count` variable represents how many groups we need to form starting with this card.
+    - Check if there are enough consecutive cards to form a complete group:
+      - For each card in the sequence (`card + i` where `i` ranges from `0` to `groupSize - 1`), verify if there are enough cards (`card_count[card + i] >= count`). If not, return `False`.
+      - If there are enough cards, reduce the count of each card in the group by `count`.
+
+5. **Successful Group Formation**:
+    ```python
+    return True
+    ```
+    - If all cards can be grouped into valid consecutive sequences of the specified size, return `True`.
+
+### Example Walkthrough
+
+Let's consider an example to illustrate the function:
+
+- `hand = [1,2,3,6,2,3,4,7,8]`
+- `groupSize = 3`
+
+1. Length check: `len(hand) % groupSize == 0` (9 % 3 == 0), so proceed.
+2. Card count: `Counter({2: 2, 3: 2, 1: 1, 6: 1, 4: 1, 7: 1, 8: 1})`
+3. Sorted cards: `[1, 2, 3, 4, 6, 7, 8]`
+
+Processing each card in sorted order:
+
+- Start with card `1`:
+  - Form a group `[1, 2, 3]`, decrement counts: `Counter({2: 1, 3: 1, 6: 1, 4: 1, 7: 1, 8: 1, 1: 0})`
+- Next card `2`:
+  - Form another group `[2, 3, 4]`, decrement counts: `Counter({6: 1, 7: 1, 8: 1, 1: 0, 2: 0, 3: 0, 4: 0})`
+- Skip `3` and `4` as their counts are now `0`.
+- Start with card `6`:
+  - Form the final group `[6, 7, 8]`, decrement counts: `Counter({1: 0, 2: 0, 3: 0, 4: 0, 6: 0, 7: 0, 8: 0})`
+
+Since all cards are grouped successfully, the function returns `True`.
+
+Solution:
+
+class Solution:
+    def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:
+        if len(hand) % groupSize != 0:
+            return False
+
+        card_count = Counter(hand)
+        sorted_cards = sorted(card_count.keys())
+
+        for card in sorted_cards:
+            if card_count[card] > 0:
+                count = card_count[card]
+                for i in range(groupSize):
+                    if card_count[card + i] < count:
+                        return False
+                    card_count[card + i] -= count
+
+        return True
