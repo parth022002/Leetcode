@@ -1,0 +1,89 @@
+648.Replace Words
+Explanation:
+
+Certainly! The code provided defines a method `replaceWords` in the `Solution` class, which takes two arguments: a list of strings `dict` and a string `sentence`. The goal of this method is to replace words in the `sentence` with their respective roots from the `dict` if a root exists. Let's go through the code step by step:
+
+1. **Create a Set of Roots**:
+    ```python
+    roots = set(dict)
+    ```
+    This line converts the list `dict` into a set `roots`. Using a set here is efficient because checking for the existence of an element in a set is on average O(1) time complexity.
+
+2. **Split the Sentence into Words**:
+    ```python
+    words = sentence.split()
+    ```
+    This splits the input `sentence` into individual words based on spaces, resulting in a list `words`.
+
+3. **Initialize the Result List**:
+    ```python
+    result = []
+    ```
+    This creates an empty list `result` that will store the processed words.
+
+4. **Iterate Over Each Word**:
+    ```python
+    for word in words:
+    ```
+    This loop iterates over each word in the `words` list.
+
+5. **Find and Replace with Root**:
+    ```python
+    for i in range(len(word) + 1):
+        prefix = word[:i]
+        if prefix in roots:
+            result.append(prefix)
+            break
+    else:
+        result.append(word)
+    ```
+    For each word, another loop is used to generate prefixes from the beginning of the word up to its full length plus one (`len(word) + 1`). The prefixes are created by slicing the word: `word[:i]`.
+
+    - If a prefix is found in the `roots` set, that prefix is added to the `result` list, and the loop breaks, moving to the next word.
+    - If no prefix is found by the end of the loop (meaning no root matches any prefix of the word), the original word is added to the `result` list.
+
+6. **Join the Result into a Sentence**:
+    ```python
+    return ' '.join(result)
+    ```
+    Finally, the `result` list, which now contains the modified words, is joined back into a single string with spaces between the words, and this string is returned as the output.
+
+### Example Walkthrough
+
+Consider the input:
+- `dict = ["cat", "bat", "rat"]`
+- `sentence = "the cattle was rattled by the battery"`
+
+1. `roots` will be `{"cat", "bat", "rat"}`.
+2. `words` will be `["the", "cattle", "was", "rattled", "by", "the", "battery"]`.
+
+Processing each word:
+
+- "the": No prefix found in `roots`. Add "the" to `result`.
+- "cattle": Prefix "cat" found in `roots`. Add "cat" to `result`.
+- "was": No prefix found in `roots`. Add "was" to `result`.
+- "rattled": Prefix "rat" found in `roots`. Add "rat" to `result`.
+- "by": No prefix found in `roots`. Add "by" to `result`.
+- "the": No prefix found in `roots`. Add "the" to `result`.
+- "battery": Prefix "bat" found in `roots`. Add "bat" to `result`.
+
+The `result` list will be `["the", "cat", "was", "rat", "by", "the", "bat"]`, which is joined into the final sentence: `"the cat was rat by the bat"`.
+
+Solution:
+
+class Solution:
+    def replaceWords(self, dict: List[str], sentence: str) -> str:
+        roots = set(dict)
+        words = sentence.split()
+        result = []
+
+        for word in words:
+            for i in range(len(word) + 1):
+                prefix = word[:i]
+                if prefix in roots:
+                    result.append(prefix)
+                    break
+            else:
+                result.append(word)
+
+        return ' '.join(result)
