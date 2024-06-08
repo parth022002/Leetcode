@@ -1,0 +1,79 @@
+523.Continuous Subarray Sum
+Explanation:
+
+The provided code defines a function `checkSubarraySum` that checks if there is a subarray of at least two consecutive elements in the list `nums` whose sum is a multiple of `k`. Here's a detailed breakdown of how the code works:
+
+1. **Initialization**:
+   - A dictionary `map` is initialized with `{0: -1}`. This helps to handle cases where the subarray starts from index 0.
+   - A variable `sum` is initialized to 0. This will be used to keep track of the cumulative sum of elements as we iterate through the list.
+
+2. **Iterating Through the List**:
+   - The function loops through each element in `nums`.
+   - For each element `nums[i]`, it adds the element to `sum`.
+
+3. **Remainder Calculation**:
+   - The remainder `rem` of the cumulative sum `sum` divided by `k` is calculated using `rem = sum % k`.
+
+4. **Checking the Map**:
+   - If `rem` is already in `map`, it means there exists a previous prefix of the array with the same remainder. This implies that the subarray between the previous occurrence and the current index has a sum which is a multiple of `k`.
+     - The function checks if the length of this subarray is at least 2 by ensuring that the difference between the current index `i` and the stored index `map[rem]` is greater than 1.
+     - If this condition is met, the function returns `True`.
+   - If `rem` is not in `map`, it adds the current index `i` to `map` with the key `rem`.
+
+5. **Return False**:
+   - If the loop completes without finding such a subarray, the function returns `False`.
+
+Here’s the code with some comments to further explain the process:
+
+```python
+class Solution:
+    def checkSubarraySum(self, nums: List[int], k: int) -> bool:
+        map = {0: -1}  # To handle the case where the subarray starts from index 0
+        sum = 0  # Cumulative sum of elements
+
+        for i in range(len(nums)):
+            sum += nums[i]  # Add current element to the cumulative sum
+            rem = sum % k  # Calculate the remainder of sum divided by k
+
+            if rem in map:  # Check if this remainder has been seen before
+                if i - map[rem] > 1:  # Ensure the subarray length is at least 2
+                    return True  # Found a valid subarray
+            else:
+                map[rem] = i  # Store the index for this remainder
+
+        return False  # No valid subarray found
+```
+
+### Example Usage
+
+Let's go through an example to see how the code works:
+
+- Suppose `nums = [23, 2, 4, 6, 7]` and `k = 6`.
+- Iteration 1: `i = 0`, `nums[i] = 23`, `sum = 23`, `rem = 23 % 6 = 5`.
+  - `map = {0: -1, 5: 0}` (new remainder 5 is added).
+- Iteration 2: `i = 1`, `nums[i] = 2`, `sum = 25`, `rem = 25 % 6 = 1`.
+  - `map = {0: -1, 5: 0, 1: 1}` (new remainder 1 is added).
+- Iteration 3: `i = 2`, `nums[i] = 4`, `sum = 29`, `rem = 29 % 6 = 5`.
+  - `rem = 5` is already in `map` with value `0`, and `i - map[5] = 2 - 0 = 2` which is greater than 1.
+  - Thus, the function returns `True`.
+
+This indicates that the subarray `[2, 4]` (from index 1 to index 2) sums to `6`, which is a multiple of `6`.
+
+Solution:
+
+class Solution:
+    def checkSubarraySum(self, nums: List[int], k: int) -> bool:
+        map = {0: -1}  # To handle the case where the sub-array starts from index 0
+        sum = 0
+
+        for i in range(len(nums)):
+            sum += nums[i]
+            rem = sum % k
+
+            if rem in map:
+                if i - map[rem] > 1:
+                    return True
+            else:
+                map[rem] = i
+
+        return False
