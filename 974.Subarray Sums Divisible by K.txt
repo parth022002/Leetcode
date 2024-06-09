@@ -1,0 +1,79 @@
+974.Subarray Sums Divisible by K
+Explanation:
+
+The provided code is a solution for finding the number of subarrays within an array `nums` that have a sum divisible by a given integer `k`. Let's break down how the code works step by step.
+
+### Step-by-Step Explanation
+
+1. **Initialization:**
+   ```python
+   count = 0
+   n = len(nums)
+   ```
+   - `count` is initialized to 0. This variable will keep track of the number of subarrays whose sum is divisible by `k`.
+   - `n` is set to the length of the array `nums`. This is used to control the loops that iterate through the array.
+
+2. **Outer Loop (Selecting the Starting Point of Subarrays):**
+   ```python
+   for i in range(n):
+   ```
+   - This loop runs from `i = 0` to `i = n-1`. Each iteration of this loop sets the starting index of the subarray.
+
+3. **Inner Loop (Calculating Subarray Sums):**
+   ```python
+   curr_sum = 0
+   for j in range(i, n):
+       curr_sum += nums[j]
+       if curr_sum % k == 0:
+           count += 1
+   ```
+   - `curr_sum` is initialized to 0 at the start of each outer loop iteration.
+   - The inner loop runs from `j = i` to `j = n-1`. Each iteration of this loop extends the subarray to include the next element in `nums` and updates `curr_sum` to be the sum of the current subarray starting from index `i` to `j`.
+   - If `curr_sum % k == 0`, it means the sum of the current subarray is divisible by `k`, and `count` is incremented by 1.
+
+4. **Return the Result:**
+   ```python
+   return count
+   ```
+   - After both loops complete, `count` holds the total number of subarrays whose sum is divisible by `k`, and this value is returned.
+
+### Complexity
+
+- **Time Complexity:**
+  - The solution has a nested loop structure where both the outer and inner loops can iterate up to `n` times.
+  - This results in a time complexity of \(O(n^2)\).
+
+- **Space Complexity:**
+  - The space complexity is \(O(1)\) because no extra space proportional to the input size is used; only a few variables are utilized.
+
+### Example
+
+Consider `nums = [4, 5, 0, -2, -3, 1]` and `k = 5`:
+
+- The outer loop starts with `i = 0`, and the inner loop calculates the sum of subarrays starting from `i = 0`:
+  - Subarray `[4]` -> Sum = 4 (not divisible by 5)
+  - Subarray `[4, 5]` -> Sum = 9 (not divisible by 5)
+  - Subarray `[4, 5, 0]` -> Sum = 9 (not divisible by 5)
+  - Subarray `[4, 5, 0, -2]` -> Sum = 7 (not divisible by 5)
+  - Subarray `[4, 5, 0, -2, -3]` -> Sum = 4 (not divisible by 5)
+  - Subarray `[4, 5, 0, -2, -3, 1]` -> Sum = 5 (divisible by 5, `count` increases)
+
+- This process repeats for each starting index `i`, and the count is incremented every time a subarray sum divisible by `k` is found.
+
+By the end of all iterations, the solution returns the total count of such subarrays.
+
+Solution:
+
+class Solution:
+    def subarraysDivByK(self, nums: List[int], k: int) -> int:
+        count = 0
+        n = len(nums)
+        
+        for i in range(n):
+            curr_sum = 0
+            for j in range(i, n):
+                curr_sum += nums[j]
+                if curr_sum % k == 0:
+                    count += 1
+        
+        return count
