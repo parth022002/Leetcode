@@ -1,0 +1,58 @@
+1051. height Checker
+Explanation:
+
+Certainly! Let's break down the given Python function `heightChecker` from the `Solution` class step by step to understand how it works.
+
+### Function Definition
+
+```python
+class Solution:
+    def heightChecker(self, heights: List[int]) -> int:
+        return sum(h != s for h, s in zip(heights, sorted(heights)))
+```
+
+### Purpose of the Function
+
+The function `heightChecker` is designed to count how many elements in the list `heights` are out of order compared to their positions in a sorted version of the list. Essentially, it checks how many students need to move to get all students in non-decreasing order of heights.
+
+### Step-by-Step Explanation
+
+1. **Input Parameter**:
+   - `heights`: A list of integers representing the heights of students.
+
+2. **Sorting the Heights**:
+   - `sorted(heights)`: This creates a new list which is the sorted version of the input list `heights`.
+
+3. **Zipping the Lists**:
+   - `zip(heights, sorted(heights))`: This pairs up elements from the original `heights` list with the corresponding elements from the sorted list. It returns an iterator of tuples, where each tuple contains one element from each of the input lists.
+
+4. **Comparing the Original and Sorted Heights**:
+   - `(h != s for h, s in zip(heights, sorted(heights)))`: This is a generator expression that compares each element in the original list with the corresponding element in the sorted list. For each pair `(h, s)`, it evaluates to `True` if the elements are different (i.e., the student is out of order) and `False` otherwise.
+
+5. **Counting the Differences**:
+   - `sum(h != s for h, s in zip(heights, sorted(heights)))`: The `sum` function adds up all the `True` values (which are treated as `1`) from the generator expression. This gives the total number of students that are not in their correct positions according to the sorted order.
+
+### Example
+
+Let's consider an example to illustrate the process:
+
+- Input: `heights = [1, 1, 4, 2, 1, 3]`
+- Sorted: `sorted(heights) = [1, 1, 1, 2, 3, 4]`
+
+**Comparisons:**
+- Original: `[1, 1, 4, 2, 1, 3]`
+- Sorted:   `[1, 1, 1, 2, 3, 4]`
+- Comparison results: `[(1 == 1), (1 == 1), (4 != 1), (2 == 2), (1 != 3), (3 != 4)]`
+- Boolean results: `[False, False, True, False, True, True]`
+
+The sum of `True` values (`1` for each `True`) is `3`, which means 3 students are out of order.
+
+### Conclusion
+
+The function `heightChecker` efficiently calculates the number of elements in the list `heights` that are not in their correct positions by comparing the original list with its sorted version and counting the differences.
+
+Solution:
+
+class Solution:
+    def heightChecker(self, heights: List[int]) -> int:
+        return sum(h!=s for h, s in zip(heights, sorted(heights)))
