@@ -1,0 +1,96 @@
+945.Minimum Increment to Make Array Unique
+Explanation:
+
+The function `minIncrementForUnique` aims to make all elements in the input list `nums` unique by incrementing elements with the minimum possible increments. Here's a detailed explanation of how it works:
+
+1. **Sorting the List**:
+   ```python
+   nums.sort()
+   ```
+   The list `nums` is sorted in non-decreasing order. This step is crucial because it simplifies the logic for ensuring all elements are unique. When the list is sorted, any duplicate elements or elements that are not unique will be adjacent to each other, making it easier to identify and increment them.
+
+2. **Initializing Variables**:
+   ```python
+   ans = 0
+   ```
+   A variable `ans` is initialized to zero. This variable will keep track of the total number of increments needed to make all elements in the list unique.
+
+3. **Iterating through the List**:
+   ```python
+   for i in range(1, len(nums)):
+   ```
+   The list is iterated starting from the second element (index 1) to the end. The reason for starting from the second element is to compare each element with its previous one.
+
+4. **Checking and Incrementing Elements**:
+   ```python
+   if nums[i] <= nums[i - 1]:
+       ans += nums[i - 1] - nums[i] + 1
+       nums[i] = nums[i - 1] + 1
+   ```
+   For each element `nums[i]`, the function checks if it is less than or equal to the previous element `nums[i - 1]`. If it is, this means the current element is not unique and needs to be incremented.
+
+   - **Calculating Increments**:
+     ```python
+     ans += nums[i - 1] - nums[i] + 1
+     ```
+     The number of increments needed to make `nums[i]` unique is `nums[i - 1] - nums[i] + 1`. This is added to `ans`.
+
+   - **Updating the Current Element**:
+     ```python
+     nums[i] = nums[i - 1] + 1
+     ```
+     The current element `nums[i]` is then updated to be one more than the previous element `nums[i - 1]`, ensuring that it is unique and greater than the previous element.
+
+5. **Returning the Result**:
+   ```python
+   return ans
+   ```
+   After processing the entire list, the function returns `ans`, which contains the total number of increments needed to make all elements in the list unique.
+
+### Example Walkthrough
+
+Consider the list `nums = [3, 2, 1, 2, 1, 7]`:
+
+1. **Sorting**: The sorted list is `[1, 1, 2, 2, 3, 7]`.
+
+2. **First iteration (`i = 1`)**:
+   - `nums[1]` (1) is not greater than `nums[0]` (1).
+   - Increment needed: `1 - 1 + 1 = 1`.
+   - Update `nums[1]` to `2`.
+   - `ans` becomes `1`.
+
+3. **Second iteration (`i = 2`)**:
+   - `nums[2]` (2) is not greater than `nums[1]` (2).
+   - Increment needed: `2 - 2 + 1 = 1`.
+   - Update `nums[2]` to `3`.
+   - `ans` becomes `2`.
+
+4. **Third iteration (`i = 3`)**:
+   - `nums[3]` (2) is not greater than `nums[2]` (3).
+   - Increment needed: `3 - 2 + 1 = 2`.
+   - Update `nums[3]` to `4`.
+   - `ans` becomes `4`.
+
+5. **Fourth iteration (`i = 4`)**:
+   - `nums[4]` (3) is not greater than `nums[3]` (4).
+   - Increment needed: `4 - 3 + 1 = 1`.
+   - Update `nums[4]` to `5`.
+   - `ans` becomes `5`.
+
+6. **Fifth iteration (`i = 5`)**:
+   - `nums[5]` (7) is already greater than `nums[4]` (5).
+   - No increment needed.
+
+Final `ans` is `5`, which is the minimum number of increments needed to make all elements in the list unique.
+
+Solution:
+
+class Solution:
+    def minIncrementForUnique(self, nums: List[int]) -> int:
+        nums.sort()
+        ans = 0
+        for i in range(1, len(nums)):
+            if nums[i] <= nums[i - 1]:
+                ans += nums[i - 1] - nums[i] + 1
+                nums[i] = nums[i - 1] + 1
+        return ans
