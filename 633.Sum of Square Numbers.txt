@@ -1,0 +1,73 @@
+633.Sum of Square Numbers
+Explanation:
+
+Certainly! The goal of the `judgeSquareSum` function is to determine whether a given non-negative integer \( c \) can be expressed as the sum of the squares of two integers. 
+
+Here’s a step-by-step explanation of how the function works:
+
+### Function Definition and Initialization
+```python
+class Solution:
+    def judgeSquareSum(self, c: int) -> bool:
+        left, right = 0, int(math.sqrt(c))
+```
+- The function `judgeSquareSum` is defined as a method of the `Solution` class and takes an integer `c` as input.
+- Two pointers, `left` and `right`, are initialized. 
+  - `left` is set to 0 (the smallest non-negative integer).
+  - `right` is set to the integer value of the square root of `c` (this is the largest possible integer whose square is less than or equal to `c`).
+
+### Main Loop: Checking the Sum of Squares
+```python
+        while left <= right:
+```
+- The loop continues as long as `left` is less than or equal to `right`. This ensures all pairs (left, right) are considered where \( 0 \leq \text{left} \leq \text{right} \).
+
+### Checking Conditions and Adjusting Pointers
+```python
+            if left * left + right * right == c:
+                return True
+```
+- First, it checks if the sum of the squares of `left` and `right` equals `c`.
+- If this condition is true, the function returns `True`, indicating that \( c \) can be expressed as the sum of the squares of `left` and `right`.
+
+```python
+            elif left * left + right * right > c:
+                right -= 1
+```
+- If the sum of the squares is greater than `c`, it means the `right` value is too large. So, `right` is decremented by 1 to try a smaller square in the next iteration.
+
+```python
+            else:
+                left += 1
+```
+- If the sum of the squares is less than `c`, it means the `left` value is too small. So, `left` is incremented by 1 to try a larger square in the next iteration.
+
+### End of Loop: No Valid Pair Found
+```python
+        return False
+```
+- If the loop completes without finding any pair of integers whose squares sum to `c`, the function returns `False`.
+
+### Example Walkthrough
+Suppose \( c = 5 \):
+- `left` starts at 0 and `right` starts at \(\sqrt{5}\approx 2\).
+- Check (0, 2): \(0^2 + 2^2 = 0 + 4 = 4\) (less than 5, so increment `left` to 1).
+- Check (1, 2): \(1^2 + 2^2 = 1 + 4 = 5\) (equal to 5, so return `True`).
+
+Thus, for \( c = 5 \), the function correctly identifies that 5 can be expressed as the sum of the squares of 1 and 2.
+
+Solution:
+
+class Solution:
+    def judgeSquareSum(self, c: int) -> bool:
+        left, right = 0, int(math.sqrt(c))
+        while left <= right:
+            if left * left + right * right == c:
+                return True
+            elif left * left + right * right > c:
+                right -= 1
+            else:
+                left += 1
+        return False
+
+
