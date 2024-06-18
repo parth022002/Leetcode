@@ -1,0 +1,86 @@
+826.Most Profit Assigning Work
+Explanation:
+
+The `maxProfitAssignment` method is designed to solve the problem of maximizing profit by assigning jobs to workers based on their abilities.
+
+### Problem Explanation:
+- **Inputs:**
+  - `difficulty`: A list of integers where each integer represents the difficulty of a job.
+  - `profit`: A list of integers where each integer represents the profit from a job, with the same index corresponding to the job's difficulty.
+  - `worker`: A list of integers where each integer represents the ability of a worker.
+
+- **Goal:** To maximize the total profit by assigning each worker a job that they can perform (i.e., the job's difficulty is less than or equal to the worker's ability). Each worker can only do one job, and they will always choose the most profitable job they can perform.
+
+### Solution Explanation:
+The method uses a greedy algorithm to achieve this:
+
+1. **Create Job Pairs and Sort Them:**
+   - Combine `difficulty` and `profit` into a list of tuples called `jobs` where each tuple is `(difficulty, profit)`.
+   - Sort `jobs` by difficulty to facilitate easy lookup later.
+
+2. **Sort Workers by Ability:**
+   - Sort the `worker` list to iterate over them in increasing order of their abilities.
+
+3. **Initialize Variables:**
+   - `ans` to accumulate the total profit.
+   - `j` as a pointer to track the current job in the `jobs` list.
+   - `maxProfit` to keep track of the maximum profit seen so far.
+
+4. **Assign Jobs to Workers:**
+   - Iterate over each worker in the sorted `worker` list.
+   - For each worker, update `maxProfit` to the highest profit of all jobs that the worker can do (i.e., those with difficulty less than or equal to the worker's ability).
+   - Accumulate this `maxProfit` to `ans`.
+
+### Code Walkthrough:
+```python
+class Solution:
+    def maxProfitAssignment(self, difficulty: List[int], profit: List[int], worker: List[int]) -> int:
+        ans = 0
+        # Create job pairs and sort them by difficulty
+        jobs = sorted(zip(difficulty, profit))
+        # Sort workers by their abilities
+        worker.sort()
+        
+        j, maxProfit = 0, 0
+        # Iterate over each worker
+        for i in range(len(worker)):
+            # Find the most profitable job the worker can do
+            while j < len(jobs) and jobs[j][0] <= worker[i]:
+                maxProfit = max(maxProfit, jobs[j][1])
+                j += 1
+            # Add the maximum profit the current worker can earn to the total profit
+            ans += maxProfit
+        
+        return ans
+```
+
+### Detailed Steps:
+1. **Sorting Jobs and Workers:**
+   - `jobs` list is sorted by difficulty, ensuring that we can check jobs in increasing order of difficulty.
+   - `worker` list is sorted by ability, allowing us to match each worker to the best job they can perform in a single pass.
+
+2. **Job Assignment:**
+   - For each worker (starting from the least capable), we look at all jobs they can perform (those with difficulty less than or equal to the worker's ability).
+   - We maintain `maxProfit` which is updated to the highest profit job seen so far that the worker can perform.
+   - This ensures that each worker gets the best possible job they can handle, maximizing the profit for that worker.
+
+3. **Result Accumulation:**
+   - The profit for each worker is added to `ans`, giving us the total maximum profit at the end.
+
+The greedy approach ensures that we efficiently find the best job for each worker without redundant checks, leading to an optimal solution with a time complexity primarily driven by the sorting operations, i.e., \(O(n \log n + m \log m)\), where \(n\) is the number of jobs and \(m\) is the number of workers.
+
+Solution:
+
+class Solution:
+    def maxProfitAssignment(self, difficulty: List[int], profit: List[int], worker: List[int]) -> int:
+        ans = 0
+        jobs = sorted(zip(difficulty, profit))
+        worker.sort()
+        j, maxProfit = 0, 0
+        for i in range(len(worker)):
+            while j < len(jobs) and jobs[j][0] <= worker[i]:
+                maxProfit = max(maxProfit, jobs[j][1])
+                j += 1
+            ans += maxProfit
+        
+        return ans
