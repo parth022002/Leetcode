@@ -1,0 +1,95 @@
+1482.Minimum Number of Days to Make m Bouquets
+Explanation:
+
+This Python code defines a solution for finding the minimum number of days required to make a given number of bouquets from flowers that bloom on different days. The solution uses a binary search approach to efficiently determine the minimum day.
+
+Here's a detailed explanation of the code:
+
+### Problem Statement
+You are given an array `bloomDay`, where `bloomDay[i]` is the day the ith flower blooms. You need to make `m` bouquets, each containing exactly `k` consecutive blooming flowers. The task is to determine the minimum number of days needed to achieve this. If it's impossible to make `m` bouquets, return `-1`.
+
+### Steps in the Solution
+
+1. **Initial Check**:
+   - The first condition checks if it is possible to make the required number of bouquets. If the total number of flowers needed (`m * k`) is greater than the number of available flowers (`len(bloomDay)`), it immediately returns `-1` because it's impossible to make the required bouquets.
+
+2. **Helper Function (`canMakeBouquets`)**:
+   - This function determines if it's possible to make `m` bouquets, each with `k` consecutive flowers, by a given day.
+   - It iterates through the `bloomDay` array and counts the number of consecutive flowers that have bloomed by the given day.
+   - If the count of consecutive flowers reaches `k`, it increments the bouquet count and resets the consecutive flower count.
+   - If the total number of bouquets made reaches `m`, it returns `True`.
+   - If it finishes iterating through the array without making `m` bouquets, it returns `False`.
+
+3. **Binary Search for Minimum Days**:
+   - The binary search is performed over the range of days from `1` to the maximum value in `bloomDay` (`low` to `high`).
+   - In each iteration, it calculates the middle day (`mid`).
+   - It uses the `canMakeBouquets` function to check if it's possible to make `m` bouquets by day `mid`.
+     - If it is possible, it means we might be able to do it in fewer days, so it sets the `high` value to `mid`.
+     - If it is not possible, it means we need more days, so it sets the `low` value to `mid + 1`.
+   - The loop continues until `low` is equal to `high`, at which point `low` (or `high`) will be the minimum number of days required.
+
+4. **Return the Result**:
+   - After the binary search completes, it returns the value of `low`, which is the minimum number of days required to make the desired number of bouquets.
+
+### Example Walkthrough
+Let's consider an example to illustrate the steps:
+
+```python
+bloomDay = [1, 10, 3, 10, 2]
+m = 3
+k = 1
+```
+
+- The required number of flowers is `m * k = 3 * 1 = 3`, which is less than the total number of flowers `5`, so it's possible to make `3` bouquets.
+- Initialize `low` to `1` and `high` to `10` (maximum value in `bloomDay`).
+- Perform the binary search:
+  - `mid = (1 + 10) // 2 = 5`
+  - Check if it's possible to make `3` bouquets by day `5`:
+    - `bloomDay = [1, 10, 3, 10, 2]`
+    - Flowers blooming by day `5`: `1`, `3`, `2` (can make `3` bouquets)
+    - So, it's possible. Set `high` to `5`.
+  - `mid = (1 + 5) // 2 = 3`
+  - Check if it's possible to make `3` bouquets by day `3`:
+    - Flowers blooming by day `3`: `1`, `3`, `2` (can make `3` bouquets)
+    - So, it's possible. Set `high` to `3`.
+  - `mid = (1 + 3) // 2 = 2`
+  - Check if it's possible to make `3` bouquets by day `2`:
+    - Flowers blooming by day `2`: `1`, `2` (only `2` bouquets possible)
+    - So, it's not possible. Set `low` to `3`.
+
+- The loop ends with `low` equal to `high` (both are `3`), so the minimum number of days required is `3`.
+
+This binary search approach ensures that the solution is efficient, even for larger inputs.
+
+Solution:
+
+class Solution:
+    def minDays(self, bloomDay: List[int], m: int, k: int) -> int:
+        if m * k > len(bloomDay):
+            return -1
+        
+        def canMakeBouquets(bloomDay, m, k, day):
+            total = 0
+            flowers = 0
+            for b in bloomDay:
+                if b <= day:
+                    flowers += 1
+                    if flowers == k:
+                        total += 1
+                        flowers = 0
+                else:
+                    flowers = 0
+                if total >= m:
+                    return True
+            return False
+        
+        low, high = 1, max(bloomDay)
+        while low < high:
+            mid = (low + high) // 2
+            if canMakeBouquets(bloomDay, m, k, mid):
+                high = mid
+            else:
+                low = mid + 1
+        
+        return low
+        
