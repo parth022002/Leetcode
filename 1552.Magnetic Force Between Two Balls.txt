@@ -1,0 +1,97 @@
+1552.Magnetic Force Between Two Balls
+Explanation:
+
+The provided code is a solution to the problem of placing `m` balls in the `position` array such that the minimum distance between any two balls is maximized. Let's break down the solution step by step:
+
+### Step-by-Step Explanation
+
+1. **Sorting the Positions**:
+   ```python
+   position.sort()
+   ```
+   The `position` list is sorted in ascending order to make it easier to compute distances between consecutive positions.
+
+2. **Helper Function (`canPlaceBalls`)**:
+   ```python
+   def canPlaceBalls(min_dist: int) -> bool:
+       count, last_pos = 1, position[0]
+       for pos in position[1:]:
+           if pos - last_pos >= min_dist:
+               count += 1
+               last_pos = pos
+               if count == m:
+                   return True
+       return False
+   ```
+   This function checks if it is possible to place `m` balls in the sorted `position` list such that the minimum distance between any two balls is at least `min_dist`.
+
+   - `count` starts at 1 because the first ball is always placed at the first position.
+   - `last_pos` keeps track of the position where the last ball was placed.
+   - The loop iterates over the remaining positions. If the distance between the current position (`pos`) and `last_pos` is greater than or equal to `min_dist`, it places a ball there (`count` is incremented and `last_pos` is updated).
+   - If `count` reaches `m`, it means placing `m` balls with at least `min_dist` distance is possible, and the function returns `True`.
+   - If the loop finishes without placing `m` balls, the function returns `False`.
+
+3. **Binary Search Initialization**:
+   ```python
+   low, high = 1, position[-1] - position[0]
+   best_dist = 0
+   ```
+   - `low` is set to 1 because the minimum possible distance between any two balls is at least 1.
+   - `high` is set to the difference between the maximum and minimum values in the `position` list, representing the maximum possible distance.
+   - `best_dist` will store the result for the largest minimum distance found.
+
+4. **Binary Search Loop**:
+   ```python
+   while low <= high:
+       mid = (low + high) // 2
+       if canPlaceBalls(mid):
+           best_dist = mid
+           low = mid + 1
+       else:
+           high = mid - 1
+   ```
+   - The loop runs as long as `low` is less than or equal to `high`.
+   - `mid` is the middle value between `low` and `high`.
+   - If placing balls with at least `mid` distance is possible (`canPlaceBalls(mid)` returns `True`), it means we can try for a larger distance, so `best_dist` is updated to `mid` and `low` is increased to `mid + 1`.
+   - If it's not possible, it means `mid` is too large, so `high` is decreased to `mid - 1`.
+
+5. **Returning the Result**:
+   ```python
+   return best_dist
+   ```
+   After the binary search loop, `best_dist` will hold the largest minimum distance between any two balls.
+
+### Summary
+The solution uses binary search to efficiently determine the maximum possible minimum distance between `m` balls placed in the sorted `position` list. The `canPlaceBalls` helper function ensures that the placement condition is met, and the binary search narrows down the possible distances until the optimal value is found.
+
+Solution:
+
+class Solution:
+    def maxDistance(self, position: List[int], m: int) -> int:
+        position.sort()
+        
+        def canPlaceBalls(min_distance: int) -> bool:
+            # Try to place the balls with at least `min_distance` apart
+            last_position = position[0]
+            balls_placed = 1
+            
+            for i in range(1, len(position)):
+                if position[i] - last_position >= min_distance:
+                    balls_placed += 1
+                    last_position = position[i]
+                    if balls_placed == m:
+                        return True
+            return False
+        
+        left, right = 1, position[-1] - position[0]
+        best_distance = 0
+        
+        while left <= right:
+            mid = (left + right) // 2
+            if canPlaceBalls(mid):
+                best_distance = mid
+                left = mid + 1
+            else:
+                right = mid - 1
+        
+        return best_distance
