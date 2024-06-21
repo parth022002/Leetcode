@@ -1,0 +1,74 @@
+1052.Grumpy Bookstore Owner
+Explanation:
+
+Sure! Here’s a brief explanation of the optimized `maxSatisfied` function:
+
+1. **Base Satisfaction Calculation**:
+   - We calculate `base_satisfaction` by summing the customers’ satisfaction during the non-grumpy minutes. This is the satisfaction we always get without any special technique.
+
+   ```python
+   base_satisfaction = sum(customers[i] for i in range(len(customers)) if not grumpy[i])
+   ```
+
+2. **Initial Extra Satisfaction Calculation**:
+   - We calculate `extra_satisfaction` for the first `minutes` interval where the secret technique can be used. This interval is where we would "turn off" grumpiness to potentially gain more satisfaction.
+
+   ```python
+   extra_satisfaction = sum(customers[i] for i in range(minutes) if grumpy[i])
+   ```
+
+3. **Initialize Maximum Extra Satisfaction**:
+   - We initialize `max_extra_satisfaction` with the initial `extra_satisfaction`.
+
+   ```python
+   max_extra_satisfaction = extra_satisfaction
+   ```
+
+4. **Sliding Window Approach**:
+   - We use a sliding window to move through the rest of the `customers` list, adjusting the `extra_satisfaction` as we go:
+     - For each new minute entering the window, if it’s a grumpy minute, we add its customer count to `extra_satisfaction`.
+     - For each minute exiting the window, if it was a grumpy minute, we subtract its customer count from `extra_satisfaction`.
+     - We update `max_extra_satisfaction` with the maximum value of `extra_satisfaction` encountered.
+
+   ```python
+   for i in range(minutes, len(customers)):
+       if grumpy[i]:
+           extra_satisfaction += customers[i]
+       if grumpy[i - minutes]:
+           extra_satisfaction -= customers[i - minutes]
+       max_extra_satisfaction = max(max_extra_satisfaction, extra_satisfaction)
+   ```
+
+5. **Final Result Calculation**:
+   - The final result is the sum of `base_satisfaction` and `max_extra_satisfaction`, representing the maximum satisfaction we can achieve.
+
+   ```python
+   return base_satisfaction + max_extra_satisfaction
+   ```
+
+This method ensures that we efficiently compute the maximum satisfaction by leveraging a sliding window technique, keeping the runtime at \(O(n)\) and using a constant amount of extra space \(O(1)\).
+
+Solution:
+
+class Solution:
+    def maxSatisfied(self, customers: List[int], grumpy: List[int], minutes: int) -> int:
+        # Calculate the base satisfaction without using the secret technique
+        base_satisfaction = sum(customers[i] for i in range(len(customers)) if not grumpy[i])
+
+        # Calculate the initial extra satisfaction we can get by using the secret technique for the first 'minutes' interval
+        extra_satisfaction = sum(customers[i] for i in range(minutes) if grumpy[i])
+
+        # Initialize the maximum extra satisfaction with the initial calculation
+        max_extra_satisfaction = extra_satisfaction
+
+        # Sliding window to calculate extra satisfaction for other intervals
+        for i in range(minutes, len(customers)):
+            if grumpy[i]:
+                extra_satisfaction += customers[i]
+            if grumpy[i - minutes]:
+                extra_satisfaction -= customers[i - minutes]
+            # Update the maximum extra satisfaction found
+            max_extra_satisfaction = max(max_extra_satisfaction, extra_satisfaction)
+
+        # The total maximum satisfaction is the base satisfaction plus the maximum extra satisfaction found
+        return base_satisfaction + max_extra_satisfaction
