@@ -1,0 +1,53 @@
+1248. Count Number of Nice subarrays
+Explanation:
+
+step-by-Step Explanation:
+1. **Initialize the Hash Map and Variables:**
+   - `count = defaultdict(int)`: This dictionary will store the frequency of prefix sums.
+   - `count[0] = 1`: We initialize the count of prefix sum `0` to `1` because a prefix sum of zero indicates an empty subarray before we start processing.
+   - `ans = 0`: This variable will store the final count of valid subarrays.
+   - `current_odd_count = 0`: This keeps track of the cumulative number of odd numbers encountered as we iterate through the list.
+
+2. **Iterate Through Each Number in `nums`:**
+   - For each `num` in `nums`, increment `current_odd_count` by `num % 2`. This adds `1` if `num` is odd and `0` if `num` is even.
+   
+3. **Check for Valid Subarrays:**
+   - `if current_odd_count - k in count`: This checks if there exists a previous prefix sum such that subtracting `k` odd numbers from the current prefix sum gives us a valid subarray. If this condition is true, it means there is a subarray ending at the current index with exactly `k` odd numbers.
+   - `ans += count[current_odd_count - k]`: If the condition is true, we add the frequency of the prefix sum `current_odd_count - k` to `ans`. This is because each occurrence of this prefix sum represents a valid starting point of a subarray ending at the current index.
+
+4. **Update the Hash Map:**
+   - `count[current_odd_count] += 1`: Increment the count of the current prefix sum `current_odd_count` in the hash map. This updates the frequency of the prefix sum to reflect its occurrence at the current index.
+
+### Example Walkthrough
+
+Consider `nums = [1, 1, 2, 1, 1]` and `k = 3`:
+
+1. Initialize `count = {0: 1}`, `ans = 0`, and `current_odd_count = 0`.
+2. Iterate through `nums`:
+   - First `1`: `current_odd_count = 1`, `count = {0: 1, 1: 1}`
+   - Second `1`: `current_odd_count = 2`, `count = {0: 1, 1: 1, 2: 1}`
+   - `2` (even): `current_odd_count = 2`, `count = {0: 1, 1: 1, 2: 2}`
+   - Third `1`: `current_odd_count = 3`, `current_odd_count - k = 0`, `ans = 1` (since `count[0] = 1`), `count = {0: 1, 1: 1, 2: 2, 3: 1}`
+   - Fourth `1`: `current_odd_count = 4`, `current_odd_count - k = 1`, `ans = 2` (since `count[1] = 1`), `count = {0: 1, 1: 1, 2: 2, 3: 1, 4: 1}`
+
+Final result: `ans = 2`, meaning there are 2 subarrays with exactly 3 odd numbers.
+
+Solution:
+
+from collections import defaultdict
+from typing import List
+
+class Solution:
+    def numberOfSubarrays(self, nums: List[int], k: int) -> int:
+        count = defaultdict(int)
+        count[0] = 1
+        ans = 0
+        current_odd_count = 0
+        
+        for num in nums:
+            current_odd_count += num % 2
+            if current_odd_count - k in count:
+                ans += count[current_odd_count - k]
+            count[current_odd_count] += 1
+            
+        return ans
