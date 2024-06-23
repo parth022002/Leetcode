@@ -1,0 +1,114 @@
+1438. Longest Continuous Subarray With Absolute Diff Less Than or Equal to Limit
+Explanation:
+
+Sure, let's break down the improved solution step by step to understand how it works and why it is efficient.
+
+### Problem Statement
+You need to find the length of the longest subarray where the absolute difference between the maximum and minimum elements is less than or equal to a given limit.
+
+### Key Concepts
+- **Sliding Window Technique**: Helps in maintaining a subarray and adjusting its bounds efficiently.
+- **Deques (Double-ended Queues)**: Used for keeping track of the minimum and maximum values within the current window.
+
+### Explanation
+
+#### Initialization
+```python
+increase = deque()  # Deque to store indices of elements in non-decreasing order
+decrease = deque()  # Deque to store indices of elements in non-increasing order
+left = 0            # Left boundary of the sliding window
+max_length = 0      # Maximum length of the valid subarray found
+```
+
+#### Iterating through the array
+```python
+for right in range(len(nums)):
+```
+- `right` represents the right boundary of the sliding window. We iterate through each element in the array to expand the window.
+
+#### Maintaining the Increasing Deque
+```python
+while increase and nums[right] < nums[increase[-1]]:
+    increase.pop()
+increase.append(right)
+```
+- We ensure the `increase` deque maintains elements in non-decreasing order.
+- If the current element (`nums[right]`) is smaller than the last element in the deque (`nums[increase[-1]]`), we remove the last element (pop from the end).
+- Finally, we append the current index `right` to the `increase` deque.
+
+#### Maintaining the Decreasing Deque
+```python
+while decrease and nums[right] > nums[decrease[-1]]:
+    decrease.pop()
+decrease.append(right)
+```
+- We ensure the `decrease` deque maintains elements in non-increasing order.
+- If the current element (`nums[right]`) is larger than the last element in the deque (`nums[decrease[-1]]`), we remove the last element (pop from the end).
+- Finally, we append the current index `right` to the `decrease` deque.
+
+#### Ensuring the Window is Valid
+```python
+while nums[decrease[0]] - nums[increase[0]] > limit:
+    left += 1
+    if increase[0] < left:
+        increase.popleft()
+    if decrease[0] < left:
+        decrease.popleft()
+```
+- We check if the difference between the maximum (`nums[decrease[0]]`) and minimum (`nums[increase[0]]`) elements in the current window exceeds the `limit`.
+- If it does, we increment the `left` boundary to shrink the window from the left side.
+- We also ensure to remove indices from the deques that are no longer within the window's bounds (i.e., indices less than `left`).
+
+#### Updating Maximum Length
+```python
+max_length = max(max_length, right - left + 1)
+```
+- After ensuring the window is valid, we update the `max_length` with the current window size if it is larger than the previous maximum.
+
+### Return the Result
+```python
+return max_length
+```
+- Finally, we return the `max_length` which is the length of the longest subarray that meets the condition.
+
+### Efficiency
+- **Time Complexity**: \(O(n)\), since each element is processed at most twice (once when added and once when removed from a deque).
+- **Space Complexity**: \(O(n)\) in the worst case, due to the space used by the deques.
+
+This solution is efficient both in terms of runtime and memory usage, making it suitable for handling large input arrays.
+
+Solution:
+
+from collections import deque
+from typing import List
+
+class Solution:
+    def longestSubarray(self, nums: List[int], limit: int) -> int:
+        increase = deque()  # Min deque
+        decrease = deque()  # Max deque
+        left = 0
+        max_length = 0
+
+        for right in range(len(nums)):
+            # Maintain the increasing deque
+            while increase and nums[right] < nums[increase[-1]]:
+                increase.pop()
+            increase.append(right)
+            
+            # Maintain the decreasing deque
+            while decrease and nums[right] > nums[decrease[-1]]:
+                decrease.pop()
+            decrease.append(right)
+            
+            # Ensure the current window is valid
+            while nums[decrease[0]] - nums[increase[0]] > limit:
+                left += 1
+                if increase[0] < left:
+                    increase.popleft()
+                if decrease[0] < left:
+                    decrease.popleft()
+                
+            # Calculate the maximum length of the subarray
+            max_length = max(max_length, right - left + 1)
+        
+        return max_length
