@@ -1,0 +1,87 @@
+995.Minimum Number of K consecutive Bit Flips
+Explanation:
+
+The given code is an implementation of a function that finds the minimum number of flips required to convert all elements of an array `nums` to 1s using a sliding window of size `k`. If it's not possible to achieve this, the function returns -1. Let's break down the code step by step:
+
+### Code Breakdown
+
+1. **Function Signature and Initial Setup:**
+   ```python
+   class Solution:
+       def minKBitFlips(self, nums: List[int], k: int) -> int:
+           n = len(nums)
+           flipped = [0] * n
+           current_flips = 0
+           flip_count = 0
+   ```
+   - The function `minKBitFlips` takes two parameters: `nums`, a list of integers (0s and 1s), and `k`, the size of the sliding window for flips.
+   - `n` is the length of the `nums` list.
+   - `flipped` is an array of the same length as `nums`, initialized to 0, used to keep track of where flips occur.
+   - `current_flips` keeps track of the cumulative number of flips within the current window.
+   - `flip_count` is the total number of flips performed.
+
+2. **Iterating Through the Array:**
+   ```python
+           for i in range(n):
+               if i >= k:
+                   current_flips ^= flipped[i - k]
+   ```
+   - The loop iterates through each element in the `nums` array.
+   - When `i` is greater than or equal to `k`, it means the window can start to move. The flip status (`flipped[i - k]`) of the element that is `k` steps behind the current position is removed from `current_flips` using the XOR operation (`^=`).
+
+3. **Determining the Need for a Flip:**
+   ```python
+               if (nums[i] == 0 and current_flips % 2 == 0) or (nums[i] == 1 and current_flips % 2 != 0):
+                   if i + k > n:
+                       return -1
+   ```
+   - The condition checks if the current bit needs to be flipped:
+     - If `nums[i]` is 0 and the number of flips so far (`current_flips`) is even, we need to flip.
+     - If `nums[i]` is 1 and the number of flips so far is odd, we also need to flip.
+   - If flipping starting from index `i` would exceed the bounds of the array (`i + k > n`), it's impossible to flip a window of size `k`, and the function returns -1.
+
+4. **Performing the Flip:**
+   ```python
+                   flipped[i] = 1
+                   current_flips += 1
+                   flip_count += 1
+   ```
+   - If a flip is needed and valid, the current position `i` in the `flipped` array is set to 1, indicating a flip starts here.
+   - `current_flips` is incremented to account for the new flip.
+   - `flip_count`, which tracks the total number of flips performed, is incremented.
+
+5. **Return the Total Number of Flips:**
+   ```python
+           return flip_count
+   ```
+   - After iterating through the entire array, the function returns the total number of flips performed (`flip_count`).
+
+### Summary
+
+- The function iterates through the `nums` array and decides whether a flip is needed based on the current value and the number of flips applied so far.
+- It uses an auxiliary array `flipped` to keep track of the flips and a variable `current_flips` to manage the cumulative number of flips within the window.
+- If a flip is required but not possible within the array bounds, the function returns -1.
+- The function aims to achieve the goal with the minimum number of flips and returns this count if successful.
+
+Solution:
+
+class Solution:
+    def minKBitFlips(self, nums: List[int], k: int) -> int:
+        n = len(nums)
+        flipped = [0] * n
+        current_flips = 0
+        flip_count = 0
+        
+        for i in range(n):
+            if i >= k:
+                current_flips ^= flipped[i - k]
+            
+            if (nums[i] == 0 and current_flips % 2 == 0) or (nums[i] == 1 and current_flips % 2 != 0):
+                if i + k > n:
+                    return -1
+                
+                flipped[i] = 1
+                current_flips += 1
+                flip_count += 1
+        
+        return flip_count
