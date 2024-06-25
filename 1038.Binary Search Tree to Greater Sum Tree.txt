@@ -1,0 +1,192 @@
+1038.Binary Search Tree to Greater Sum Tree
+Explanation:
+
+Certainly! Let's break down the Morris Traversal approach in the `bstToGst` method step by step:
+
+### Initialization
+
+1. **Initialize variables**:
+    - `greater = 0`: This variable will hold the cumulative sum of node values as we traverse.
+    - `current = root`: This is our pointer to traverse the tree, starting at the root.
+
+### Main Loop
+
+2. **While Loop**:
+    - The main `while` loop continues until `current` becomes `None`. This loop ensures we visit every node in the tree.
+
+### Case 1: No Right Child
+
+3. **Check for Right Child**:
+    - **If `current.right` is `None`**:
+        - **Update `greater`**:
+            - Add the current node's value to `greater`.
+            - `greater += current.val`
+        - **Update Node's Value**:
+            - Set the current node's value to the updated `greater`.
+            - `current.val = greater`
+        - **Move Left**:
+            - Move to the left child of the current node.
+            - `current = current.left`
+
+### Case 2: Right Child Exists
+
+4. **Find In-Order Predecessor**:
+    - **If `current.right` is not `None`**:
+        - Find the in-order predecessor, which is the right child's leftmost descendant.
+        - Initialize `predecessor = current.right`.
+        - Use a nested `while` loop to find the leftmost node:
+            ```python
+            while predecessor.left and predecessor.left != current:
+                predecessor = predecessor.left
+            ```
+
+5. **Modify Tree Structure**:
+    - **First Visit to Predecessor**:
+        - **If `predecessor.left` is `None`**:
+            - Temporarily link the predecessor's left child to the current node to come back later.
+            - `predecessor.left = current`
+            - Move to the right child of the current node.
+            - `current = current.right`
+    - **Second Visit to Predecessor**:
+        - **If `predecessor.left` is `current`**:
+            - Restore the tree by removing the temporary link.
+            - `predecessor.left = None`
+            - **Update `greater`**:
+                - Add the current node's value to `greater`.
+                - `greater += current.val`
+            - **Update Node's Value**:
+                - Set the current node's value to the updated `greater`.
+                - `current.val = greater`
+            - **Move Left**:
+                - Move to the left child of the current node.
+                - `current = current.left`
+
+### Termination
+
+6. **End of Loop**:
+    - The `while` loop ends when all nodes have been visited (`current` becomes `None`).
+
+### Return Result
+
+7. **Return the Modified Tree**:
+    - Return the root of the modified tree, which now represents the Greater Sum Tree.
+    - `return root`
+
+### Example Execution
+
+Let's consider an example to illustrate the steps:
+
+#### Example Tree:
+```
+    4
+   / \
+  1   6
+     / \
+    5   7
+```
+
+#### Step-by-Step Execution:
+
+1. **Initialize**:
+    - `greater = 0`
+    - `current = root (4)`
+
+2. **First Loop (current = 4)**:
+    - `current.right (6)` exists:
+        - Find predecessor (7):
+            - `predecessor = 6`
+            - Move to `7 (leftmost)`
+        - Link `7.left = 4`
+        - Move to `current.right (6)`
+
+3. **Second Loop (current = 6)**:
+    - `current.right (7)` exists:
+        - Find predecessor (7):
+            - `predecessor = 7`
+            - No left child, link `7.left = 6`
+        - Move to `current.right (7)`
+
+4. **Third Loop (current = 7)**:
+    - `current.right` is `None`:
+        - Update `greater = 0 + 7 = 7`
+        - `current.val = 7`
+        - Move to `current.left (6)`
+
+5. **Fourth Loop (current = 6)**:
+    - `predecessor (7).left == current`:
+        - Restore `7.left = None`
+        - Update `greater = 7 + 6 = 13`
+        - `current.val = 13`
+        - Move to `current.left (5)`
+
+6. **Fifth Loop (current = 5)**:
+    - `current.right` is `None`:
+        - Update `greater = 13 + 5 = 18`
+        - `current.val = 18`
+        - Move to `current.left (None)`
+
+7. **Sixth Loop (current = 4)**:
+    - `predecessor (6).left == current`:
+        - Restore `6.left = None`
+        - Update `greater = 18 + 4 = 22`
+        - `current.val = 22`
+        - Move to `current.left (1)`
+
+8. **Seventh Loop (current = 1)**:
+    - `current.right` is `None`:
+        - Update `greater = 22 + 1 = 23`
+        - `current.val = 23`
+        - Move to `current.left (None)`
+
+9. **End of Loop**:
+    - `current` is `None`, end loop
+
+10. **Return**:
+    - Return the modified root
+
+#### Final Tree:
+```
+    22
+   /  \
+  23   13
+      /  \
+     18   7
+```
+
+This step-by-step approach ensures that each node's value is correctly updated in place with an efficient use of space and time.
+
+Solution:
+
+
+class Solution:
+    def bstToGst(self, root: TreeNode) -> TreeNode:
+        greater = 0
+        current = root
+
+        while current:
+            # If there is no right child, visit this node and go to left child
+            if current.right is None:
+                greater += current.val
+                current.val = greater
+                current = current.left
+            else:
+                # Find the inorder predecessor of current
+                predecessor = current.right
+                while predecessor.left and predecessor.left != current:
+                    predecessor = predecessor.left
+                
+                # Make current the left child of its inorder predecessor
+                if predecessor.left is None:
+                    predecessor.left = current
+                    current = current.right
+                else:
+                    # Revert the changes made in the 'if' part to restore the original tree
+                    predecessor.left = None
+                    greater += current.val
+                    current.val = greater
+                    current = current.left
+        
+        return root
+
+
+
