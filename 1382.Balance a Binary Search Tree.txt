@@ -1,0 +1,84 @@
+1382.Balance a Binary Search Tree
+Explanation:
+
+Sure! Here’s a brief explanation of the steps involved in the provided `balanceBST` function:
+
+1. **TreeNode Class Definition**:
+   - The `TreeNode` class is defined with an initializer to create a node with a specified value (`val`), left child (`left`), and right child (`right`).
+
+2. **Solution Class with balanceBST Method**:
+   - The `Solution` class contains the `balanceBST` method, which balances a given Binary Search Tree (BST).
+
+3. **In-order Traversal (in_order_traversal function)**:
+   - The `in_order_traversal` function is defined to perform an in-order traversal of the BST iteratively using a stack. This function:
+     - Initializes an empty stack and an empty list `elements`.
+     - Traverses the tree:
+       - While there are nodes in the stack or the current node is not `None`, it pushes all left children of the current node onto the stack.
+       - Pops the node from the stack, appends its value to the `elements` list, and moves to the right child.
+     - Returns the list `elements`, which contains the values of the nodes in sorted order.
+
+4. **Build Balanced BST (build_balanced_bst function)**:
+   - The `build_balanced_bst` function constructs a balanced BST from the sorted list `elements`. This function:
+     - Takes the `elements` list and two indices (`start` and `end`) to indicate the current subarray to consider.
+     - If `start` is greater than `end`, it returns `None`, indicating no node should be created.
+     - Finds the middle index (`mid`) of the current subarray, creates a new `TreeNode` with the value at `elements[mid]`.
+     - Recursively builds the left subtree using the left half of the current subarray.
+     - Recursively builds the right subtree using the right half of the current subarray.
+     - Returns the created `TreeNode`.
+
+5. **Balance the BST**:
+   - The `balanceBST` method:
+     - Calls `in_order_traversal` to get the list of node values in sorted order.
+     - Calls `build_balanced_bst` with the sorted list to construct and return the balanced BST.
+
+### Step-by-Step Process:
+
+1. **Convert the BST to a Sorted List**:
+   - Perform an in-order traversal to get a sorted list of node values.
+
+2. **Build a Balanced BST from the Sorted List**:
+   - Use the sorted list to recursively construct a balanced BST by always choosing the middle element as the root of the current subtree.
+
+This approach ensures that the resulting BST is height-balanced, with the depth of the two subtrees of every node never differing by more than one.
+
+Solution:
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def balanceBST(self, root: TreeNode) -> TreeNode:
+        def in_order_traversal(node):
+            stack, elements = [], []
+            while stack or node:
+                while node:
+                    stack.append(node)
+                    node = node.left
+                node = stack.pop()
+                elements.append(node.val)
+                node = node.right
+            return elements
+
+        def build_balanced_bst(elements, start, end):
+            if start > end:
+                return None
+            mid = (start + end) // 2
+            node = TreeNode(elements[mid])
+            node.left = build_balanced_bst(elements, start, mid - 1)
+            node.right = build_balanced_bst(elements, mid + 1, end)
+            return node
+
+        elements = in_order_traversal(root)
+        return build_balanced_bst(elements, 0, len(elements) - 1)
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+
+        
