@@ -1,0 +1,42 @@
+1791.Find Center of Star Graph
+Explanation:
+
+The `findCenter` method is designed to find the center of a star graph. In a star graph, there is one central node connected to all other nodes, which each have only one connection.
+
+Here's a step-by-step explanation of the code:
+
+1. **Function Signature**: The method `findCenter` is part of a class `Solution` and it takes a parameter `edges` which is a list of lists. Each sublist represents an edge between two nodes in the graph.
+
+2. **Edge Representation**: Each edge in the graph is represented by a list of two integers. For example, an edge `[a, b]` means there's an edge connecting node `a` and node `b`.
+
+3. **Identifying the Center Node**: 
+    - The center node in a star graph is the node that appears in all the edge pairs. Given that the graph is a star graph, the center node will appear in the first two edges.
+
+4. **Checking the First Two Edges**: The method compares the nodes in the first two edges to find the common node, which will be the center of the star graph:
+    - `edges[0][0] == edges[1][0]`: If the first node of the first edge is the same as the first node of the second edge, then this node is the center.
+    - `edges[0][0] == edges[1][1]`: If the first node of the first edge is the same as the second node of the second edge, then this node is the center.
+    - If neither of the above conditions is true, then the second node of the first edge must be the center.
+
+5. **Return the Center Node**: Based on the checks above, the method returns the center node.
+
+Here is the code again with comments:
+
+```python
+class Solution:
+    def findCenter(self, edges: List[List[int]]) -> int:
+        # Check if the first node of the first edge is the same as any node in the second edge
+        if edges[0][0] == edges[1][0] or edges[0][0] == edges[1][1]:
+            return edges[0][0]  # The first node of the first edge is the center
+        # If the first node of the first edge is not the center, then the second node of the first edge must be the center
+        return edges[0][1]
+```
+
+This method leverages the property of a star graph where the center node will appear in both of the first two edges. By comparing these nodes, the center node can be efficiently identified.
+
+Solution:
+
+class Solution:
+    def findCenter(self, edges: List[List[int]]) -> int:
+        if edges[0][0] == edges[1][0] or edges[0][0] == edges[1][1]:
+            return edges[0][0]
+        return edges[0][1]
