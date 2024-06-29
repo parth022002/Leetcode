@@ -1,0 +1,95 @@
+2192.All Ancestors of Node in a Directed Acyclic Graph
+Explanation:
+
+The `Solution` class defines a method `getAncestors` that returns the list of all ancestors for each node in a directed acyclic graph (DAG) given the number of nodes and a list of edges.
+
+Here's a detailed breakdown of the code:
+
+### `getAncestors` Method
+
+1. **Initialize the result and graph structures:**
+   ```python
+   res = [[] for _ in range(n)]
+   graph = [[] for _ in range(n)]
+   ```
+   - `res`: A list of lists where each sublist will contain the ancestors of the corresponding node.
+   - `graph`: Adjacency list representation of the graph.
+
+2. **Construct the graph:**
+   ```python
+   for edge in edges:
+       graph[edge[0]].append(edge[1])
+   ```
+   - For each edge in `edges`, add the destination node to the list of the source node in `graph`.
+
+3. **Perform DFS from each node:**
+   ```python
+   for i in range(n):
+       self.dfs(graph, i, i, res, [False] * n)
+   ```
+   - For each node `i`, call the `dfs` method to find all ancestors starting from node `i`.
+
+4. **Sort the results:**
+   ```python
+   for i in range(n):
+       res[i].sort()
+   ```
+   - Sort the list of ancestors for each node.
+
+5. **Return the results:**
+   ```python
+   return res
+   ```
+
+### `dfs` Method
+
+1. **Mark the current node as visited:**
+   ```python
+   visit[curr] = True
+   ```
+
+2. **Traverse all destinations of the current node:**
+   ```python
+   for dest in graph[curr]:
+       if not visit[dest]:
+           res[dest].append(parent)
+           self.dfs(graph, parent, dest, res, visit)
+   ```
+   - For each destination node `dest` of the current node `curr`, if `dest` is not visited:
+     - Append the parent node (which is the starting node of the DFS) to the ancestors list of `dest`.
+     - Recursively call `dfs` for the destination node.
+
+### Explanation
+
+- The `getAncestors` method initializes an empty list for each node's ancestors and constructs the graph from the given edges.
+- It then performs a depth-first search (DFS) starting from each node to find all ancestors.
+- During the DFS, it marks nodes as visited to avoid cycles and duplicates, and appends the parent node to the ancestors list of each visited node.
+- Finally, it sorts the ancestors list for each node and returns the result.
+
+This approach ensures that all ancestors for each node are found by exploring all paths in the graph starting from each node. The sorting step is performed to match the problem's requirement for the ancestors to be in sorted order.
+
+Solution:
+
+class Solution:
+    def getAncestors(self, n: int, edges: List[List[int]]) -> List[List[int]]:
+        res = [[] for _ in range(n)]
+        graph = [[] for _ in range(n)]
+        
+        for edge in edges:
+            graph[edge[0]].append(edge[1])
+        
+        for i in range(n):
+            self.dfs(graph, i, i, res, [False] * n)
+        
+        for i in range(n):
+            res[i].sort()
+        
+        return res
+    
+    def dfs(self, graph, parent, curr, res, visit):
+        visit[curr] = True
+        for dest in graph[curr]:
+            if not visit[dest]:
+                res[dest].append(parent)
+                self.dfs(graph, parent, dest, res, visit)
+        
