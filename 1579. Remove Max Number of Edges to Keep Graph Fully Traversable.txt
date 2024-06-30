@@ -1,0 +1,124 @@
+1579. Remove Max Number of Edges to Keep Graph Fully Traversable
+Explanation:
+
+The provided code defines a solution for the problem of finding the maximum number of edges that can be removed from an undirected graph while still ensuring that the graph remains fully traversable by two users, Alice and Bob. Here's a detailed explanation of the code:
+
+### Class `Solution`
+This class contains the main method `maxNumEdgesToRemove` which solves the problem.
+
+### Method `maxNumEdgesToRemove`
+This method accepts two arguments:
+- `n`: The number of nodes in the graph.
+- `edges`: A list of edges where each edge is represented as a list `[type, u, v]`:
+  - `type` can be 1, 2, or 3:
+    - 1: Edge usable by Alice only.
+    - 2: Edge usable by Bob only.
+    - 3: Edge usable by both Alice and Bob.
+  - `u` and `v` are the nodes that the edge connects.
+
+### Class `UnionFind`
+A helper class to manage the union-find (disjoint set) structure, which helps efficiently manage and merge connected components.
+
+#### `__init__`
+The constructor initializes the data structures:
+- `self.representative`: A list where `self.representative[i]` is the representative (or parent) of the node `i`.
+- `self.component_size`: A list where `self.component_size[i]` stores the size of the component whose representative is `i`.
+- `self.components`: The number of connected components.
+
+#### `find`
+This method finds the representative (or root) of the node `x`. It uses path compression to flatten the structure, making future queries faster.
+
+#### `union`
+This method unites the components containing nodes `x` and `y`. It returns `True` if the union operation resulted in a merge, and `False` if `x` and `y` were already in the same component. It uses union by size to ensure smaller trees are added under larger trees, keeping the structure balanced.
+
+#### `is_connected`
+This method checks if the entire graph is fully connected by verifying that there is only one component.
+
+### Main Logic
+1. **Initialization**:
+   - Two `UnionFind` instances are created, one for Alice (`alice`) and one for Bob (`bob`).
+   - `edges_required` is initialized to count the number of edges that are necessary to keep the graph connected.
+
+2. **Processing Type 3 Edges**:
+   - Type 3 edges are processed first because they are usable by both Alice and Bob. For each type 3 edge, if the edge is added successfully to Alice's union-find structure, it is also added to Bob's. Each successful addition increments `edges_required`.
+
+3. **Processing Type 1 and Type 2 Edges**:
+   - After processing type 3 edges, type 1 (Alice's) and type 2 (Bob's) edges are processed. Each successful addition to Alice or Bob's union-find structure increments `edges_required`.
+
+4. **Checking Connectivity**:
+   - After processing all edges, the method checks if both Alice and Bob can traverse the entire graph (i.e., both `alice` and `bob` should have only one component). If both are connected, the method returns the total number of edges minus `edges_required` (the number of edges that can be removed). If not, it returns `-1`, indicating that it's not possible to keep the graph fully traversable for both users.
+
+### Example Usage
+```python
+solution = Solution()
+print(solution.maxNumEdgesToRemove(4, [[3,1,2],[3,2,3],[1,1,3],[1,2,4],[2,1,4]]))
+# Output: 2
+```
+
+In this example:
+- There are 4 nodes.
+- There are edges of various types, and the function calculates how many edges can be removed while ensuring both Alice and Bob can still traverse the graph fully. The output is `2`, meaning 2 edges can be removed.
+
+Solution:
+
+class Solution:
+    def maxNumEdgesToRemove(self, n: int, edges: List[List[int]]) -> int:
+        # UnionFind class definition
+        class UnionFind:
+            def __init__(self, n):
+                self.representative = list(range(n + 1))
+                self.component_size = [1] * (n + 1)
+                self.components = n
+            
+            def find(self, x):
+                if self.representative[x] != x:
+                    self.representative[x] = self.find(self.representative[x])
+                return self.representative[x]
+            
+            def union(self, x, y):
+                rootX = self.find(x)
+                rootY = self.find(y)
+                
+                if rootX == rootY:
+                    return False
+                
+                if self.component_size[rootX] >= self.component_size[rootY]:
+                    self.representative[rootY] = rootX
+                    self.component_size[rootX] += self.component_size[rootY]
+                else:
+                    self.representative[rootX] = rootY
+                    self.component_size[rootY] += self.component_size[rootX]
+                
+                self.components -= 1
+                return True
+            
+            def is_connected(self):
+                return self.components == 1
+        
+        # Main function logic
+        alice = UnionFind(n)
+        bob = UnionFind(n)
+        
+        edges_required = 0
+        
+        # Step 1: Process type 3 edges first
+        for edge in edges:
+            if edge[0] == 3:
+                if alice.union(edge[1], edge[2]):
+                    bob.union(edge[1], edge[2])
+                    edges_required += 1
+        
+        # Step 2: Process type 1 and type 2 edges
+        for edge in edges:
+            if edge[0] == 1:
+                if alice.union(edge[1], edge[2]):
+                    edges_required += 1
+            elif edge[0] == 2:
+                if bob.union(edge[1], edge[2]):
+                    edges_required += 1
+        
+        # Check if both Alice and Bob can traverse the whole graph
+        if alice.is_connected() and bob.is_connected():
+            return len(edges) - edges_required
+        
+        return -1
