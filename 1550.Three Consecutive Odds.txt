@@ -1,0 +1,77 @@
+1550.Three Consecutive Odds
+Explanation:
+
+Sure! Here’s an explanation of the given code:
+
+### Problem Statement
+The function `threeConsecutiveOdds` takes an array of integers (`arr`) as input and returns `True` if there are three consecutive odd numbers in the array, otherwise it returns `False`.
+
+### Code Explanation
+#### Initialization
+```python
+count = 0  # Initialize count to keep track of consecutive odd numbers
+```
+A variable `count` is initialized to 0. This variable will be used to keep track of the number of consecutive odd numbers encountered in the array.
+
+#### Iterating through the Array
+```python
+for num in arr:  # Iterate through each element in the array
+```
+The `for` loop is used to iterate through each element (`num`) in the input array `arr`.
+
+#### Checking for Odd Numbers
+```python
+if num % 2 != 0:  # Check if the current element is odd
+```
+The condition `num % 2 != 0` checks if the current element `num` is odd. In Python, `num % 2` gives the remainder when `num` is divided by 2. If the remainder is not 0, then `num` is odd.
+
+#### Incrementing the Count
+```python
+count += 1  # Increment the count if it's odd
+```
+If the current element `num` is odd, `count` is incremented by 1.
+
+#### Checking for Three Consecutive Odds
+```python
+if count == 3:  # If we have found three consecutive odds, return true
+    return True
+```
+If `count` reaches 3, it means we have found three consecutive odd numbers, so the function immediately returns `True`.
+
+#### Resetting the Count
+```python
+else:  # If the element is even, reset the count to 0
+    count = 0
+```
+If the current element `num` is even, the `else` block is executed. In this block, `count` is reset to 0 because the sequence of consecutive odd numbers is broken.
+
+#### Final Return Statement
+```python
+return False  # If we finish the loop without finding three consecutive odds, return false
+```
+If the loop finishes without finding three consecutive odd numbers, the function returns `False`.
+
+### Summary
+- The function iterates through the array.
+- It increments a counter each time it encounters an odd number.
+- If three consecutive odd numbers are found, it returns `True`.
+- If an even number is encountered, the counter is reset.
+- If the end of the array is reached without finding three consecutive odd numbers, it returns `False`.
+
+This approach ensures that the function efficiently checks for the presence of three consecutive odd numbers with a time complexity of O(n) and a space complexity of O(1).
+
+Solution:
+
+class Solution:
+    def threeConsecutiveOdds(self, arr: List[int]) -> bool:
+        count = 0 # Initialize count to keep track of consecutive odd numbers
+
+        for num in arr: # Iterate through each element in the array
+            if num % 2 != 0: # Check if the current element is odd
+                count += 1 # Increment the count if it's odd
+                if count == 3: # If we have found three consecutive odds, return true
+                    return True
+            else: # If the element is even, reset the count to 0
+                count = 0
+
+        return False # If we finish the loop without finding three consecutive odds, return false
