@@ -1,0 +1,104 @@
+350.Insertion of Two Arrays II
+Explanation:
+
+The given code defines a method `intersect` within a class `Solution`. This method is designed to find the intersection of two arrays, `nums1` and `nums2`, returning the elements that appear in both arrays. Here's a detailed step-by-step explanation of the code:
+
+### Code Breakdown
+
+```python
+class Solution:
+    def intersect(self, nums1: List[int], nums2: List[int]) -> List[int]:
+```
+
+- The `intersect` method takes two parameters, `nums1` and `nums2`, which are both lists of integers.
+- The method returns a list of integers that represent the intersection of `nums1` and `nums2`.
+
+```python
+        nums1.sort()
+        nums2.sort()
+```
+
+- Both input lists, `nums1` and `nums2`, are sorted in non-decreasing order. Sorting helps to efficiently find the intersection using a two-pointer technique.
+
+```python
+        i, j = 0, 0
+        result = []
+```
+
+- Two pointers, `i` and `j`, are initialized to 0. These pointers will be used to traverse `nums1` and `nums2`, respectively.
+- An empty list `result` is initialized to store the intersection elements.
+
+```python
+        while i < len(nums1) and j < len(nums2):
+```
+
+- A while loop is used to iterate through both arrays as long as neither pointer has reached the end of its respective list.
+
+```python
+            if nums1[i] < nums2[j]:
+                i += 1
+            elif nums1[i] > nums2[j]:
+                j += 1
+            else:
+                result.append(nums1[i])
+                i += 1
+                j += 1
+```
+
+- Within the while loop:
+  - If the current element in `nums1` (pointed to by `i`) is less than the current element in `nums2` (pointed to by `j`), it means `nums1[i]` is not in the intersection, so increment `i` to move to the next element in `nums1`.
+  - If `nums1[i]` is greater than `nums2[j]`, it means `nums2[j]` is not in the intersection, so increment `j` to move to the next element in `nums2`.
+  - If `nums1[i]` is equal to `nums2[j]`, it means the current elements are the same and thus part of the intersection. Append this element to `result`, and increment both `i` and `j` to move to the next elements in both lists.
+
+```python
+        return result
+```
+
+- After exiting the while loop, return the `result` list, which contains all the intersection elements.
+
+### Example
+
+Let's walk through an example to see how this works in practice.
+
+#### Input
+```python
+nums1 = [1, 2, 2, 1]
+nums2 = [2, 2]
+```
+
+#### Execution Steps
+1. Sort both arrays:
+   - `nums1` becomes `[1, 1, 2, 2]`
+   - `nums2` becomes `[2, 2]`
+2. Initialize `i = 0`, `j = 0`, and `result = []`.
+3. Start the while loop:
+   - Compare `nums1[0]` (1) and `nums2[0]` (2): `nums1[0]` < `nums2[0]`, so increment `i` to 1.
+   - Compare `nums1[1]` (1) and `nums2[0]` (2): `nums1[1]` < `nums2[0]`, so increment `i` to 2.
+   - Compare `nums1[2]` (2) and `nums2[0]` (2): `nums1[2]` == `nums2[0]`, append 2 to `result`, increment `i` to 3 and `j` to 1.
+   - Compare `nums1[3]` (2) and `nums2[1]` (2): `nums1[3]` == `nums2[1]`, append 2 to `result`, increment `i` to 4 and `j` to 2.
+4. Exit the while loop since `i` is now equal to the length of `nums1`.
+5. Return `result`, which is `[2, 2]`.
+
+This approach ensures that the intersection is found efficiently by leveraging the sorted order of the arrays and using two pointers to traverse them.
+
+Solution:
+
+class Solution:
+    def intersect(self, nums1: List[int], nums2: List[int]) -> List[int]:
+        nums1.sort()
+        nums2.sort()
+        
+        i, j = 0, 0
+        result = []
+        
+        while i < len(nums1) and j < len(nums2):
+            if nums1[i] < nums2[j]:
+                i += 1
+            elif nums1[i] > nums2[j]:
+                j += 1
+            else:
+                result.append(nums1[i])
+                i += 1
+                j += 1
+                
+        return result
