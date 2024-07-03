@@ -1,0 +1,100 @@
+1509.Minimum Difference Between Largest and Smallest Value in Three Moves
+
+Solution:
+
+class Solution:
+    def minDifference(self, nums: List[int]) -> int:
+        n = len(nums)
+        if n <= 4:
+            return 0
+        
+        nums.sort()
+        return min(nums[i + n - 4] - nums[i] for i in range(4))
+
+Explanation:
+
+Sure! Let's break down the given solution step by step to understand how it works and why it is efficient.
+
+### Code Explanation
+
+```python
+from typing import List
+
+class Solution:
+    def minDifference(self, nums: List[int]) -> int:
+        n = len(nums)
+        if n <= 4:
+            return 0
+        
+        nums.sort()
+        return min(nums[i + n - 4] - nums[i] for i in range(4))
+```
+
+### Step-by-Step Explanation
+
+1. **Importing Required Modules**:
+   ```python
+   from typing import List
+   ```
+   - This import allows us to use type hints for lists in Python.
+
+2. **Defining the Class and Method**:
+   ```python
+   class Solution:
+       def minDifference(self, nums: List[int]) -> int:
+   ```
+   - We define a class `Solution` with a method `minDifference` that takes a list of integers `nums` and returns an integer.
+
+3. **Getting the Length of the Array**:
+   ```python
+       n = len(nums)
+   ```
+   - We calculate the length of the input list `nums` and store it in the variable `n`.
+
+4. **Handling Small Arrays**:
+   ```python
+       if n <= 4:
+           return 0
+   ```
+   - If the length of `nums` is 4 or fewer, we return 0. This is because if we have 4 or fewer elements, we can remove all of them, making the minimum difference between any remaining elements 0.
+
+5. **Sorting the Array**:
+   ```python
+       nums.sort()
+   ```
+   - We sort the array in ascending order. Sorting takes \(O(n \log n)\) time.
+
+6. **Calculating the Minimum Difference**:
+   ```python
+       return min(nums[i + n - 4] - nums[i] for i in range(4))
+   ```
+   - Here, we use a generator expression within the `min` function to calculate the minimum difference between specific elements.
+   - We iterate over the first 4 elements of the sorted array using `for i in range(4)`.
+   - For each `i`, we calculate the difference between the element at index `i + n - 4` and the element at index `i`. This corresponds to considering the smallest 4 numbers, the smallest 3 and the largest 1, the smallest 2 and the largest 2, and the smallest 1 and the largest 3:
+     - When `i = 0`: Consider the smallest 4 numbers.
+     - When `i = 1`: Consider the smallest 3 numbers and the largest 1 number.
+     - When `i = 2`: Consider the smallest 2 numbers and the largest 2 numbers.
+     - When `i = 3`: Consider the smallest 1 number and the largest 3 numbers.
+   - The `min` function then finds the minimum of these 4 calculated differences.
+
+### Example
+
+Let's walk through an example with `nums = [1, 5, 0, 10, 14]`:
+
+1. The length `n` is 5, so we do not return 0.
+2. We sort the array: `nums = [0, 1, 5, 10, 14]`.
+3. We then calculate:
+   - For `i = 0`: `nums[5-4] - nums[0] = nums[1] - nums[0] = 1 - 0 = 1`
+   - For `i = 1`: `nums[5-3] - nums[1] = nums[2] - nums[1] = 5 - 1 = 4`
+   - For `i = 2`: `nums[5-2] - nums[2] = nums[3] - nums[2] = 10 - 5 = 5`
+   - For `i = 3`: `nums[5-1] - nums[3] = nums[4] - nums[3] = 14 - 10 = 4`
+4. The minimum of these differences is 1.
+
+Hence, the output for this example is `1`.
+
+### Efficiency
+
+- **Time Complexity**: The most time-consuming operation is sorting the array, which takes \(O(n \log n)\). The subsequent calculations take constant time \(O(1)\).
+- **Space Complexity**: We are sorting the array in place, so no additional space is required other than a few variables, making the space complexity \(O(1)\) beyond the input array.
+
+This approach is efficient and concise, handling the problem requirements effectively.
