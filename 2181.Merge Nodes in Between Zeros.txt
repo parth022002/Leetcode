@@ -1,0 +1,129 @@
+2181.Merge Nodes in Between Zeros
+Solution:
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+# Definition for singly-linked list.
+class ListNode(object):
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+
+class Solution(object):
+    def mergeNodes(self, head):
+        current = head.next  # Start from the node after the initial 0
+
+        while current:
+            total = 0
+            sum_node = current
+
+            # Sum the values of nodes until the next 0 is encountered
+            while sum_node.val != 0:
+                total += sum_node.val
+                sum_node = sum_node.next
+
+            # Assign the total to the current node
+            current.val = total
+
+            # Skip over the nodes just summed up and move to the next segment
+            current.next = sum_node.next
+            current = current.next
+
+        return head.next  # Skip the initial 0 node
+
+
+Explanation:
+
+The `mergeNodes` function in the `Solution` class processes a linked list where nodes contain integer values. The function aims to merge nodes in the following way: it sums the values between nodes with a value of `0` and assigns this sum to the node right after each `0`, effectively condensing the list.
+
+### Detailed Explanation
+
+1. **Initialization**:
+    ```python
+    current = head.next  # Start from the node after the initial 0
+    ```
+    - The function begins by setting the `current` pointer to the node after the head node, assuming the head node contains a `0`. This skips the initial `0` and starts processing from the next node.
+
+2. **Main Processing Loop**:
+    ```python
+    while current:
+    ```
+    - A `while` loop runs as long as `current` is not `None`, ensuring that all nodes in the list are processed.
+
+3. **Summing Nodes Until Zero**:
+    ```python
+    total = 0
+    sum_node = current
+
+    while sum_node.val != 0:
+        total += sum_node.val
+        sum_node = sum_node.next
+    ```
+    - Within the loop, `total` is initialized to `0`.
+    - The `sum_node` pointer is used to traverse nodes starting from `current`.
+    - Another `while` loop runs, summing the values of nodes until a node with a value of `0` is encountered.
+    - `total` accumulates the sum of node values between zeros.
+
+4. **Assigning the Sum**:
+    ```python
+    current.val = total
+    ```
+    - Once the inner loop completes, the `total` (sum of values between zeros) is assigned to the `current` node's value.
+
+5. **Skipping Summed Nodes**:
+    ```python
+    current.next = sum_node.next
+    current = current.next
+    ```
+    - The `current.next` pointer is updated to skip all the nodes that were just summed up and point to the node following the `0`.
+    - The `current` pointer is then moved to the next segment of the list to continue the process.
+
+6. **Returning the Modified List**:
+    ```python
+    return head.next  # Skip the initial 0 node
+    ```
+    - Finally, the function returns the modified list starting from the node after the initial `0` head node.
+
+### Usage
+
+Here's an example of how you can create a linked list, apply the `mergeNodes` function, and print the resulting linked list:
+
+```python
+# Helper function to create a linked list from a list of values
+def create_linked_list(values):
+    if not values:
+        return None
+    head = ListNode(values[0])
+    current = head
+    for value in values[1:]:
+        current.next = ListNode(value)
+        current = current.next
+    return head
+
+# Helper function to print the linked list
+def print_linked_list(head):
+    current = head
+    while current:
+        print(current.val, end=' -> ' if current.next else '')
+        current = current.next
+    print()
+
+# Example usage
+values = [0, 3, 1, 0, 4, 5, 2, 0]  # Sample input
+head = create_linked_list(values)
+
+solution = Solution()
+new_head = solution.mergeNodes(head)
+
+print("Resulting Linked List:")
+print_linked_list(new_head)
+```
+
+In this example:
+- `create_linked_list` creates a linked list from a list of values.
+- `print_linked_list` prints the linked list.
+- The `mergeNodes` function processes the linked list to merge nodes as described.
+- The resulting linked list is then printed to show the modified structure.
