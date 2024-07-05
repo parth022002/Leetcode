@@ -1,0 +1,134 @@
+2058. Find the Minimum and Maximum Number of Nodes Between Critical Points
+Solution:
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+class Solution:
+    def nodesBetweenCriticalPoints(self, head: Optional[ListNode]) -> List[int]:
+        # Initialize pointers for traversing the list
+        left = head
+        mid = head.next
+
+        # Check if the list has at least three nodes
+        if not mid or not mid.next:
+            return [-1, -1]
+
+        right = mid.next
+
+        idx = 2  # Index of the current middle node
+        idxs = []  # List to store indices of critical points
+
+        # Traverse the list
+        while right:
+            # Check for local maxima or minima
+            if (mid.val > left.val and mid.val > right.val) or (mid.val < left.val and mid.val < right.val):
+                idxs.append(idx)
+
+            # Move to the next set of nodes
+            left = mid
+            mid = right
+            right = right.next
+            idx += 1
+
+        # If there are fewer than two critical points, return [-1, -1]
+        if len(idxs) < 2:
+            return [-1, -1]
+
+        # Find the minimum and maximum distances between critical points
+        min_distance = float('inf')
+        max_distance = idxs[-1] - idxs[0]
+
+        for i in range(1, len(idxs)):
+            min_distance = min(min_distance, idxs[i] - idxs[i - 1])
+
+        return [min_distance, max_distance]
+
+Explanation:
+
+Sure! Let's break down the provided code step by step to understand how it works and what it's doing.
+
+### Problem Statement
+
+The goal is to find the minimum and maximum distances between critical points in a singly-linked list. A critical point in a linked list is defined as a node that is either a local maxima or a local minima:
+- A local maxima is a node whose value is greater than the values of its adjacent nodes.
+- A local minima is a node whose value is smaller than the values of its adjacent nodes.
+
+The function should return a list containing the minimum and maximum distances between these critical points. If there are fewer than two critical points, the function should return `[-1, -1]`.
+
+### Code Explanation
+
+1. **Initialization and Base Case Handling**
+   ```python
+   def nodesBetweenCriticalPoints(self, head: Optional[ListNode]) -> List[int]:
+       left = head
+       mid = head.next
+
+       if not mid or not mid.next:
+           return [-1, -1]
+   ```
+   - `left`, `mid`, and `right` are pointers used to traverse the list.
+   - We first check if the list has at least three nodes by verifying if `mid` and `mid.next` exist. If not, we return `[-1, -1]`.
+
+2. **Traversal Setup**
+   ```python
+   right = mid.next
+   idx = 2  # Index of the current middle node
+   idxs = []  # List to store indices of critical points
+   ```
+   - Initialize `right` to point to the third node.
+   - `idx` is used to keep track of the index of the `mid` node.
+   - `idxs` will store the indices of the critical points.
+
+3. **Traversing the List**
+   ```python
+   while right:
+       if (mid.val > left.val and mid.val > right.val) or (mid.val < left.val and mid.val < right.val):
+           idxs.append(idx)
+
+       left = mid
+       mid = right
+       right = right.next
+       idx += 1
+   ```
+   - Traverse the list using the three pointers `left`, `mid`, and `right`.
+   - For each `mid` node, check if it is a local maxima or minima:
+     - If `mid.val` is greater than both `left.val` and `right.val`, or
+     - If `mid.val` is smaller than both `left.val` and `right.val`,
+   - If the above condition is true, add the index `idx` to `idxs`.
+   - Move `left`, `mid`, and `right` one node forward.
+   - Increment `idx`.
+
+4. **Post-Traversal Processing**
+   ```python
+   if len(idxs) < 2:
+       return [-1, -1]
+
+   min_distance = float('inf')
+   max_distance = idxs[-1] - idxs[0]
+
+   for i in range(1, len(idxs)):
+       min_distance = min(min_distance, idxs[i] - idxs[i - 1])
+
+   return [min_distance, max_distance]
+   ```
+   - If fewer than two critical points were found, return `[-1, -1]`.
+   - Otherwise, calculate the minimum and maximum distances between the critical points:
+     - Initialize `min_distance` to infinity and `max_distance` to the difference between the first and last critical points.
+     - Iterate through `idxs` to find the minimum distance between consecutive critical points.
+   - Return the list `[min_distance, max_distance]`.
+
+### Example
+
+Let's consider an example linked list: 1 -> 3 -> 2 -> 4 -> 1 -> 5
+
+- The critical points are at indices 1, 3, and 4:
+  - Index 1: 3 is a local maxima (greater than 1 and 2).
+  - Index 3: 4 is a local maxima (greater than 2 and 1).
+  - Index 4: 1 is a local minima (smaller than 4 and 5).
+- The minimum distance between critical points is `4 - 3 = 1`.
+- The maximum distance between critical points is `4 - 1 = 3`.
+
+The function will return `[1, 3]`.
