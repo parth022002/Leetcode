@@ -1,0 +1,101 @@
+2582. Pass the Pillow
+Solution:
+
+class Solution:
+    def passThePillow(self, n: int, time: int) -> int:
+        completed = time // (n - 1)
+        remaining = time % (n - 1)
+        ans = 0
+        if completed % 2 != 0:
+            ans = n - remaining
+        else:
+            ans = remaining + 1
+        return ans
+
+Explanation:
+
+Sure, let's break down the steps of the `passThePillow` function in the Python code:
+
+```python
+class Solution:
+    def passThePillow(self, n: int, time: int) -> int:
+        completed = time // (n - 1)
+        remaining = time % (n - 1)
+        ans = 0
+        if completed % 2 != 0:
+            ans = n - remaining
+        else:
+            ans = remaining + 1
+        return ans
+```
+
+1. **Initialization**: 
+   - The function `passThePillow` takes two arguments:
+     - `n`: The number of people in the circle.
+     - `time`: The total time elapsed.
+
+2. **Calculate Complete Rounds**:
+   ```python
+   completed = time // (n - 1)
+   ```
+   - This calculates the number of complete back-and-forth rounds the pillow has passed through the circle.
+   - `(n - 1)` is used because passing the pillow from the first person to the last person and back to the first person takes `n - 1` moves.
+   - `//` is integer division, which gives the number of complete rounds.
+
+3. **Calculate Remaining Time**:
+   ```python
+   remaining = time % (n - 1)
+   ```
+   - This calculates the remaining time after the complete rounds have been accounted for.
+   - `%` is the modulo operator, which gives the remainder of the division of `time` by `n - 1`.
+
+4. **Determine the Pillow Position**:
+   ```python
+   ans = 0
+   if completed % 2 != 0:
+       ans = n - remaining
+   else:
+       ans = remaining + 1
+   ```
+   - Initialize `ans` to 0.
+   - Check if the number of complete rounds (`completed`) is odd or even:
+     - If `completed` is odd (`completed % 2 != 0`), the pillow is moving in the reverse direction:
+       ```python
+       ans = n - remaining
+       ```
+       - Subtract the `remaining` time from `n` to find the current position.
+     - If `completed` is even, the pillow is moving in the forward direction:
+       ```python
+       ans = remaining + 1
+       ```
+       - Add 1 to the `remaining` time to find the current position.
+
+5. **Return the Result**:
+   ```python
+   return ans
+   ```
+   - Return the calculated position of the pillow.
+
+### Example
+
+Let's go through an example to illustrate the steps:
+
+- Suppose `n = 5` (5 people) and `time = 8`.
+
+1. Calculate complete rounds:
+   ```python
+   completed = 8 // (5 - 1) = 8 // 4 = 2
+   ```
+
+2. Calculate remaining time:
+   ```python
+   remaining = 8 % (5 - 1) = 8 % 4 = 0
+   ```
+
+3. Determine the pillow position:
+   ```python
+   completed = 2 (even)
+   ans = remaining + 1 = 0 + 1 = 1
+   ```
+
+Thus, after 8 units of time, the pillow is with the 1st person.
