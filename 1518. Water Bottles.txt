@@ -1,0 +1,101 @@
+1518. Water Bottles
+Solution:
+
+class Solution:
+    def numWaterBottles(self, initialBottles: int, exchangeRate: int) -> int:
+        # Initialize total number of bottles drunk
+        totalBottlesDrunk = initialBottles
+        
+        # Current number of empty bottles we have
+        emptyBottles = initialBottles
+
+        while emptyBottles >= exchangeRate:
+            # Exchange empty bottles for full ones
+            newBottles = emptyBottles // exchangeRate
+            totalBottlesDrunk += newBottles
+            
+            # Update the number of empty bottles
+            emptyBottles = emptyBottles % exchangeRate + newBottles
+
+        return totalBottlesDrunk
+
+
+Explanation:
+
+Sure! Here's a detailed explanation of the `numWaterBottles` function:
+
+### Function Signature
+```python
+class Solution:
+    def numWaterBottles(self, initialBottles: int, exchangeRate: int) -> int:
+```
+This function takes two integer parameters:
+- `initialBottles`: The initial number of full water bottles you start with.
+- `exchangeRate`: The number of empty bottles required to exchange for one full bottle.
+
+### Step-by-Step Explanation
+
+1. **Initialize total number of bottles drunk**:
+    ```python
+    totalBottlesDrunk = initialBottles
+    ```
+    - This variable keeps track of the total number of bottles you have drunk. Initially, it's set to the number of full bottles you start with, because you'll drink all of them.
+
+2. **Initialize the number of empty bottles**:
+    ```python
+    emptyBottles = initialBottles
+    ```
+    - This variable keeps track of the number of empty bottles you have. Initially, it's equal to the number of bottles you've just drunk (i.e., all the initial bottles).
+
+3. **Loop until you can't exchange any more bottles**:
+    ```python
+    while emptyBottles >= exchangeRate:
+    ```
+    - This loop runs as long as you have enough empty bottles to exchange for at least one full bottle.
+
+4. **Exchange empty bottles for new full ones**:
+    ```python
+    newBottles = emptyBottles // exchangeRate
+    totalBottlesDrunk += newBottles
+    ```
+    - `newBottles` is the number of new full bottles you get by exchanging empty bottles. It's calculated by integer division of `emptyBottles` by `exchangeRate`.
+    - Add these new full bottles to `totalBottlesDrunk` because you'll drink them.
+
+5. **Update the number of empty bottles**:
+    ```python
+    emptyBottles = emptyBottles % exchangeRate + newBottles
+    ```
+    - `emptyBottles % exchangeRate` gives the remaining empty bottles after the exchange.
+    - Add `newBottles` to this, as they will be drunk and become empty bottles again.
+
+6. **Return the total number of bottles drunk**:
+    ```python
+    return totalBottlesDrunk
+    ```
+    - Once the loop exits (i.e., you no longer have enough empty bottles to exchange for even one full bottle), return the total count of bottles you've drunk.
+
+### Example Walkthrough
+
+Let's take an example to understand how it works:
+
+**Input**: `initialBottles = 9`, `exchangeRate = 3`
+
+1. Initial state:
+   - `totalBottlesDrunk = 9`
+   - `emptyBottles = 9`
+
+2. First iteration of the loop:
+   - `newBottles = 9 // 3 = 3`
+   - `totalBottlesDrunk = 9 + 3 = 12`
+   - `emptyBottles = 9 % 3 + 3 = 0 + 3 = 3`
+
+3. Second iteration of the loop:
+   - `newBottles = 3 // 3 = 1`
+   - `totalBottlesDrunk = 12 + 1 = 13`
+   - `emptyBottles = 3 % 3 + 1 = 0 + 1 = 1`
+
+4. Exit loop as `emptyBottles < exchangeRate`.
+
+5. Return `totalBottlesDrunk` which is `13`.
+
+So, with 9 initial bottles and an exchange rate of 3, you can drink a total of 13 bottles.
