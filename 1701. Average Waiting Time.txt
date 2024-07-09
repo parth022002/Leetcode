@@ -1,0 +1,96 @@
+1701. Average Waiting Time
+Solution:
+
+class Solution:
+    def averageWaitingTime(self, customers: list[list[int]]) -> float:
+        n: int = len(customers)
+        time_waiting: int = customers[0][1]
+        finished_prev = customers[0][0] + customers[0][1]
+
+        for customer_ind in range(1, n, 1):
+            times: list[int] = customers[customer_ind]
+            arrive: int = times[0]
+
+            # chef starts cook this as soon as he finished last dish or customer arrived
+            start_cook: int = max(arrive, finished_prev)
+            end_time: int = start_cook + times[1]
+            finished_prev: int = end_time
+            time_waiting += end_time - arrive
+
+        return time_waiting / n
+
+Explanation:
+
+The provided code calculates the average waiting time for a series of customers in a restaurant scenario where a single chef is preparing dishes in a specific order. Let's break down the code step-by-step to understand its logic and functionality:
+
+### Function Definition
+```python
+class Solution:
+    def averageWaitingTime(self, customers: list[list[int]]) -> float:
+```
+- `averageWaitingTime` is a method within the `Solution` class.
+- It takes a single parameter, `customers`, which is a list of lists. Each inner list contains two integers: the arrival time of a customer and the time required to prepare their dish.
+
+### Initial Variables
+```python
+        n: int = len(customers)
+        time_waiting: int = customers[0][1]
+        finished_prev = customers[0][0] + customers[0][1]
+```
+- `n` is the total number of customers.
+- `time_waiting` is initialized with the preparation time of the first customer, as they don't have to wait; the chef starts immediately upon their arrival.
+- `finished_prev` is the time at which the chef finishes preparing the first customer's dish, calculated by adding the arrival time and preparation time of the first customer.
+
+### Loop Through Customers
+```python
+        for customer_ind in range(1, n, 1):
+            times: list[int] = customers[customer_ind]
+            arrive: int = times[0]
+```
+- The loop starts from the second customer (index 1) and iterates through each subsequent customer.
+- `times` is the current customer's arrival time and preparation time.
+- `arrive` is the current customer's arrival time.
+
+### Calculate Start and End Times
+```python
+            start_cook: int = max(arrive, finished_prev)
+            end_time: int = start_cook + times[1]
+            finished_prev: int = end_time
+            time_waiting += end_time - arrive
+```
+- `start_cook` determines when the chef starts preparing the current customer's dish. It is the later of the customer's arrival time or the time the chef finished the previous dish.
+- `end_time` is when the chef finishes preparing the current customer's dish.
+- `finished_prev` is updated to this `end_time` for use in the next iteration.
+- `time_waiting` is incremented by the waiting time of the current customer, which is the difference between `end_time` and their arrival time.
+
+### Return the Average Waiting Time
+```python
+        return time_waiting / n
+```
+- The method returns the average waiting time by dividing the total waiting time by the number of customers.
+
+### Example
+Let's walk through an example with the input `[[1, 2], [2, 5], [4, 3]]`:
+
+1. First customer arrives at time 1 and requires 2 units of time.
+   - `time_waiting = 2`
+   - `finished_prev = 1 + 2 = 3`
+
+2. Second customer arrives at time 2 and requires 5 units of time.
+   - `start_cook = max(2, 3) = 3`
+   - `end_time = 3 + 5 = 8`
+   - `finished_prev = 8`
+   - `time_waiting += 8 - 2 = 6`, so `time_waiting = 2 + 6 = 8`
+
+3. Third customer arrives at time 4 and requires 3 units of time.
+   - `start_cook = max(4, 8) = 8`
+   - `end_time = 8 + 3 = 11`
+   - `finished_prev = 11`
+   - `time_waiting += 11 - 4 = 7`, so `time_waiting = 8 + 7 = 15`
+
+The average waiting time is `15 / 3 = 5.0`.
+
+### Summary
+- The function processes each customer in the order they arrive.
+- It calculates the waiting time based on when the chef finishes the previous dish.
+- The average waiting time is returned as a float.
