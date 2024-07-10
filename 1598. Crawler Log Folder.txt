@@ -1,0 +1,80 @@
+1598. Crawler Log Folder
+Solution:
+
+class Solution:
+    def minOperations(self, logs: List[str]) -> int:
+        depth = 0
+        for log in logs:
+            if log == "../":
+                depth -= 1 if depth > 0 else 0
+            elif log == "./":
+                depth += 0
+            else:
+                depth += 1
+        return depth
+
+Explanation:
+
+Sure! Let's break down your `minOperations` function step-by-step:
+
+### Purpose of the Function
+The function `minOperations` is designed to determine the minimum number of operations needed to go back to the main folder (root directory) from a series of operations logged in a list. Each operation represents a file system command that either moves up a directory, stays in the current directory, or moves into a subdirectory.
+
+### Input
+- `logs`: A list of strings where each string represents an operation. The operations can be:
+  - `"../"`: Move up one directory.
+  - `"./"`: Stay in the current directory.
+  - Any other string (representing a subdirectory name): Move into that subdirectory.
+
+### Output
+- An integer representing the minimum number of operations to return to the root directory.
+
+### Function Breakdown
+1. **Initialize `depth`**:
+   - `depth = 0`
+   - This variable keeps track of the current depth in the directory structure. Starting from the root directory, the initial depth is 0.
+
+2. **Iterate Through `logs`**:
+   - `for log in logs:`
+   - This loop goes through each operation in the `logs` list.
+
+3. **Handle Different Operations**:
+   - **Move Up One Directory**:
+     - `if log == "../":`
+     - If the operation is `"../"`, check if the current depth is greater than 0.
+     - `depth -= 1 if depth > 0 else 0`
+     - If the depth is greater than 0, decrease it by 1 (move up one directory). If the depth is 0, do nothing (cannot go up from root).
+   - **Stay in the Current Directory**:
+     - `elif log == "./":`
+     - If the operation is `"./"`, do nothing.
+     - `depth += 0`
+     - This line effectively does nothing since adding 0 does not change the depth.
+   - **Move Into a Subdirectory**:
+     - `else:`
+     - For any other operation (which represents moving into a subdirectory), increase the depth by 1.
+     - `depth += 1`
+
+4. **Return the Result**:
+   - `return depth`
+   - After processing all the operations, the function returns the final value of `depth`, which represents the number of subdirectory levels deep from the root directory.
+
+### Example
+Let's go through an example to see how it works:
+
+**Input**:
+```python
+logs = ["d1/", "d2/", "../", "d21/", "./"]
+```
+
+**Execution**:
+- `depth = 0`
+- `"d1/"`: `depth` becomes 1 (move into `d1`)
+- `"d2/"`: `depth` becomes 2 (move into `d2` inside `d1`)
+- `"../"`: `depth` becomes 1 (move up from `d2` to `d1`)
+- `"d21/"`: `depth` becomes 2 (move into `d21` inside `d1`)
+- `"./"`: `depth` remains 2 (stay in `d21`)
+
+**Output**:
+- The function returns `2`, which is the number of operations needed to go back to the root directory from the current position.
+
+This implementation ensures that the depth is always non-negative and properly reflects the current directory level after processing each operation.
