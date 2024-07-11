@@ -1,0 +1,135 @@
+1190. Reverse Substrings Between Each Pair of Parentheses
+Solution:
+
+class Solution:
+    def reverseParentheses(self, s: str) -> str:
+        stack = []
+        for char in s:
+            if char == ')':
+                temp = []
+                while stack and stack[-1] != '(':
+                    temp.append(stack.pop())
+                if stack: 
+                    stack.pop()  # pop the '('
+                stack.extend(temp)
+            else:
+                stack.append(char)
+        
+        return ''.join(stack)
+
+Explanation:
+
+Certainly! Let's go through the `reverseParentheses` method step by step to understand how it works:
+
+### Method Explanation
+
+```python
+class Solution:
+    def reverseParentheses(self, s: str) -> str:
+        stack = []
+        for char in s:
+            if char == ')':
+                temp = []
+                while stack and stack[-1] != '(':
+                    temp.append(stack.pop())
+                if stack: 
+                    stack.pop()  # pop the '('
+                stack.extend(temp)
+            else:
+                stack.append(char)
+        
+        return ''.join(stack)
+```
+
+### Steps and Logic
+
+1. **Initialization:**
+   ```python
+   stack = []
+   ```
+   - We initialize an empty list called `stack` to use as a stack to help manage the characters and reversed substrings.
+
+2. **Iterating through the string:**
+   ```python
+   for char in s:
+   ```
+   - We loop through each character in the input string `s`.
+
+3. **Handling closing parentheses `)`**:
+   ```python
+   if char == ')':
+   ```
+   - When we encounter a closing parenthesis `)`, we need to reverse the substring enclosed by the nearest pair of parentheses.
+
+4. **Reversing the substring:**
+   ```python
+   temp = []
+   while stack and stack[-1] != '(':
+       temp.append(stack.pop())
+   ```
+   - We initialize a temporary list `temp` to hold characters.
+   - We pop characters from `stack` and append them to `temp` until we encounter an opening parenthesis `(`.
+   - This effectively reverses the order of characters within the parentheses.
+
+5. **Removing the opening parenthesis `(`:**
+   ```python
+   if stack: 
+       stack.pop()
+   ```
+   - After we have all the characters in `temp` (which are now reversed), we pop the opening parenthesis `(` from `stack`.
+
+6. **Re-adding the reversed substring:**
+   ```python
+   stack.extend(temp)
+   ```
+   - We extend `stack` with the reversed characters stored in `temp`.
+
+7. **Handling other characters:**
+   ```python
+   else:
+       stack.append(char)
+   ```
+   - If the character is not a closing parenthesis `)`, we simply append it to `stack`.
+
+8. **Building the final result:**
+   ```python
+   return ''.join(stack)
+   ```
+   - Finally, we join all the characters in `stack` to form the resulting string and return it.
+
+### Example Walkthrough
+
+Let's consider the input string `s = "(ab(c)d)"`.
+
+1. The loop starts, and `stack` is empty: `stack = []`.
+
+2. We encounter `(`, so we append it to `stack`: `stack = ['(']`.
+
+3. We encounter `a`, so we append it to `stack`: `stack = ['(', 'a']`.
+
+4. We encounter `b`, so we append it to `stack`: `stack = ['(', 'a', 'b']`.
+
+5. We encounter `(`, so we append it to `stack`: `stack = ['(', 'a', 'b', '(']`.
+
+6. We encounter `c`, so we append it to `stack`: `stack = ['(', 'a', 'b', '(', 'c']`.
+
+7. We encounter `)`, so we reverse the substring inside the nearest parentheses:
+   - `temp = []`
+   - Pop `c`: `temp = ['c']`
+   - Pop `(`: `stack = ['(', 'a', 'b']`
+   - Extend `stack` with `temp`: `stack = ['(', 'a', 'b', 'c']`
+
+8. We encounter `d`, so we append it to `stack`: `stack = ['(', 'a', 'b', 'c', 'd']`.
+
+9. We encounter `)`, so we reverse the substring inside the nearest parentheses:
+   - `temp = []`
+   - Pop `d`: `temp = ['d']`
+   - Pop `c`: `temp = ['d', 'c']`
+   - Pop `b`: `temp = ['d', 'c', 'b']`
+   - Pop `a`: `temp = ['d', 'c', 'b', 'a']`
+   - Pop `(`: `stack = []`
+   - Extend `stack` with `temp`: `stack = ['d', 'c', 'b', 'a']`
+
+10. The final result is `dcba`, which we obtain by joining `stack`: `''.join(['d', 'c', 'b', 'a'])`.
+
+So the function correctly reverses the substrings within the parentheses and returns the final transformed string.
