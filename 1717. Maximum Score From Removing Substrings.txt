@@ -1,0 +1,79 @@
+1717. Maximum Score From Removing Substrings
+Solution:
+
+class Solution:
+    def maximumGain(self, s: str, x: int, y: int) -> int:
+        def remove_substring(s, first, second, points):
+            stack = []
+            score = 0
+            for char in s:
+                if stack and stack[-1] == first and char == second:
+                    stack.pop()
+                    score += points
+                else:
+                    stack.append(char)
+            return ''.join(stack), score
+        
+        # Determine the order based on the points
+        if x > y:
+            # Remove "ab" first
+            s, score1 = remove_substring(s, 'a', 'b', x)
+            s, score2 = remove_substring(s, 'b', 'a', y)
+        else:
+            # Remove "ba" first
+            s, score1 = remove_substring(s, 'b', 'a', y)
+            s, score2 = remove_substring(s, 'a', 'b', x)
+        
+        return score1 + score2
+
+
+Explanation:
+
+Certainly! Here’s an explanation of the steps in the `maximumGain` function:
+
+### Steps Explanation
+
+1. **Helper Function Definition: `remove_substring`**
+   - **Purpose**: This helper function removes all instances of a specified substring (either "ab" or "ba") from the input string `s` and calculates the score for these removals.
+   - **Parameters**:
+     - `s`: The input string from which substrings are to be removed.
+     - `first` and `second`: Characters that form the target substring (`first + second`).
+     - `points`: The score awarded for removing one instance of the target substring.
+   - **Implementation**:
+     - A stack is used to efficiently remove the target substrings.
+     - Iterate over each character in the string:
+       - If the top of the stack contains `first` and the current character is `second`, pop the stack and add the points.
+       - Otherwise, push the current character onto the stack.
+     - The function returns the modified string (with target substrings removed) and the accumulated score.
+
+2. **Main Function Logic: `maximumGain`**
+   - **Purpose**: To maximize the score by removing the higher-value substrings first, followed by the lower-value substrings.
+   - **Parameters**:
+     - `s`: The input string.
+     - `x`: Points awarded for removing an "ab" substring.
+     - `y`: Points awarded for removing a "ba" substring.
+   - **Implementation**:
+     - **Determine the Removal Order**: 
+       - Compare `x` and `y` to decide which substring to prioritize for removal.
+       - If `x > y`, prioritize removing "ab" substrings first. Otherwise, prioritize removing "ba" substrings first.
+     - **Remove Substrings in Priority Order**:
+       - Call `remove_substring` to remove the higher-value substring first and get the intermediate string and score.
+       - Call `remove_substring` again to remove the lower-value substring from the intermediate string and get the final score.
+   - **Return the Total Score**:
+     - The function returns the sum of the scores from both removal operations.
+
+### Example Walkthrough
+
+For an example, let's consider the input `s = "cdbcbbaaabab"`, `x = 4`, and `y = 5`.
+
+1. **Comparing Points**: Since `y > x`, prioritize removing "ba" substrings first.
+2. **First Removal**:
+   - Call `remove_substring` with `s = "cdbcbbaaabab"`, `first = 'b'`, `second = 'a'`, and `points = 5`.
+   - Resulting string after removal: `s = "cdcbcaaab"`, Score: `10` (two "ba" substrings removed).
+3. **Second Removal**:
+   - Call `remove_substring` with `s = "cdcbcaaab"`, `first = 'a'`, `second = 'b'`, and `points = 4`.
+   - Resulting string after removal: `s = "cdcbcaa"`, Score: `4` (one "ab" substring removed).
+4. **Total Score**:
+   - The total score is `10 (from "ba" removals) + 4 (from "ab" removal) = 14`.
+
+Thus, the function ensures that the substrings are removed in an optimal order to maximize the total score.
