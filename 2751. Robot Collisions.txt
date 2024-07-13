@@ -1,0 +1,111 @@
+2751. Robot Collisions
+Solution:
+
+class Solution:
+    def survivedRobotsHealths(self, positions: List[int], healths: List[int], directions: str) -> List[int]:
+        # Combine positions, healths, and directions into a list of tuples and sort by positions
+        robots = sorted(zip(positions, healths, directions, range(len(positions))))
+        
+        stack = []  # stack to keep track of robots moving to the right
+        results = [None] * len(positions)  # to store final healths of robots in original order
+        
+        for pos, health, direction, index in robots:
+            if direction == 'R':
+                stack.append((pos, health, direction, index))
+            else:  # direction == 'L'
+                while stack and health > 0:
+                    r_pos, r_health, r_direction, r_index = stack[-1]
+                    if r_health < health:
+                        # Robot moving to the right is weaker, it is destroyed
+                        health -= 1
+                        stack.pop()
+                    elif r_health > health:
+                        # Robot moving to the left is weaker, it is destroyed
+                        stack[-1] = (r_pos, r_health - 1, r_direction, r_index)
+                        health = 0
+                    else:  # r_health == health
+                        # Both robots destroy each other
+                        stack.pop()
+                        health = 0
+                
+                if health > 0:
+                    results[index] = health
+        
+        # Robots moving to the right that did not collide
+        while stack:
+            pos, health, direction, index = stack.pop()
+            results[index] = health
+        
+        # Filter out the None values to get the final list of surviving robots' healths
+        return [health for health in results if health is not None]
+
+Explanation:
+
+Certainly! Let's go through the `survivedRobotsHealths` method step-by-step to understand how it works:
+
+### Method Overview:
+This method determines the health of robots that survive after all collisions. Each robot has a position, health, and direction (either 'R' for right or 'L' for left). Robots moving towards each other (one to the right and the other to the left) will collide and potentially reduce each other's health.
+
+### Detailed Explanation:
+
+1. **Combining and Sorting Robots:**
+   ```python
+   robots = sorted(zip(positions, healths, directions, range(len(positions))))
+   ```
+   - We combine the `positions`, `healths`, and `directions` into a list of tuples along with their original indices.
+   - The combined list is sorted by positions to process the collisions in the correct spatial order.
+
+2. **Initializations:**
+   ```python
+   stack = []  # stack to keep track of robots moving to the right
+   results = [None] * len(positions)  # to store final healths of robots in original order
+   ```
+   - `stack` is used to track robots moving to the right ('R').
+   - `results` is an array to store the final health of the robots in their original order. Initially, all values are set to `None`.
+
+3. **Processing Each Robot:**
+   ```python
+   for pos, health, direction, index in robots:
+       if direction == 'R':
+           stack.append((pos, health, direction, index))
+       else:  # direction == 'L'
+           while stack and health > 0:
+               r_pos, r_health, r_direction, r_index = stack[-1]
+               if r_health < health:
+                   health -= 1
+                   stack.pop()
+               elif r_health > health:
+                   stack[-1] = (r_pos, r_health - 1, r_direction, r_index)
+                   health = 0
+               else:  # r_health == health
+                   stack.pop()
+                   health = 0
+           if health > 0:
+               results[index] = health
+   ```
+   - For each robot, if it is moving to the right ('R'), it is pushed onto the stack.
+   - If it is moving to the left ('L'), we handle collisions with the robots in the stack:
+     - **Collision Handling:** While there are robots in the stack and the current left-moving robot has health remaining, we check the top robot in the stack (which is moving to the right).
+       - If the health of the right-moving robot (`r_health`) is less than the current left-moving robot's health, the right-moving robot is destroyed (`stack.pop()`), and the left-moving robot loses 1 health.
+       - If the health of the right-moving robot is greater than the current left-moving robot's health, the left-moving robot is destroyed, and the right-moving robot's health is reduced by 1.
+       - If both robots have the same health, both are destroyed.
+   - After processing collisions, if the left-moving robot still has health, it is added to the `results` array at its original index.
+
+4. **Remaining Right-Moving Robots:**
+   ```python
+   while stack:
+       pos, health, direction, index = stack.pop()
+       results[index] = health
+   ```
+   - Any remaining right-moving robots in the stack did not encounter any collisions and thus survive with their original health. These are added to the `results` array.
+
+5. **Filtering and Returning Results:**
+   ```python
+   return [health for health in results if health is not None]
+   ```
+   - Finally, we filter out `None` values from the `results` array to get the list of surviving robots' healths and return it.
+
+### Summary:
+- The method processes each robot based on its direction and handles collisions between robots moving towards each other.
+- A stack is used to keep track of right-moving robots and handle collisions when a left-moving robot is encountered.
+- The surviving healths of the robots are recorded in the `results` array, which is then filtered to exclude `None` values before returning.
