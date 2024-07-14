@@ -1,0 +1,98 @@
+726. Number of Atoms
+Solution: 
+
+class Solution:
+    def countOfAtoms(self, formula: str) -> str:
+        from collections import defaultdict
+
+        stack = [defaultdict(int)]
+        i, n = 0, len(formula)  # Correct initialization here
+
+        while i < n:
+            if formula[i] == '(':
+                stack.append(defaultdict(int))
+                i += 1
+            elif formula[i] == ')':
+                top = stack.pop()
+                i += 1
+                start = i
+                while i < n and formula[i].isdigit():
+                    i += 1
+                multiplier = int(formula[start:i] or 1)
+                for element, count in top.items():
+                    stack[-1][element] += count * multiplier
+            else:
+                start = i
+                i += 1
+                while i < n and formula[i].islower():
+                    i += 1
+                element = formula[start:i]
+                start = i
+                while i < n and formula[i].isdigit():
+                    i += 1
+                count = int(formula[start:i] or 1)
+                stack[-1][element] += count
+
+        result = stack.pop()
+        sorted_elements = sorted(result.items())
+        return ''.join(f"{element}{(count if count > 1 else '')}" for element, count in sorted_elements)
+
+Explanation:
+
+Certainly! Here's a detailed explanation of each step in the `countOfAtoms` function:
+
+### Step-by-Step Explanation:
+
+1. **Initialization**:
+    - `from collections import defaultdict`: This imports the `defaultdict` class from the `collections` module, which will be used to handle the counts of atoms dynamically.
+    - `stack = [defaultdict(int)]`: Initialize the stack with one `defaultdict` to store the counts of atoms. This `defaultdict` will automatically initialize any new key with the integer `0`.
+    - `i, n = 0, len(formula)`: Initialize `i` to `0` to start at the beginning of the formula, and `n` to the length of the formula.
+
+2. **Main Loop**:
+    - `while i < n`: Loop through the formula until `i` reaches the end of the formula.
+
+3. **Processing Characters**:
+    - **If `(` is encountered**:
+        - `stack.append(defaultdict(int))`: Push a new `defaultdict` onto the stack to start a new scope for counting atoms within the parentheses.
+        - `i += 1`: Move to the next character.
+    - **If `)` is encountered**:
+        - `top = stack.pop()`: Pop the top `defaultdict` from the stack, which contains the counts of atoms within the last set of parentheses.
+        - `i += 1`: Move to the next character.
+        - `start = i`: Mark the start of the multiplier.
+        - `while i < n and formula[i].isdigit()`: Move `i` forward to capture the entire number following the `)`. This loop ensures we capture multi-digit numbers.
+        - `multiplier = int(formula[start:i] or 1)`: Convert the captured number to an integer. If no number is found, default to `1`.
+        - `for element, count in top.items()`: Loop through the atoms in the popped `defaultdict`.
+            - `stack[-1][element] += count * multiplier`: Multiply the count of each atom by the multiplier and add it to the previous scope's `defaultdict`.
+    - **Processing Element Names and Counts**:
+        - `start = i`: Mark the start of the element name.
+        - `i += 1`: Move to the next character.
+        - `while i < n and formula[i].islower()`: Continue moving `i` forward to capture the full element name (e.g., from 'C' to 'Cl').
+        - `element = formula[start:i]`: Extract the element name from the formula.
+        - `start = i`: Mark the start of the count.
+        - `while i < n and formula[i].isdigit()`: Move `i` forward to capture the entire count following the element. This loop ensures we capture multi-digit numbers.
+        - `count = int(formula[start:i] or 1)`: Convert the captured number to an integer. If no number is found, default to `1`.
+        - `stack[-1][element] += count`: Add the count of the element to the current scope's `defaultdict`.
+
+4. **Final Result Construction**:
+    - `result = stack.pop()`: Pop the last `defaultdict` from the stack, which now contains the total counts of each atom in the formula.
+    - `sorted_elements = sorted(result.items())`: Sort the elements alphabetically by their names.
+    - `return ''.join(f"{element}{(count if count > 1 else '')}" for element, count in sorted_elements)`: Construct the final string by concatenating each element name with its count (if greater than 1).
+
+### Example Usage:
+
+```python
+sol = Solution()
+print(sol.countOfAtoms("H2O"))          # Output: "H2O"
+print(sol.countOfAtoms("Mg(OH)2"))      # Output: "H2MgO2"
+print(sol.countOfAtoms("K4(ON(SO3)2)2")) # Output: "K4N2O14S4"
+```
+
+### Explanation of Example:
+- **"H2O"**:
+  - Directly counts 2 hydrogen atoms and 1 oxygen atom.
+- **"Mg(OH)2"**:
+  - Recognizes "Mg", "OH" within parentheses, and multiplies "O" and "H" by 2.
+- **"K4(ON(SO3)2)2"**:
+  - Recognizes "K4", then "ON" and "(SO3)2" within nested parentheses, and multiplies accordingly.
+
+This function processes chemical formulas, handling nested parentheses and multipliers, and constructs a string representation of the counts of each atom in alphabetical order.
