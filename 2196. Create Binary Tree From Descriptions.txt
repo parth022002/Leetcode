@@ -1,0 +1,100 @@
+2196. Create Binary Tree From Descriptions
+Solution:
+
+class Solution:
+    def createBinaryTree(self, descriptions: List[List[int]]) -> Optional[TreeNode]:
+        mp = {}
+        hasParent = set()
+
+        for desc in descriptions:
+            if desc[0] not in mp:
+                mp[desc[0]] = TreeNode(desc[0])
+            if desc[1] not in mp:
+                mp[desc[1]] = TreeNode(desc[1])
+            hasParent.add(desc[1])
+
+        root = None
+        for desc in descriptions:
+            if desc[2] == 1:  # left
+                mp[desc[0]].left = mp[desc[1]]
+            else:  # right
+                mp[desc[0]].right = mp[desc[1]]
+            if desc[0] not in hasParent:
+                root = mp[desc[0]]
+
+        return root
+        
+
+Explanation:
+
+Sure! Let's break down the code step by step.
+
+### Code Overview
+
+The `Solution` class contains a method `createBinaryTree` which takes a list of descriptions as input and creates a binary tree based on these descriptions. Each description in the list is a triplet `[parent, child, is_left]`, where:
+- `parent` is the value of the parent node.
+- `child` is the value of the child node.
+- `is_left` is a flag indicating whether the child node is a left child (`1` means left child, `0` means right child).
+
+The method returns the root of the constructed binary tree.
+
+### Detailed Explanation
+
+#### Step 1: Initialization
+
+```python
+mp = {}
+hasParent = set()
+```
+- `mp`: A dictionary that will map values to their corresponding `TreeNode` objects.
+- `hasParent`: A set that will keep track of all nodes that have a parent.
+
+#### Step 2: Create Nodes and Track Children
+
+```python
+for desc in descriptions:
+    if desc[0] not in mp:
+        mp[desc[0]] = TreeNode(desc[0])
+    if desc[1] not in mp:
+        mp[desc[1]] = TreeNode(desc[1])
+    hasParent.add(desc[1])
+```
+- This loop iterates over each description in the `descriptions` list.
+- For each `desc` (a triplet `[parent, child, is_left]`):
+  - If the `parent` node is not already in `mp`, it creates a new `TreeNode` for the `parent` and adds it to `mp`.
+  - If the `child` node is not already in `mp`, it creates a new `TreeNode` for the `child` and adds it to `mp`.
+  - The `child` value is added to the `hasParent` set, indicating that this node has a parent.
+
+#### Step 3: Construct Tree and Identify Root
+
+```python
+root = None
+for desc in descriptions:
+    if desc[2] == 1:  # left
+        mp[desc[0]].left = mp[desc[1]]
+    else:  # right
+        mp[desc[0]].right = mp[desc[1]]
+    if desc[0] not in hasParent:
+        root = mp[desc[0]]
+```
+- This loop iterates over each description in the `descriptions` list again.
+- For each `desc`:
+  - If `is_left` is `1`, it assigns the `child` node as the left child of the `parent` node.
+  - If `is_left` is `0`, it assigns the `child` node as the right child of the `parent` node.
+  - It checks if the `parent` node is not in the `hasParent` set. If it's not, it means this node does not have a parent, so it is potentially the root node. The last such node encountered in this loop will be the root of the tree.
+
+#### Step 4: Return the Root
+
+```python
+return root
+```
+- The method returns the `root` node of the constructed binary tree.
+
+### Summary
+
+1. The method initializes a dictionary `mp` to store nodes and a set `hasParent` to track child nodes.
+2. It iterates over the descriptions to create `TreeNode` objects for each parent and child, adding the children to `hasParent`.
+3. It iterates over the descriptions again to build the tree structure by assigning left and right children.
+4. It identifies the root node (a node that is never a child) and returns it.
+
+This approach ensures that all nodes are created only once and the tree structure is built efficiently.
