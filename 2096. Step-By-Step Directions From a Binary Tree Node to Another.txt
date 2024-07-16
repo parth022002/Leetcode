@@ -1,0 +1,145 @@
+2096. Step-By-Step Directions From a Binary Tree Node to Another
+Solution:
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def getDirections(self, root: Optional[TreeNode], startValue: int, destValue: int) -> str:
+        
+        def findPath(node, target, path):
+            if not node:
+                return False
+            if node.val == target:
+                return True
+            path.append('L')
+            if findPath(node.left, target, path):
+                return True
+            path.pop()
+            
+            path.append('R')
+            if findPath(node.right, target, path):
+                return True
+            path.pop()
+            
+            return False
+        
+        pathToStart, pathToDest = [], []
+        findPath(root, startValue, pathToStart)
+        findPath(root, destValue, pathToDest)
+        
+        # Find the divergence point
+        i = 0
+        while i < len(pathToStart) and i < len(pathToDest) and pathToStart[i] == pathToDest[i]:
+            i += 1
+        
+        # Steps to move up to the common ancestor and then to the destination
+        directions = ['U'] * (len(pathToStart) - i) + pathToDest[i:]
+        return ''.join(directions)
+
+Explanation:
+
+Sure, let's go through the steps of the given code to understand how it works:
+
+### Step-by-Step Explanation
+
+1. **TreeNode Definition**: 
+    ```python
+    # Definition for a binary tree node.
+    # class TreeNode:
+    #     def __init__(self, val=0, left=None, right=None):
+    #         self.val = val
+    #         self.left = left
+    #         self.right = right
+    ```
+   This part is just the definition of a binary tree node, where each node has a value (`val`), a left child (`left`), and a right child (`right`).
+
+2. **Solution Class and getDirections Method**:
+    ```python
+    class Solution:
+        def getDirections(self, root: Optional[TreeNode], startValue: int, destValue: int) -> str:
+    ```
+   The `Solution` class contains the `getDirections` method which takes the root of the binary tree, the starting node value (`startValue`), and the destination node value (`destValue`).
+
+3. **findPath Function**:
+    ```python
+    def findPath(node, target, path):
+        if not node:
+            return False
+        if node.val == target:
+            return True
+        path.append('L')
+        if findPath(node.left, target, path):
+            return True
+        path.pop()
+        
+        path.append('R')
+        if findPath(node.right, target, path):
+            return True
+        path.pop()
+        
+        return False
+    ```
+   This helper function `findPath` is used to find the path from the root to a target node. It takes three parameters: the current node (`node`), the target value (`target`), and the current path (`path`).
+
+    - **Base Case**: If the node is `None`, return `False` (the target is not found in this path).
+    - **Target Found**: If the current node's value is equal to the target, return `True`.
+    - **Traverse Left Subtree**: Append 'L' to the path and recursively call `findPath` on the left child. If the target is found in the left subtree, return `True`. Otherwise, remove the last direction ('L') from the path.
+    - **Traverse Right Subtree**: Similarly, append 'R' to the path and recursively call `findPath` on the right child. If the target is found in the right subtree, return `True`. Otherwise, remove the last direction ('R') from the path.
+    - **Target Not Found**: If the target is not found in either subtree, return `False`.
+
+4. **Find Paths to Start and Destination**:
+    ```python
+    pathToStart, pathToDest = [], []
+    findPath(root, startValue, pathToStart)
+    findPath(root, destValue, pathToDest)
+    ```
+   Initialize two empty lists, `pathToStart` and `pathToDest`, to store the paths from the root to the `startValue` and `destValue` nodes, respectively. Use the `findPath` function to populate these lists.
+
+5. **Find Divergence Point**:
+    ```python
+    i = 0
+    while i < len(pathToStart) and i < len(pathToDest) and pathToStart[i] == pathToDest[i]:
+        i += 1
+    ```
+   Find the first point where the paths to the start and destination nodes diverge. This is done by iterating through both paths until a difference is found.
+
+6. **Construct Directions**:
+    ```python
+    directions = ['U'] * (len(pathToStart) - i) + pathToDest[i:]
+    return ''.join(directions)
+    ```
+   Construct the directions from the start node to the destination node:
+   
+    - **Move Up**: Use 'U' to move up to the common ancestor. The number of 'U' moves is the length of the remaining part of the path from the start node to the common ancestor (`len(pathToStart) - i`).
+    - **Move to Destination**: Append the remaining part of the path from the common ancestor to the destination node (`pathToDest[i:]`).
+    - **Join Directions**: Combine the 'U' moves and the remaining path to form the final directions string.
+
+### Example
+
+Consider a tree and the values for `startValue` and `destValue`:
+```
+       1
+      / \
+     2   3
+    /   / \
+   4   5   6
+```
+
+- `startValue = 4`
+- `destValue = 6`
+
+The paths would be:
+- `pathToStart = ['L', 'L']` (Root -> Left -> Left)
+- `pathToDest = ['R', 'R']` (Root -> Right -> Right)
+
+Divergence point (`i`) is 0 (no common prefix):
+- Move up: 'U' * (2 - 0) = 'UU'
+- Path to destination from common ancestor: 'RR'
+
+Final directions: 'UURR'
+
+By following these steps, the code efficiently finds the path from the start node to the destination node in a binary tree.
