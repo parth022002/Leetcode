@@ -1,0 +1,64 @@
+1110. Delete Nodes And Return Forest
+Solution:
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def delNodes(self, root: Optional[TreeNode], to_delete: List[int]) -> List[TreeNode]:
+        to_delete_set = set(to_delete)
+        res = []
+        
+        def dfs(node, is_root):
+            if not node:
+                return None
+            root_deleted = node.val in to_delete_set
+            if is_root and not root_deleted:
+                res.append(node)
+            node.left = dfs(node.left, root_deleted)
+            node.right = dfs(node.right, root_deleted)
+            return None if root_deleted else node
+        
+        dfs(root, True)
+        return res
+        
+Explanation:
+
+Sure, I'll explain the steps of your code in detail.
+
+### Step-by-Step Explanation:
+
+1. **Class and Function Definitions:**
+    - You define a class `TreeNode` which is a standard definition for a binary tree node. This class has an `__init__` method that initializes the node's value and its left and right children.
+    - You define the class `Solution` that contains the method `delNodes` which will perform the deletion operation and return the resulting forest.
+
+2. **Initialization:**
+    - `to_delete_set = set(to_delete)`: Convert the list `to_delete` to a set for O(1) average time complexity in lookups.
+    - `res = []`: Initialize an empty list `res` to store the roots of the resulting forest.
+
+3. **Depth-First Search (DFS) Function:**
+    - `def dfs(node, is_root)`: Define a nested function `dfs` that takes a node and a boolean `is_root` indicating whether the current node is a root of a new tree in the forest.
+    - `if not node: return None`: If the current node is `None`, return `None`. This is the base case for the recursion.
+
+4. **Node Deletion Check:**
+    - `root_deleted = node.val in to_delete_set`: Check if the current node's value is in the `to_delete_set`. This determines whether the current node needs to be deleted.
+    - `if is_root and not root_deleted: res.append(node)`: If the current node is a root (determined by `is_root` being `True`) and it's not marked for deletion (`not root_deleted`), add this node to the `res` list as it's the root of a new tree in the forest.
+
+5. **Recursive DFS Calls:**
+    - `node.left = dfs(node.left, root_deleted)`: Recursively call `dfs` on the left child of the current node. Pass `root_deleted` as the `is_root` parameter for the child. If the current node is deleted (`root_deleted` is `True`), then the left child becomes a root of a new tree.
+    - `node.right = dfs(node.right, root_deleted)`: Similarly, recursively call `dfs` on the right child of the current node with `root_deleted` as the `is_root` parameter.
+
+6. **Return the Current Node:**
+    - `return None if root_deleted else node`: If the current node is marked for deletion, return `None` to remove it from its parent. Otherwise, return the current node to keep it in the tree.
+
+7. **Initial DFS Call:**
+    - `dfs(root, True)`: Start the DFS traversal from the root of the tree. Pass `True` as the `is_root` parameter because the root of the original tree is initially considered a root of the forest.
+
+8. **Return the Resulting Forest:**
+    - `return res`: After the DFS traversal completes, return the `res` list which contains the roots of the trees in the resulting forest.
+
+### Summary:
+The algorithm uses DFS to traverse the tree and determine which nodes should be deleted. During the traversal, it constructs the resulting forest by treating the children of deleted nodes as new roots. The use of a set for `to_delete` ensures efficient lookups, and the recursive approach simplifies the tree modification process. The resulting forest is stored in the list `res`, which is returned at the end.
