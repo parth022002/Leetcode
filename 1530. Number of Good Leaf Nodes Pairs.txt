@@ -1,0 +1,134 @@
+1530. Number of Good Leaf Nodes Pairs
+Solution:
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def countPairs(self, root: TreeNode, distance: int) -> int:
+        self.map = {}
+        self.leaves = []
+        self.findLeaves(root, [], self.leaves, self.map)
+        res = 0
+        for i in range(len(self.leaves)):
+            for j in range(i + 1, len(self.leaves)):
+                list_i, list_j = self.map[self.leaves[i]], self.map[self.leaves[j]]
+                for k in range(min(len(list_i), len(list_j))):
+                    if list_i[k] != list_j[k]:
+                        dist = len(list_i) - k + len(list_j) - k
+                        if dist <= distance:
+                            res += 1
+                        break
+        return res
+
+    def findLeaves(self, node: TreeNode, trail: List[TreeNode], leaves: List[TreeNode], map: Dict[TreeNode, List[TreeNode]]):
+        if not node:
+            return
+        tmp = trail[:]
+        tmp.append(node)
+        if not node.left and not node.right:
+            map[node] = tmp
+            leaves.append(node)
+            return
+        self.findLeaves(node.left, tmp, leaves, map)
+        self.findLeaves(node.right, tmp, leaves, map)
+
+Explanation:
+
+The code defines a solution to count pairs of leaf nodes in a binary tree such that the distance between them is less than or equal to a given value. Here is a detailed explanation:
+
+1. **TreeNode Class**: 
+    - The `TreeNode` class is a standard definition for a node in a binary tree. Each node has a value `val`, a left child `left`, and a right child `right`.
+  
+    ```python
+    # Definition for a binary tree node.
+    # class TreeNode:
+    #     def __init__(self, val=0, left=None, right=None):
+    #         self.val = val
+    #         self.left = left
+    #         self.right = right
+    ```
+
+2. **Solution Class**: 
+    - The `Solution` class contains two main methods: `countPairs` and `findLeaves`.
+    
+    ```python
+    class Solution:
+    ```
+
+3. **countPairs Method**:
+    - This method calculates the number of good leaf node pairs with a distance less than or equal to a given value.
+
+    ```python
+    def countPairs(self, root: TreeNode, distance: int) -> int:
+    ```
+
+4. **findLeaves Method**:
+    - This is a helper method to find all the leaf nodes in the tree and store the path from the root to each leaf node.
+
+    ```python
+    def findLeaves(self, node: TreeNode, trail: List[TreeNode], leaves: List[TreeNode], map: Dict[TreeNode, List[TreeNode]]):
+    ```
+
+5. **Detailed Steps**:
+    - **Initialization**: Initialize a dictionary `self.map` to store the path to each leaf node, and a list `self.leaves` to store the leaf nodes.
+    
+    ```python
+    self.map = {}
+    self.leaves = []
+    ```
+
+    - **Find Leaves and Paths**: Use the `findLeaves` method to populate `self.leaves` and `self.map`.
+    
+    ```python
+    self.findLeaves(root, [], self.leaves, self.map)
+    ```
+
+    - **Count Good Pairs**: Initialize a counter `res` to zero. Iterate through each pair of leaf nodes, calculate the distance between them, and increment the counter if the distance is less than or equal to the given value.
+    
+    ```python
+    res = 0
+    for i in range(len(self.leaves)):
+        for j in range(i + 1, len(self.leaves)):
+            list_i, list_j = self.map[self.leaves[i]], self.map[self.leaves[j]]
+            for k in range(min(len(list_i), len(list_j))):
+                if list_i[k] != list_j[k]:
+                    dist = len(list_i) - k + len(list_j) - k
+                    if dist <= distance:
+                        res += 1
+                    break
+    return res
+    ```
+
+    - **Break Down of Distance Calculation**:
+        - For each pair of leaf nodes, get their paths from the root (`list_i` and `list_j`).
+        - Compare the paths to find the first node where they differ (this is their Lowest Common Ancestor, LCA).
+        - The distance between the two leaf nodes is the sum of the distances from each leaf node to the LCA.
+        - If this distance is less than or equal to the given value, increment the counter `res`.
+
+6. **findLeaves Method Implementation**:
+    - This method recursively traverses the tree to find all leaf nodes and their paths from the root. 
+
+    ```python
+    def findLeaves(self, node: TreeNode, trail: List[TreeNode], leaves: List[TreeNode], map: Dict[TreeNode, List[TreeNode]]):
+        if not node:
+            return
+        tmp = trail[:]
+        tmp.append(node)
+        if not node.left and not node.right:
+            map[node] = tmp
+            leaves.append(node)
+            return
+        self.findLeaves(node.left, tmp, leaves, map)
+        self.findLeaves(node.right, tmp, leaves, map)
+    ```
+
+    - **Trail**: A list representing the current path from the root to the current node.
+    - **Leaves**: A list to collect all the leaf nodes.
+    - **Map**: A dictionary to map each leaf node to its path from the root.
+    - The method appends the current node to the trail and checks if the node is a leaf. If it is, it adds the trail to the map and the node to the leaves list. If not, it recursively calls itself for the left and right children.
+
+In summary, the code efficiently finds all the leaf nodes, calculates their paths from the root, and counts the number of good pairs based on the given distance constraint.
