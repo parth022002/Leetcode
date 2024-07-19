@@ -1,0 +1,76 @@
+1380. Lucky Numbers in a Matrix
+solution:
+
+class Solution:
+    def luckyNumbers(self, matrix: List[List[int]]) -> List[int]:
+        # Find the minimum element in each row
+        row_mins = [min(row) for row in matrix]
+        
+        # Find the maximum element in each column
+        col_maxes = [max(col) for col in zip(*matrix)]
+        
+        # Find all lucky numbers
+        ans = [row_mins[i] for i in range(len(matrix)) if row_mins[i] in col_maxes]
+        
+        return ans
+
+Explanation:
+
+Sure, here is a step-by-step explanation of the optimized `luckyNumbers` function:
+
+```python
+from typing import List
+
+class Solution:
+    def luckyNumbers(self, matrix: List[List[int]]) -> List[int]:
+        # Find the minimum element in each row
+        row_mins = [min(row) for row in matrix]
+        
+        # Find the maximum element in each column
+        col_maxes = [max(col) for col in zip(*matrix)]
+        
+        # Find all lucky numbers
+        ans = [row_mins[i] for i in range(len(matrix)) if row_mins[i] in col_maxes]
+        
+        return ans
+```
+
+### Steps Explained:
+
+1. **Finding Minimum Elements in Each Row**:
+   ```python
+   row_mins = [min(row) for row in matrix]
+   ```
+   - We iterate over each row of the matrix.
+   - For each row, we use the `min()` function to find the minimum element.
+   - We store these minimum elements in the list `row_mins`.
+
+2. **Finding Maximum Elements in Each Column**:
+   ```python
+   col_maxes = [max(col) for col in zip(*matrix)]
+   ```
+   - We use `zip(*matrix)` to transpose the matrix. This transforms rows into columns.
+   - We iterate over each transposed "column".
+   - For each column, we use the `max()` function to find the maximum element.
+   - We store these maximum elements in the list `col_maxes`.
+
+3. **Finding All Lucky Numbers**:
+   ```python
+   ans = [row_mins[i] for i in range(len(matrix)) if row_mins[i] in col_maxes]
+   ```
+   - We iterate over the indices of the `row_mins` list.
+   - For each index `i`, we check if the element `row_mins[i]` is also present in `col_maxes`.
+   - If it is, we add `row_mins[i]` to the result list `ans`.
+
+4. **Returning the Result**:
+   ```python
+   return ans
+   ```
+   - Finally, we return the list `ans` which contains all the lucky numbers.
+
+### Summary:
+- **Row Minimums**: We create a list of minimum values for each row.
+- **Column Maximums**: We create a list of maximum values for each column by transposing the matrix.
+- **Lucky Numbers**: We check if any row minimums are also column maximums and collect these lucky numbers in the result list.
+
+This approach is efficient and ensures that the function finds all lucky numbers in the given matrix.
