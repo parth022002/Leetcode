@@ -1,0 +1,95 @@
+1605. Find Valid Matrix Given Row and Column Sums
+Solution:
+
+class Solution:
+    def restoreMatrix(self, rowSum: List[int], colSum: List[int]) -> List[List[int]]:
+        rows = len(rowSum)
+        cols = len(colSum)
+        res = [[0] * cols for _ in range(rows)]
+
+        cur_row, cur_col = 0, 0
+
+        while cur_row < rows and cur_col < cols:
+            value_to_put = min(rowSum[cur_row], colSum[cur_col])
+            res[cur_row][cur_col] = value_to_put
+            rowSum[cur_row] -= value_to_put
+            colSum[cur_col] -= value_to_put
+
+            if rowSum[cur_row] == 0:
+                cur_row += 1
+            if colSum[cur_col] == 0:
+                cur_col += 1
+
+        return res
+
+Explanation:
+
+Certainly! Let's break down the steps of the `restoreMatrix` function and understand the logic behind it.
+
+### Function Explanation
+
+The goal of the `restoreMatrix` function is to create a matrix that satisfies given row and column sums. Here’s how the function works:
+
+1. **Initialization**:
+   - Determine the number of rows (`rows`) and columns (`cols`) based on the lengths of `rowSum` and `colSum`.
+   - Initialize a result matrix `res` with dimensions `rows x cols`, filled with zeros.
+   - Initialize two pointers, `cur_row` and `cur_col`, both starting at 0. These pointers help us navigate through the rows and columns of the result matrix.
+
+2. **Matrix Construction**:
+   - Use a `while` loop to iterate until we have processed all the rows and columns. The loop continues as long as `cur_row` is less than the number of rows and `cur_col` is less than the number of columns.
+   - In each iteration, determine the value to be placed in the current cell `res[cur_row][cur_col]`. This value is the minimum of the current row sum (`rowSum[cur_row]`) and the current column sum (`colSum[cur_col]`).
+   - Place this value in the result matrix.
+   - Subtract the placed value from both the current row sum and the current column sum.
+   - Move the row pointer (`cur_row`) to the next row if the current row sum reaches zero.
+   - Move the column pointer (`cur_col`) to the next column if the current column sum reaches zero.
+
+3. **Termination**:
+   - The loop terminates when all rows and columns have been processed.
+   - Return the constructed result matrix `res`.
+
+### Detailed Step-by-Step Example
+
+Let's consider a concrete example to illustrate these steps:
+
+```python
+rowSum = [3, 8]
+colSum = [4, 7]
+```
+
+1. **Initialization**:
+   - `rows = 2` (length of `rowSum`)
+   - `cols = 2` (length of `colSum`)
+   - `res = [[0, 0], [0, 0]]`
+   - `cur_row = 0`, `cur_col = 0`
+
+2. **First Iteration**:
+   - `value_to_put = min(rowSum[0], colSum[0]) = min(3, 4) = 3`
+   - Place `3` in `res[0][0]`: `res = [[3, 0], [0, 0]]`
+   - Update `rowSum` and `colSum`: `rowSum = [0, 8]`, `colSum = [1, 7]`
+   - Since `rowSum[0] == 0`, increment `cur_row` to 1.
+   - `cur_col` remains 0.
+
+3. **Second Iteration**:
+   - `value_to_put = min(rowSum[1], colSum[0]) = min(8, 1) = 1`
+   - Place `1` in `res[1][0]`: `res = [[3, 0], [1, 0]]`
+   - Update `rowSum` and `colSum`: `rowSum = [0, 7]`, `colSum = [0, 7]`
+   - Since `colSum[0] == 0`, increment `cur_col` to 1.
+   - `cur_row` remains 1.
+
+4. **Third Iteration**:
+   - `value_to_put = min(rowSum[1], colSum[1]) = min(7, 7) = 7`
+   - Place `7` in `res[1][1]`: `res = [[3, 0], [1, 7]]`
+   - Update `rowSum` and `colSum`: `rowSum = [0, 0]`, `colSum = [0, 0]`
+   - Since `rowSum[1] == 0`, increment `cur_row` to 2.
+   - Since `colSum[1] == 0`, increment `cur_col` to 2.
+
+5. **Termination**:
+   - The loop terminates because `cur_row` (2) is equal to `rows` (2) and `cur_col` (2) is equal to `cols` (2).
+
+6. **Result**:
+   - The constructed matrix `res` is `[[3, 0], [1, 7]]`.
+   - This matrix satisfies the given row and column sums:
+     - Row sums: 3 (3+0) and 8 (1+7)
+     - Column sums: 4 (3+1) and 7 (0+7)
+
+The function successfully restores the matrix according to the given row and column sums.
