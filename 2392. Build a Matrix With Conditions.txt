@@ -1,0 +1,116 @@
+2392. Build a Matrix With Conditions
+Solution:
+
+class Solution:
+    def buildMatrix(self, k: int, rowConditions: List[List[int]], colConditions: List[List[int]]) -> List[List[int]]:
+        def topo_sort(edges: List[List[int]]) -> List[int]:
+            graph = defaultdict(list)
+            in_degree = [0] * (k + 1)
+            
+            for u, v in edges:
+                graph[u].append(v)
+                in_degree[v] += 1
+            
+            zero_in_degree = deque([i for i in range(1, k + 1) if in_degree[i] == 0])
+            res = []
+            
+            while zero_in_degree:
+                node = zero_in_degree.popleft()
+                res.append(node)
+                
+                for neighbor in graph[node]:
+                    in_degree[neighbor] -= 1
+                    if in_degree[neighbor] == 0:
+                        zero_in_degree.append(neighbor)
+            
+            if len(res) == k:
+                return res
+            else:
+                return []
+        
+        row_order = topo_sort(rowConditions)
+        col_order = topo_sort(colConditions)
+        
+        if not row_order or not col_order:
+            return []
+        
+        row_pos = {num: i for i, num in enumerate(row_order)}
+        col_pos = {num: i for i, num in enumerate(col_order)}
+        
+        matrix = [[0] * k for _ in range(k)]
+        
+        for num in range(1, k + 1):
+            matrix[row_pos[num]][col_pos[num]] = num
+        
+        return matrix
+
+Explanation:
+
+Sure! The provided code defines a class `Solution` with a method `buildMatrix` that constructs a `k x k` matrix based on given row and column conditions. Let's break down the code step by step:
+
+### Step-by-Step Explanation
+
+1. **Topological Sorting Function (`topo_sort`)**:
+   - **Purpose**: This function performs a topological sort on a directed graph defined by the given edges. It helps in determining the order of elements that respect the given dependencies.
+   - **Parameters**: It takes `edges` (a list of directed edges) and `k` (number of nodes).
+   - **Graph Construction**:
+     - Create a graph using `defaultdict(list)` to store adjacency lists.
+     - Create an `in_degree` list to count the incoming edges for each node.
+   - **Build the Graph**:
+     - For each directed edge `(u, v)`, append `v` to the adjacency list of `u` and increment the in-degree of `v`.
+   - **Topological Sorting**:
+     - Initialize a deque `zero_in_degree` with nodes that have zero in-degree (i.e., no incoming edges).
+     - While there are nodes in `zero_in_degree`:
+       - Pop a node, add it to the result list.
+       - For each neighbor of this node, decrement its in-degree. If the in-degree becomes zero, add it to `zero_in_degree`.
+   - **Check for Cycles**:
+     - If the result list has `k` elements, return it; otherwise, return an empty list (indicating a cycle or unsatisfiable constraints).
+
+2. **Main Function (`buildMatrix`)**:
+   - **Parameters**: Takes `k` (size of the matrix), `rowConditions`, and `colConditions` (both lists of directed edges representing dependencies).
+   - **Row and Column Orders**:
+     - Call `topo_sort` on `rowConditions` to get `row_order`.
+     - Call `topo_sort` on `colConditions` to get `col_order`.
+   - **Check for Valid Orders**:
+     - If either `row_order` or `col_order` is empty (indicating a cycle), return an empty matrix.
+   - **Position Mapping**:
+     - Create dictionaries `row_pos` and `col_pos` to map each number to its position in the respective orders.
+   - **Matrix Construction**:
+     - Initialize a `k x k` matrix filled with zeros.
+     - For each number from `1` to `k`, place it in the matrix at the position defined by `row_pos` and `col_pos`.
+   - **Return the Matrix**:
+     - Return the constructed matrix.
+
+### Example Walkthrough
+
+Suppose `k = 3`, `rowConditions = [[1, 2], [2, 3]]`, and `colConditions = [[2, 1], [3, 2]]`:
+
+1. **Topological Sort for Row Conditions**:
+   - Build the graph and in-degree: `1 -> 2 -> 3`.
+   - Zero in-degree nodes initially: `[1]`.
+   - Process nodes: `[1, 2, 3]`.
+   - `row_order`: `[1, 2, 3]`.
+
+2. **Topological Sort for Column Conditions**:
+   - Build the graph and in-degree: `2 -> 1 -> 3`.
+   - Zero in-degree nodes initially: `[2]`.
+   - Process nodes: `[2, 1, 3]`.
+   - `col_order`: `[2, 1, 3]`.
+
+3. **Mapping Positions**:
+   - `row_pos`: `{1: 0, 2: 1, 3: 2}`.
+   - `col_pos`: `{2: 0, 1: 1, 3: 2}`.
+
+4. **Construct the Matrix**:
+   - Place each number based on its row and column positions:
+     - `1` at `(0, 1)`.
+     - `2` at `(1, 0)`.
+     - `3` at `(2, 2)`.
+   - Resulting matrix:
+     ```
+     [[0, 1, 0],
+      [2, 0, 0],
+      [0, 0, 3]]
+     ```
+
+This method ensures that the resulting matrix respects the row and column conditions specified.
