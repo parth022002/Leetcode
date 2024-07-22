@@ -1,0 +1,77 @@
+2418. Sort the People
+Solution:
+
+class Solution:
+    def sortPeople(self, names: List[str], heights: List[int]) -> List[str]:
+        return [names[i] for i in sorted(range(len(heights)), key= lambda i: -heights[i])]
+
+Explanation:
+
+Certainly! Let's break down the steps of your original `sortPeople` method:
+
+### Code:
+```python
+from typing import List
+
+class Solution:
+    def sortPeople(self, names: List[str], heights: List[int]) -> List[str]:
+        return [names[i] for i in sorted(range(len(heights)), key=lambda i: -heights[i])]
+```
+
+### Explanation:
+
+1. **Function Signature**:
+   - The method `sortPeople` takes two parameters: `names` (a list of strings) and `heights` (a list of integers).
+   - The goal is to return the `names` list sorted by the corresponding `heights` in descending order.
+
+2. **Generating Indices**:
+   - `range(len(heights))` generates a list of indices corresponding to the elements in the `heights` list.
+     ```python
+     range(len(heights))  # This produces a sequence of indices [0, 1, 2, ..., len(heights)-1]
+     ```
+
+3. **Sorting Indices**:
+   - `sorted(range(len(heights)), key=lambda i: -heights[i])` sorts these indices based on the heights in descending order.
+   - The `key` parameter of the `sorted` function is used to specify a function to be called on each list element before making comparisons. Here, the `key` is `lambda i: -heights[i]`.
+   - The lambda function `lambda i: -heights[i]` takes an index `i` and returns the negative of the height at that index. This effectively sorts the heights in descending order because `-heights[i]` makes larger heights come first.
+     ```python
+     sorted(range(len(heights)), key=lambda i: -heights[i])  # This returns a list of indices sorted by height in descending order.
+     ```
+
+4. **Reordering Names**:
+   - `[names[i] for i in sorted(range(len(heights)), key=lambda i: -heights[i])]` creates a new list of names in the order determined by the sorted indices.
+   - The list comprehension iterates over the sorted indices, and for each index `i`, it retrieves the corresponding name from the `names` list.
+     ```python
+     [names[i] for i in sorted(range(len(heights)), key=lambda i: -heights[i])]
+     ```
+
+### Step-by-Step Example:
+
+Let's say we have:
+```python
+names = ["Alice", "Bob", "Charlie"]
+heights = [165, 180, 175]
+```
+
+1. `range(len(heights))` generates `[0, 1, 2]`.
+
+2. `sorted(range(len(heights)), key=lambda i: -heights[i])`:
+   - For index `0`: `-heights[0]` = `-165`.
+   - For index `1`: `-heights[1]` = `-180`.
+   - For index `2`: `-heights[2]` = `-175`.
+   - Sorting these values in ascending order of their negatives gives `[1, 2, 0]` because:
+     - `-180` < `-175` < `-165`.
+
+3. `[names[i] for i in sorted(range(len(heights)), key=lambda i: -heights[i])]`:
+   - For sorted index `1`: `names[1]` = `"Bob"`.
+   - For sorted index `2`: `names[2]` = `"Charlie"`.
+   - For sorted index `0`: `names[0]` = `"Alice"`.
+   - This results in `["Bob", "Charlie", "Alice"]`.
+
+### Final Output:
+The method returns the list of names sorted by heights in descending order:
+```python
+["Bob", "Charlie", "Alice"]
+```
+
+This approach ensures that the names are sorted based on the corresponding heights efficiently and concisely.
