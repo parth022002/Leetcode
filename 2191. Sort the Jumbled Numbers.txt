@@ -1,0 +1,119 @@
+2191. Sort the Jumbled Numbers
+Solution:
+
+class Solution:
+    def sortJumbled(self, mapping: List[int], nums: List[int]) -> List[int]:
+        def map_number(num: int) -> int:
+            # If the number is 0, directly return the mapped value for 0
+            if num == 0:
+                return mapping[0]
+            
+            mapped_num = 0
+            power_of_ten = 1
+            while num > 0:
+                num, digit = divmod(num, 10)
+                mapped_num += mapping[digit] * power_of_ten
+                power_of_ten *= 10
+            return mapped_num
+        
+        # Create a list of tuples (mapped value, original index)
+        mapped_with_index = [(map_number(num), index) for index, num in enumerate(nums)]
+        
+        # Sort by mapped values, stable sort ensures the original order is maintained for identical values
+        mapped_with_index.sort()
+        
+        # Reconstruct the sorted list using the original indices
+        return [nums[index] for _, index in mapped_with_index]
+
+Explanation:
+
+Certainly! Let's break down the code step by step to understand how it works:
+
+### Overall Goal
+The function `sortJumbled` aims to sort a list of numbers (`nums`) based on a "jumbled" mapping of their digits provided in the list `mapping`. Each digit in the numbers is mapped to a new digit as specified by `mapping`, and the numbers are sorted based on these new values.
+
+### Code Breakdown
+
+1. **Function Signature**:
+    ```python
+    def sortJumbled(self, mapping: List[int], nums: List[int]) -> List[int]:
+    ```
+    - The function `sortJumbled` takes two parameters:
+        - `mapping`: A list of 10 integers, where `mapping[i]` is the mapped value of digit `i`.
+        - `nums`: A list of integers to be sorted.
+
+2. **Inner Function `map_number`**:
+    ```python
+    def map_number(num: int) -> int:
+    ```
+    - This function takes a single integer `num` and returns its "jumbled" mapped value based on the provided `mapping`.
+
+3. **Mapping Logic**:
+    ```python
+    if num == 0:
+        return mapping[0]
+    ```
+    - If the number is 0, it directly returns the mapped value for 0 (i.e., `mapping[0]`).
+
+    ```python
+    mapped_num = 0
+    power_of_ten = 1
+    while num > 0:
+        num, digit = divmod(num, 10)
+        mapped_num += mapping[digit] * power_of_ten
+        power_of_ten *= 10
+    return mapped_num
+    ```
+    - For other numbers, it initializes `mapped_num` to 0 and `power_of_ten` to 1.
+    - It then enters a while loop that continues until `num` becomes 0.
+    - Inside the loop:
+        - `divmod(num, 10)` splits `num` into two parts: the quotient (`num` without its last digit) and the remainder (`digit`, the last digit of `num`).
+        - `mapping[digit]` gives the mapped value of the current last digit.
+        - `mapped_num` is updated by adding the mapped value of the digit multiplied by the current power of ten (to place it in the correct decimal place).
+        - `power_of_ten` is multiplied by 10 to shift to the next decimal place.
+    - The function returns the fully constructed `mapped_num`.
+
+4. **Mapping and Sorting**:
+    ```python
+    mapped_with_index = [(map_number(num), index) for index, num in enumerate(nums)]
+    ```
+    - This line creates a list of tuples, where each tuple consists of:
+        - The mapped value of a number (`map_number(num)`).
+        - The original index of the number in `nums`.
+    - `enumerate(nums)` provides both the number and its index.
+
+    ```python
+    mapped_with_index.sort()
+    ```
+    - This sorts the list of tuples by the first element of each tuple (the mapped value).
+    - The sort is stable, meaning that if two elements have the same mapped value, their relative order in the original list is preserved.
+
+5. **Reconstructing the Sorted List**:
+    ```python
+    return [nums[index] for _, index in mapped_with_index]
+    ```
+    - This line constructs the final sorted list.
+    - It extracts the original numbers from `nums` using their indices from the sorted list of tuples (`mapped_with_index`).
+    - The `_` is used to ignore the mapped value, and only the index is used to retrieve the original number.
+
+### Example
+Let's take an example to see how the code works:
+
+- `mapping = [9, 8, 7, 6, 5, 4, 3, 2, 1, 0]`
+- `nums = [123, 456, 789]`
+
+For each number in `nums`:
+- `123` becomes `876` (mapped digits are `8`, `7`, `6`)
+- `456` becomes `543` (mapped digits are `5`, `4`, `3`)
+- `789` becomes `210` (mapped digits are `2`, `1`, `0`)
+
+The list of tuples `mapped_with_index` will be:
+- `[(876, 0), (543, 1), (210, 2)]`
+
+After sorting by the mapped values:
+- `[(210, 2), (543, 1), (876, 0)]`
+
+Reconstructing the sorted list using the original indices:
+- `[789, 456, 123]`
+
+So the sorted `nums` based on the jumbled mapping is `[789, 456, 123]`.
