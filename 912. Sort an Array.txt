@@ -1,0 +1,141 @@
+912. Sort an Array
+Solution:
+
+class Solution:
+    def sortArray(self, nums: List[int]) -> List[int]:
+        # Auxiliary array to be used for merging
+        self.aux = [0] * len(nums)
+        self.mergeSort(nums, 0, len(nums) - 1)
+        return nums
+
+    def mergeSort(self, nums: List[int], left: int, right: int) -> None:
+        if left >= right:
+            return
+
+        mid = (left + right) // 2
+
+        self.mergeSort(nums, left, mid)
+        self.mergeSort(nums, mid + 1, right)
+
+        self.merge(nums, left, mid, right)
+
+    def merge(self, nums: List[int], left: int, mid: int, right: int) -> None:
+        # Copy both halves into the auxiliary array
+        for i in range(left, right + 1):
+            self.aux[i] = nums[i]
+
+        i, j = left, mid + 1
+        k = left
+
+        while i <= mid and j <= right:
+            if self.aux[i] <= self.aux[j]:
+                nums[k] = self.aux[i]
+                i += 1
+            else:
+                nums[k] = self.aux[j]
+                j += 1
+            k += 1
+
+        # Copy the remaining elements from the left half, if any
+        while i <= mid:
+            nums[k] = self.aux[i]
+            i += 1
+            k += 1
+
+        # Copy the remaining elements from the right half, if any
+        while j <= right:
+            nums[k] = self.aux[j]
+            j += 1
+            k += 1
+
+
+Explanation:
+
+Sure! Let's go through the code step by step:
+
+### `sortArray` Method
+
+```python
+def sortArray(self, nums: List[int]) -> List[int]:
+    # Auxiliary array to be used for merging
+    self.aux = [0] * len(nums)
+    self.mergeSort(nums, 0, len(nums) - 1)
+    return nums
+```
+
+1. **Auxiliary Array**: The method initializes an auxiliary array `self.aux` of the same size as `nums`. This array will be used during the merging process to temporarily hold elements.
+2. **Merge Sort**: It then calls the `mergeSort` method with the `nums` array and the indices of the first and last elements (0 and `len(nums) - 1` respectively).
+3. **Return**: Finally, it returns the sorted array.
+
+### `mergeSort` Method
+
+```python
+def mergeSort(self, nums: List[int], left: int, right: int) -> None:
+    if left >= right:
+        return
+
+    mid = (left + right) // 2
+
+    self.mergeSort(nums, left, mid)
+    self.mergeSort(nums, mid + 1, right)
+
+    self.merge(nums, left, mid, right)
+```
+
+1. **Base Case**: The method first checks if `left` is greater than or equal to `right`. If it is, the subarray has one or zero elements and is already sorted, so it returns immediately.
+2. **Find Midpoint**: It calculates the midpoint of the array segment as `(left + right) // 2`.
+3. **Recursive Sort**:
+   - It recursively sorts the left half of the array (`left` to `mid`).
+   - It recursively sorts the right half of the array (`mid + 1` to `right`).
+4. **Merge**: After sorting both halves, it merges them using the `merge` method.
+
+### `merge` Method
+
+```python
+def merge(self, nums: List[int], left: int, mid: int, right: int) -> None:
+    # Copy both halves into the auxiliary array
+    for i in range(left, right + 1):
+        self.aux[i] = nums[i]
+
+    i, j = left, mid + 1
+    k = left
+
+    while i <= mid and j <= right:
+        if self.aux[i] <= self.aux[j]:
+            nums[k] = self.aux[i]
+            i += 1
+        else:
+            nums[k] = self.aux[j]
+            j += 1
+        k += 1
+
+    # Copy the remaining elements from the left half, if any
+    while i <= mid:
+        nums[k] = self.aux[i]
+        i += 1
+        k += 1
+
+    # Copy the remaining elements from the right half, if any
+    while j <= right:
+        nums[k] = self.aux[j]
+        j += 1
+        k += 1
+```
+
+1. **Copy Elements**: The method starts by copying the elements from the segment of `nums` (from `left` to `right`) into the auxiliary array `self.aux`.
+2. **Merge Halves**:
+   - It initializes three pointers: `i` for the left half starting from `left`, `j` for the right half starting from `mid + 1`, and `k` for the position in `nums` where the next smallest element should go.
+   - It then enters a loop to merge elements back into `nums`. In each iteration:
+     - It compares the current elements of the left and right halves (`self.aux[i]` and `self.aux[j]`).
+     - The smaller element is placed back into `nums[k]`, and the corresponding pointer (`i` or `j`) and `k` are incremented.
+3. **Copy Remaining Elements**: After one of the halves is exhausted, it copies any remaining elements from the other half into `nums`:
+   - If there are remaining elements in the left half (`i` to `mid`), they are copied into `nums`.
+   - If there are remaining elements in the right half (`j` to `right`), they are copied into `nums`.
+
+### Summary
+
+- **Initialization**: The sorting starts by creating an auxiliary array and calling the recursive `mergeSort` function.
+- **Recursive Division**: The array is recursively divided into halves until subarrays with one element are reached.
+- **Merging**: The sorted subarrays are then merged back together using an auxiliary array to temporarily hold elements, ensuring the final array is sorted.
+
+This is a classic implementation of the merge sort algorithm, which is efficient with a time complexity of \(O(n \log n)\) and a space complexity of \(O(n)\).
