@@ -1,0 +1,106 @@
+1334. Find the City With the Smallest Number of Neighbors at a Threshold Distance
+Solution:
+
+class Solution:
+    def findTheCity(self, n: int, edges: List[List[int]], distanceThreshold: int) -> int:
+        # Create an adjacency list from the edge list
+        graph = [[] for _ in range(n)]
+        for u, v, w in edges:
+            graph[u].append((v, w))
+            graph[v].append((u, w))
+        
+        def dijkstra(start):
+            # Initialize the distances with infinity and the start distance with 0
+            dist = [float('inf')] * n
+            dist[start] = 0
+            pq = [(0, start)]  # (distance, node)
+            while pq:
+                curr_dist, u = heapq.heappop(pq)
+                if curr_dist > dist[u]:
+                    continue
+                for v, weight in graph[u]:
+                    if dist[u] + weight < dist[v]:
+                        dist[v] = dist[u] + weight
+                        heapq.heappush(pq, (dist[v], v))
+            return dist
+        
+        minReachableCities = float('inf')
+        bestCity = -1
+        
+        # Use Dijkstra's algorithm to find the shortest paths from each city
+        for i in range(n):
+            dist = dijkstra(i)
+            reachableCities = sum(1 for d in dist if d <= distanceThreshold)
+            if reachableCities <= minReachableCities:
+                minReachableCities = reachableCities
+                bestCity = i
+        
+        return bestCity
+
+Explanation:
+
+Sure! Let's break down the improved solution step-by-step to understand how it works and why it is more efficient:
+
+### Step-by-Step Explanation
+
+1. **Graph Representation**:
+   ```python
+   graph = [[] for _ in range(n)]
+   for u, v, w in edges:
+       graph[u].append((v, w))
+       graph[v].append((u, w))
+   ```
+   - The `graph` is created as an adjacency list where each index represents a city.
+   - Each city (node) points to a list of tuples, with each tuple containing a neighboring city and the weight (distance) to that neighbor.
+   - This representation allows efficient access to neighbors and their distances.
+
+2. **Dijkstra's Algorithm Function**:
+   ```python
+   def dijkstra(start):
+       dist = [float('inf')] * n
+       dist[start] = 0
+       pq = [(0, start)]  # (distance, node)
+       while pq:
+           curr_dist, u = heapq.heappop(pq)
+           if curr_dist > dist[u]:
+               continue
+           for v, weight in graph[u]:
+               if dist[u] + weight < dist[v]:
+                   dist[v] = dist[u] + weight
+                   heapq.heappush(pq, (dist[v], v))
+       return dist
+   ```
+   - `dist` is an array that keeps track of the shortest distance from the starting city to all other cities, initialized to infinity (`float('inf')`) except for the starting city itself, which is 0.
+   - `pq` is a priority queue (min-heap) initialized with the starting city and a distance of 0.
+   - The while loop processes nodes in the priority queue:
+     - `heapq.heappop(pq)` extracts the node `u` with the smallest distance `curr_dist`.
+     - If the extracted distance `curr_dist` is greater than the recorded distance `dist[u]`, it means we have already found a shorter path to `u`, so we skip this node.
+     - For each neighbor `v` of `u`, we check if going through `u` offers a shorter path to `v` (`dist[u] + weight < dist[v]`).
+     - If a shorter path is found, update `dist[v]` and push `(dist[v], v)` onto the priority queue.
+   - The function returns the `dist` array containing the shortest distances from the starting city to all other cities.
+
+3. **Finding the Best City**:
+   ```python
+   minReachableCities = float('inf')
+   bestCity = -1
+
+   for i in range(n):
+       dist = dijkstra(i)
+       reachableCities = sum(1 for d in dist if d <= distanceThreshold)
+       if reachableCities <= minReachableCities:
+           minReachableCities = reachableCities
+           bestCity = i
+
+   return bestCity
+   ```
+   - We initialize `minReachableCities` to infinity and `bestCity` to -1.
+   - For each city `i`, we use the `dijkstra` function to get the shortest distances from city `i` to all other cities.
+   - We count the number of cities that are reachable within the `distanceThreshold`.
+   - If the number of reachable cities is less than or equal to `minReachableCities`, we update `minReachableCities` and set `bestCity` to the current city `i`. If there's a tie, the latest city `i` with the same number of reachable cities will be chosen, as per the problem's requirement.
+   - Finally, we return the `bestCity`.
+
+### Efficiency
+- **Time Complexity**: The Dijkstra's algorithm runs in \(O((E + \log n) \times n)\) for each starting city, where \(E\) is the number of edges. This is more efficient compared to the \(O(n^3)\) complexity of the Floyd-Warshall algorithm.
+- **Space Complexity**: The space complexity is \(O(n + E)\) due to the adjacency list representation and the distance array, which is more efficient than the \(O(n^2)\) space used in the Floyd-Warshall algorithm.
+
+Overall, this implementation improves both runtime and memory usage while achieving the desired functionality.
