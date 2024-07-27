@@ -1,0 +1,140 @@
+2976. Minimum Cost to Convert String I
+Solution:
+
+class Solution:
+    def minimumCost(self, source: str, target: str, original: List[str], changed: List[str], cost: List[int]) -> int:
+        
+        # Initialize the 26x26 cost matrix with infinity
+        arr = [[sys.maxsize] * 26 for _ in range(26)]
+        
+        # Set the cost of transforming a character to itself to 0
+        for i in range(26):
+            arr[i][i] = 0
+        
+        # Populate the initial costs from original to changed characters
+        for i in range(len(original)):
+            val1 = ord(original[i]) - ord('a')
+            val2 = ord(changed[i]) - ord('a')
+            arr[val1][val2] = min(arr[val1][val2], cost[i])
+        
+        # Apply the Floyd-Warshall algorithm to find the minimum cost between all pairs of characters
+        for k in range(26):
+            for i in range(26):
+                for j in range(26):
+                    if arr[i][k] < sys.maxsize and arr[k][j] < sys.maxsize:
+                        arr[i][j] = min(arr[i][j], arr[i][k] + arr[k][j])
+        
+        # Calculate the total minimum cost to transform source into target
+        total_cost = 0
+        for i in range(len(source)):
+            val1 = ord(source[i]) - ord('a')
+            val2 = ord(target[i]) - ord('a')
+
+            if val1 != val2:
+                if arr[val1][val2] == sys.maxsize:
+                    return -1  # If there is no valid transformation path
+                total_cost += arr[val1][val2]
+        
+        return total_cost
+
+Explanation:
+
+Sure! Let's break down the `minimumCost` method step by step:
+
+### Function Definition
+
+```python
+def minimumCost(self, source: str, target: str, original: List[str], changed: List[str], cost: List[int]) -> int:
+```
+
+This function calculates the minimum cost to transform the `source` string into the `target` string, given a list of character transformations and their associated costs.
+
+### Initialize Cost Matrix
+
+```python
+arr = [[sys.maxsize] * 26 for _ in range(26)]
+```
+
+This line initializes a 26x26 matrix (`arr`) with the value `sys.maxsize` (a large number representing infinity). This matrix will store the minimum cost to transform each character to another character. The matrix size is 26x26 because there are 26 letters in the English alphabet.
+
+### Set Transformation Cost to Self as 0
+
+```python
+for i in range(26):
+    arr[i][i] = 0
+```
+
+This loop sets the diagonal elements of the cost matrix to 0. This means that the cost to transform a character into itself is 0 (no transformation needed).
+
+### Populate Initial Costs
+
+```python
+for i in range(len(original)):
+    val1 = ord(original[i]) - ord('a')
+    val2 = ord(changed[i]) - ord('a')
+    arr[val1][val2] = min(arr[val1][val2], cost[i])
+```
+
+Here, we populate the cost matrix with the given transformations and their costs:
+- `val1` and `val2` are the indices of the characters in the alphabet (0 for 'a', 1 for 'b', etc.).
+- We update the matrix to reflect the minimum cost for each transformation provided.
+
+### Floyd-Warshall Algorithm
+
+```python
+for k in range(26):
+    for i in range(26):
+        for j in range(26):
+            if arr[i][k] < sys.maxsize and arr[k][j] < sys.maxsize:
+                arr[i][j] = min(arr[i][j], arr[i][k] + arr[k][j])
+```
+
+This part implements the Floyd-Warshall algorithm, which finds the shortest paths between all pairs of vertices in a graph. In this context, it finds the minimum cost to transform any character into any other character by possibly using intermediate transformations:
+- `k` is the intermediate character.
+- `i` is the source character.
+- `j` is the target character.
+- We update `arr[i][j]` to be the minimum of its current value or the sum of transforming `i` to `k` and then `k` to `j`.
+
+### Calculate Total Minimum Cost
+
+```python
+total_cost = 0
+for i in range(len(source)):
+    val1 = ord(source[i]) - ord('a')
+    val2 = ord(target[i]) - ord('a')
+
+    if val1 != val2:
+        if arr[val1][val2] == sys.maxsize:
+            return -1  # If there is no valid transformation path
+        total_cost += arr[val1][val2]
+```
+
+Finally, we calculate the total cost to transform the `source` string into the `target` string:
+- For each character in the `source` string, find the corresponding character in the `target` string.
+- If they are different, check the cost in the matrix.
+  - If the cost is `sys.maxsize`, it means no valid transformation path exists, so return -1.
+  - Otherwise, add the cost to the total cost.
+
+### Return the Result
+
+```python
+return total_cost
+```
+
+This line returns the total minimum cost to transform the `source` string into the `target` string.
+
+### Example Usage
+
+To see how this function works with an example:
+
+```python
+sol = Solution()
+print(sol.minimumCost("abc", "def", ["a", "b", "c"], ["d", "e", "f"], [1, 2, 3]))
+```
+
+Here, we're trying to transform the string "abc" into "def" with the given transformations and costs:
+- Transform 'a' to 'd' with cost 1.
+- Transform 'b' to 'e' with cost 2.
+- Transform 'c' to 'f' with cost 3.
+
+The expected result is the sum of these costs, which is 6.
