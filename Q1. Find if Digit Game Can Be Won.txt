@@ -1,0 +1,58 @@
+Q1. Find if Digit Game Can Be Won
+Solution: 
+
+class Solution:
+    def canAliceWin(self, nums: List[int]) -> bool:
+        single_digit_sum = sum(num for num in nums if num < 10)
+        double_digit_sum = sum(num for num in nums if num >= 10)
+        total_sum = sum(nums)
+
+        return single_digit_sum > (total_sum - single_digit_sum) or double_digit_sum > (total_sum - double_digit_sum)
+
+
+Explanation:
+
+Sure! Let's go through the code step by step to understand how it works and what it aims to achieve:
+
+### Code Breakdown
+
+```python
+class Solution:
+    def canAliceWin(self, nums: List[int]) -> bool:
+        single_digit_sum = sum(num for num in nums if num < 10)
+        double_digit_sum = sum(num for num in nums if num >= 10)
+        total_sum = sum(nums)
+
+        return single_digit_sum > (total_sum - single_digit_sum) or double_digit_sum > (total_sum - double_digit_sum)
+```
+
+### Explanation
+
+1. **Class Definition**:
+   - `class Solution:`: This defines a class named `Solution`. In competitive programming, problems are often wrapped in a class for organizational purposes.
+
+2. **Method Definition**:
+   - `def canAliceWin(self, nums: List[int]) -> bool:`: This defines a method named `canAliceWin` which takes a list of integers (`nums`) as an input and returns a boolean value (`True` or `False`).
+
+3. **Calculating Sums**:
+   - `single_digit_sum = sum(num for num in nums if num < 10)`:
+     - This line computes the sum of all single-digit numbers in the list `nums`. It uses a generator expression to filter out numbers less than 10 and then sums them up.
+     - Example: If `nums = [1, 2, 13, 5]`, `single_digit_sum` would be `1 + 2 + 5 = 8`.
+   
+   - `double_digit_sum = sum(num for num in nums if num >= 10)`:
+     - This line computes the sum of all double-digit (or larger) numbers in the list `nums`. It uses a generator expression to filter out numbers greater than or equal to 10 and then sums them up.
+     - Example: If `nums = [1, 2, 13, 5]`, `double_digit_sum` would be `13`.
+
+   - `total_sum = sum(nums)`:
+     - This line computes the total sum of all numbers in the list `nums`.
+     - Example: If `nums = [1, 2, 13, 5]`, `total_sum` would be `1 + 2 + 13 + 5 = 21`.
+
+4. **Winning Condition**:
+   - `return single_digit_sum > (total_sum - single_digit_sum) or double_digit_sum > (total_sum - double_digit_sum)`:
+     - This line checks if either the sum of single-digit numbers is greater than the sum of all other numbers, or the sum of double-digit (and larger) numbers is greater than the sum of all other numbers.
+     - If either condition is true, it returns `True`, indicating Alice can win. Otherwise, it returns `False`.
+
+### Summary
+
+The `canAliceWin` method determines whether Alice can win based on the sums of single-digit and double-digit numbers in the list. It computes the sum of single-digit numbers and double-digit (or larger) numbers, and checks if either sum is greater than the sum of all other numbers. If either condition holds, Alice is considered to win, and the function returns `True`; otherwise, it returns `False`.
+

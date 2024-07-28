@@ -1,0 +1,116 @@
+Q2. Find the Count of Numbers Which Are Not Special
+Solution:
+
+class Solution:
+    def nonSpecialCount(self, l: int, r: int) -> int:
+        def is_prime(n: int) -> bool:
+            if n <= 1:
+                return False
+            if n <= 3:
+                return True
+            if n % 2 == 0 or n % 3 == 0:
+                return False
+            i = 5
+            while i * i <= n:
+                if n % i == 0 or n % (i + 2) == 0:
+                    return False
+                i += 6
+            return True
+        
+        special_numbers = set()
+
+        # We need to check for all prime numbers up to sqrt(r)
+        upper_limit = int(math.sqrt(r)) + 1
+
+        for i in range(2, upper_limit):
+            if is_prime(i):
+                square = i * i
+                if square >= l and square <= r:
+                    special_numbers.add(square)
+
+        total_numbers = r - l + 1
+        non_special_count = total_numbers - len(special_numbers)
+        
+        return non_special_count
+
+Explanation:
+
+Sure! Let's go through the `nonSpecialCount` method step by step to understand its functionality and logic.
+
+### Code Breakdown
+
+```python
+class Solution:
+    def nonSpecialCount(self, l: int, r: int) -> int:
+        def is_prime(n: int) -> bool:
+            if n <= 1:
+                return False
+            if n <= 3:
+                return True
+            if n % 2 == 0 or n % 3 == 0:
+                return False
+            i = 5
+            while i * i <= n:
+                if n % i == 0 or n % (i + 2) == 0:
+                    return False
+                i += 6
+            return True
+        
+        special_numbers = set()
+
+        # We need to check for all prime numbers up to sqrt(r)
+        upper_limit = int(math.sqrt(r)) + 1
+
+        for i in range(2, upper_limit):
+            if is_prime(i):
+                square = i * i
+                if square >= l and square <= r:
+                    special_numbers.add(square)
+
+        total_numbers = r - l + 1
+        non_special_count = total_numbers - len(special_numbers)
+        
+        return non_special_count
+```
+
+### Explanation
+
+1. **Class Definition**:
+   - `class Solution:`: Defines a class named `Solution`.
+
+2. **Method Definition**:
+   - `def nonSpecialCount(self, l: int, r: int) -> int:`: Defines a method named `nonSpecialCount` which takes two integers `l` and `r` as input and returns an integer.
+
+3. **Prime Check Function**:
+   - `def is_prime(n: int) -> bool:`: Defines a helper function to check if a given number `n` is a prime number.
+   - The function uses standard checks:
+     - `if n <= 1`: Returns `False` for numbers less than or equal to 1.
+     - `if n <= 3`: Returns `True` for numbers 2 and 3, which are prime.
+     - `if n % 2 == 0 or n % 3 == 0`: Returns `False` for numbers divisible by 2 or 3.
+     - The loop `while i * i <= n` checks for factors from 5 upwards, incrementing by 6 each time to skip multiples of 2 and 3. If any factor is found, it returns `False`, otherwise `True`.
+
+4. **Set of Special Numbers**:
+   - `special_numbers = set()`: Initializes an empty set to store "special" numbers (squares of prime numbers within the range).
+
+5. **Determine Upper Limit for Prime Checking**:
+   - `upper_limit = int(math.sqrt(r)) + 1`: Calculates the upper limit for prime checking as the integer part of the square root of `r` plus 1. This ensures we check all primes whose squares could potentially be within the range `[l, r]`.
+
+6. **Find Special Numbers**:
+   - `for i in range(2, upper_limit):`: Iterates through numbers from 2 to the upper limit.
+   - `if is_prime(i):`: Checks if `i` is a prime number.
+     - `square = i * i`: Calculates the square of the prime number.
+     - `if square >= l and square <= r:`: If the square lies within the range `[l, r]`, it is added to the `special_numbers` set.
+
+7. **Count Non-Special Numbers**:
+   - `total_numbers = r - l + 1`: Calculates the total number of integers in the range `[l, r]`.
+   - `non_special_count = total_numbers - len(special_numbers)`: Subtracts the count of special numbers from the total number of integers to get the count of non-special numbers.
+
+8. **Return Result**:
+   - `return non_special_count`: Returns the count of non-special numbers.
+
+### Summary
+
+The `nonSpecialCount` method calculates the number of non-special numbers in the range `[l, r]`, where special numbers are defined as squares of prime numbers within that range. It does this by:
+1. Identifying prime numbers up to the square root of `r`.
+2. Calculating their squares and checking if they fall within the range `[l, r]`.
+3. Subtracting the count of these special numbers from the total count of numbers in the range to determine the count of non-special numbers.

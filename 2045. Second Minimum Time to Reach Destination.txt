@@ -1,0 +1,103 @@
+2045. Second Minimum Time to Reach Destination
+Solution:
+
+from collections import deque
+from typing import List
+
+class Solution:
+    def secondMinimum(self, n: int, edges: List[List[int]], time: int, change: int) -> int:
+        g = [[] for _ in range(n + 1)]
+
+        for u, v in edges:
+            g[u].append(v)
+            g[v].append(u)
+        
+        q = deque([(1, 1)])
+        dist1 = [-1] * (n + 1)
+        dist2 = [-1] * (n + 1)
+        dist1[1] = 0
+
+        while q:
+            x, freq = q.popleft()
+            t = dist1[x] if freq == 1 else dist2[x]
+
+            if (t // change) % 2:
+                t = change * (t // change + 1) + time
+            else:
+                t += time
+
+            for y in g[x]:
+                if dist1[y] == -1:
+                    dist1[y] = t
+                    q.append((y, 1))
+                elif dist2[y] == -1 and dist1[y] != t:
+                    if y == n:
+                        return t
+                    dist2[y] = t
+                    q.append((y, 2))
+
+        return 0
+Explanation:
+
+Certainly! Let's break down the algorithm step by step:
+
+### Step-by-Step Explanation
+
+1. **Graph Initialization**:
+    - `g = [[] for _ in range(n + 1)]`:
+      - Create an adjacency list `g` for the graph. Since nodes are numbered from 1 to `n`, we use a list of lists where `g[i]` will hold the neighbors of node `i`.
+
+2. **Building the Graph**:
+    - `for u, v in edges:`
+      - Loop through each edge `(u, v)` and add `v` to the list of neighbors for `u` and vice versa.
+      - `g[u].append(v)`
+      - `g[v].append(u)`
+
+3. **Initialization for BFS**:
+    - `q = deque([(1, 1)])`:
+      - Use a deque for BFS, starting from node 1 with the frequency flag set to 1 (indicating the first visit).
+    - `dist1 = [-1] * (n + 1)`:
+      - Initialize `dist1` to store the shortest time to reach each node, initially set to -1 (meaning not visited).
+    - `dist2 = [-1] * (n + 1)`:
+      - Initialize `dist2` to store the second shortest time to reach each node, initially set to -1 (meaning not visited).
+    - `dist1[1] = 0`:
+      - The distance to the starting node (node 1) is 0.
+
+4. **Breadth-First Search (BFS)**:
+    - `while q:`:
+      - Process the queue until it's empty.
+    - `x, freq = q.popleft()`:
+      - Dequeue a node `x` and its frequency flag `freq`.
+    - `t = dist1[x] if freq == 1 else dist2[x]`:
+      - Determine the current time `t` based on whether it's the first or second visit to node `x`.
+
+5. **Time Calculation**:
+    - If `(t // change) % 2:`:
+      - Check if the current time falls within a red light cycle. If `True`, we need to wait for the green light.
+      - `t = change * (t // change + 1) + time`:
+        - Calculate the time after waiting for the next green light and adding the travel time.
+    - Else:
+      - `t += time`:
+        - If it's a green light, simply add the travel time.
+
+6. **Processing Neighbors**:
+    - `for y in g[x]:`:
+      - Iterate through each neighbor `y` of node `x`.
+    - `if dist1[y] == -1:`:
+      - If `y` hasn't been visited before, update its first visit time.
+      - `dist1[y] = t`
+      - `q.append((y, 1))`
+    - `elif dist2[y] == -1 and dist1[y] != t:`:
+      - If `y` has been visited once but not twice, and the current time `t` is different from the first visit time, update the second visit time.
+      - If `y == n`:
+        - If `y` is the target node `n`, return the second shortest time `t` as the result.
+      - `dist2[y] = t`
+      - `q.append((y, 2))`
+
+7. **Return Result**:
+    - `return 0`:
+      - If no valid path is found (which theoretically shouldn't happen in a valid connected graph with the given problem constraints), return 0 as a fallback.
+
+### Summary
+
+The algorithm uses a BFS approach to explore the graph, keeping track of the shortest and second shortest times to reach each node. It handles the traffic light cycles by adjusting the travel time based on whether the current time falls within a red or green light period. The solution aims to find the second shortest time to reach the target node `n`.
