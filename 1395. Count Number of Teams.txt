@@ -1,0 +1,154 @@
+1395. Count Number of Teams
+Solution:
+
+class Solution:
+    def numTeams(self, rating: List[int]) -> int:
+        l = []
+        sr = sorted(rating)
+        low = {}
+        for idx, r in enumerate(sr):
+            low[r] = idx
+        res = 0
+        n = len(rating)
+        for idx, r in enumerate(rating):
+            i = bisect.bisect(l, r)
+            l.insert(i, r)
+            j = low[r] - i
+            res += i * (n - 1 - idx - j) + j * (idx - i)
+        return res
+    
+    def numTeams2(self, rating: List[int]) -> int:
+        ans, n = 0, len(rating)
+        for j in range(n):
+            # for any middle position j find counts less than rating[j] in [0..j) and (j..n) ranges
+            llt, lgt = 0, 0
+            for i in range(j):
+                llt += rating[i] < rating[j]
+                lgt += rating[i] > rating[j]
+            rlt, rgt = 0, 0
+            for k in range(j + 1, n):
+                rlt += rating[k] < rating[j]
+                rgt += rating[k] > rating[j]
+            ans += llt * rgt + lgt * rlt 
+        return ans
+
+    # bf, tle
+    def numTeams1(self, rating: List[int]) -> int:
+        ans, n = 0, len(rating)
+        for i in range(n):
+            for j in range(i + 1, n):
+                for k in range(j + 1, n):
+                    ans += 1 if rating[i] < rating[j] < rating[k] or rating[i] > rating[j] > rating[k] else 0
+        return ans
+
+Explanation:
+
+Certainly! Here's an explanation of each function in the `Solution` class, which aims to count the number of valid teams (triplets) in a given list of ratings. A valid team consists of three soldiers with ratings such that either the ratings form a strictly increasing sequence or a strictly decreasing sequence.
+
+### Function 1: `numTeams`
+
+This function uses a combination of sorting, binary search, and counting to determine the number of valid teams.
+
+1. **Initialization:**
+   - `l`: An empty list to keep track of the ratings processed so far.
+   - `sr`: A sorted version of the input `rating` list.
+   - `low`: A dictionary to store the index of each rating in the sorted list.
+
+2. **Constructing the `low` dictionary:**
+   ```python
+   for idx, r in enumerate(sr):
+       low[r] = idx
+   ```
+   This loop maps each rating to its index in the sorted list.
+
+3. **Counting valid teams:**
+   - `res`: Initializes the result counter to 0.
+   - `n`: Stores the length of the `rating` list.
+
+   ```python
+   for idx, r in enumerate(rating):
+       i = bisect.bisect(l, r)
+       l.insert(i, r)
+       j = low[r] - i
+       res += i * (n - 1 - idx - j) + j * (idx - i)
+   ```
+   - For each rating in the original list:
+     - `i`: The position where the current rating `r` would be inserted in the list `l` to keep it sorted.
+     - Insert the rating `r` into `l`.
+     - `j`: The number of elements greater than `r` that have already been processed.
+     - Update `res` by adding the number of valid teams where `r` is the middle soldier.
+
+4. **Return the result:**
+   ```python
+   return res
+   ```
+
+### Function 2: `numTeams2`
+
+This function uses a brute force approach with some optimizations to count the number of valid teams.
+
+1. **Initialization:**
+   - `ans`: Initializes the result counter to 0.
+   - `n`: Stores the length of the `rating` list.
+
+2. **Main Loop:**
+   ```python
+   for j in range(n):
+   ```
+   - For each index `j` in the `rating` list (considered as the middle position of the triplet):
+
+3. **Counting elements less than and greater than `rating[j]` to the left and right:**
+   - `llt` (left less than): Count of ratings less than `rating[j]` in the range [0..j).
+   - `lgt` (left greater than): Count of ratings greater than `rating[j]` in the range [0..j).
+   - `rlt` (right less than): Count of ratings less than `rating[j]` in the range (j..n).
+   - `rgt` (right greater than): Count of ratings greater than `rating[j]` in the range (j..n).
+
+   ```python
+   for i in range(j):
+       llt += rating[i] < rating[j]
+       lgt += rating[i] > rating[j]
+
+   for k in range(j + 1, n):
+       rlt += rating[k] < rating[j]
+       rgt += rating[k] > rating[j]
+   ```
+
+4. **Updating the result counter:**
+   ```python
+   ans += llt * rgt + lgt * rlt
+   ```
+   - Add the number of valid teams where `rating[j]` is the middle soldier.
+
+5. **Return the result:**
+   ```python
+   return ans
+   ```
+
+### Function 3: `numTeams1`
+
+This is a brute force approach that checks all possible triplets to count the valid teams.
+
+1. **Initialization:**
+   - `ans`: Initializes the result counter to 0.
+   - `n`: Stores the length of the `rating` list.
+
+2. **Triple Nested Loop:**
+   ```python
+   for i in range(n):
+       for j in range(i + 1, n):
+           for k in range(j + 1, n):
+               ans += 1 if rating[i] < rating[j] < rating[k] or rating[i] > rating[j] > rating[k] else 0
+   ```
+   - Iterate through all possible triplets `(i, j, k)` such that `i < j < k`.
+   - Check if the triplet forms a valid team (either strictly increasing or strictly decreasing).
+   - Increment the result counter if the condition is met.
+
+3. **Return the result:**
+   ```python
+   return ans
+   ```
+
+### Summary
+- **`numTeams`**: Uses a combination of sorting, binary search, and counting to achieve an efficient solution.
+- **`numTeams2`**: Uses a middle point approach with two passes (left and right) to count valid teams.
+- **`numTeams1`**: A brute force approach that checks all possible triplets, which is simple but inefficient for large input sizes.
