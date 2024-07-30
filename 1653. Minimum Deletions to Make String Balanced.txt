@@ -1,0 +1,105 @@
+1653. Minimum Deletions to Make String Balanced
+Solution:
+
+class Solution:
+    def minimumDeletions(self, s: str) -> int:
+        res = count = 0
+        for c in s:
+            if c == 'b':
+                count += 1
+            elif count:
+                res += 1
+                count -= 1
+        return res
+
+Explanation:
+
+Sure, let's break down the code and explain how it works.
+
+### Problem Statement
+The task is to find the minimum number of deletions required to make a given string `s` balanced. A string is considered balanced if there are no 'a' characters before any 'b' characters. In other words, all 'a's should come before all 'b's.
+
+### Code Explanation
+
+Here's the provided solution again for reference:
+
+```python
+class Solution:
+    def minimumDeletions(self, s: str) -> int:
+        res = count = 0
+        for c in s:
+            if c == 'b':
+                count += 1
+            elif count:
+                res += 1
+                count -= 1
+        return res
+```
+
+Now, let's go through the code step by step:
+
+1. **Initialization**:
+   ```python
+   res = count = 0
+   ```
+   - `res` is used to keep track of the number of deletions needed.
+   - `count` is used to keep track of the number of 'b's encountered so far.
+
+2. **Loop through the string**:
+   ```python
+   for c in s:
+   ```
+   This loop iterates through each character `c` in the string `s`.
+
+3. **Check if the character is 'b'**:
+   ```python
+   if c == 'b':
+       count += 1
+   ```
+   - If the character is 'b', increment the `count` by 1. This keeps track of how many 'b's have been seen.
+
+4. **Check if the character is 'a' and there are previous 'b's**:
+   ```python
+   elif count:
+       res += 1
+       count -= 1
+   ```
+   - If the character is 'a' and there are one or more 'b's before it (i.e., `count` is greater than 0), it means we have to remove this 'a' to make the string balanced.
+   - Increment `res` by 1 to count this deletion.
+   - Decrement `count` by 1 because one 'b' can now be "paired" with this 'a' (conceptually thinking of it as removing this 'a' to balance the sequence).
+
+5. **Return the result**:
+   ```python
+   return res
+   ```
+   - After the loop finishes, `res` contains the minimum number of deletions needed to make the string balanced.
+
+### Example
+
+Let's go through an example to understand the flow:
+
+Suppose the input string is `s = "aababbab"`.
+
+- Start: `res = 0`, `count = 0`
+- Iteration 1: `c = 'a'`
+  - `count = 0`, nothing changes.
+- Iteration 2: `c = 'a'`
+  - `count = 0`, nothing changes.
+- Iteration 3: `c = 'b'`
+  - `count += 1` -> `count = 1`
+- Iteration 4: `c = 'a'`
+  - `count > 0`, so `res += 1` -> `res = 1`
+  - `count -= 1` -> `count = 0`
+- Iteration 5: `c = 'b'`
+  - `count += 1` -> `count = 1`
+- Iteration 6: `c = 'b'`
+  - `count += 1` -> `count = 2`
+- Iteration 7: `c = 'a'`
+  - `count > 0`, so `res += 1` -> `res = 2`
+  - `count -= 1` -> `count = 1`
+- Iteration 8: `c = 'b'`
+  - `count += 1` -> `count = 2`
+
+Final values: `res = 2`, `count = 2`
+
+Thus, the minimum number of deletions required to make the string "aababbab" balanced is 2.
