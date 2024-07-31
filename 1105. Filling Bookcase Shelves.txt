@@ -1,0 +1,96 @@
+1105. Filling Bookcase Shelves
+Solution:
+
+class Solution:
+    def minHeightShelves(self, books: List[List[int]], shelfWidth: int) -> int: 
+        n = len(books)
+        f = [0] * (n + 1)
+        
+        for i in range(1, n + 1):
+            width = 0
+            height = 0
+            f[i] = float('inf')
+            
+            for j in range(i, 0, -1):
+                width += books[j - 1][0]
+                if width > shelfWidth:
+                    break
+                height = max(height, books[j - 1][1])
+                f[i] = min(f[i], f[j - 1] + height)
+        
+        return f[n]
+
+Explanation:
+
+Sure, let's break down and explain the `minHeightShelves` function step by step:
+
+### Problem Description
+You are given a list of books, where each book is represented by a list `[width, height]`. You need to place these books on a shelf with a given maximum width such that the total height of the shelf is minimized. The books must be placed in the order they are given.
+
+### Dynamic Programming Approach
+We use dynamic programming to find the minimum height needed to place all the books on the shelves.
+
+### Variables
+- `books`: List of books where each book is represented as `[width, height]`.
+- `shelfWidth`: The maximum width of the shelf.
+- `n`: The number of books.
+- `f`: A list where `f[i]` represents the minimum height of the shelf needed to place the first `i` books.
+
+### Steps
+
+1. **Initialization**:
+    ```python
+    n = len(books)
+    f = [0] * (n + 1)
+    ```
+    - `n` is the number of books.
+    - `f` is initialized to a list of zeros of size `n + 1`. This will store the minimum heights for different numbers of books.
+
+2. **Dynamic Programming Calculation**:
+    ```python
+    for i in range(1, n + 1):
+        width = 0
+        height = 0
+        f[i] = float('inf')
+    ```
+    - Iterate over each book (from 1 to n).
+    - `width` and `height` are used to track the cumulative width and maximum height of the current shelf segment.
+    - `f[i]` is initially set to infinity for each `i` to ensure we can find the minimum height when comparing.
+
+3. **Inner Loop to Determine the Best Shelf Configuration**:
+    ```python
+        for j in range(i, 0, -1):
+            width += books[j - 1][0]
+            if width > shelfWidth:
+                break
+            height = max(height, books[j - 1][1])
+            f[i] = min(f[i], f[j - 1] + height)
+    ```
+    - Iterate backwards from the current book `i` to the first book.
+    - Accumulate the width of books.
+    - If the cumulative width exceeds the `shelfWidth`, break the loop (since we can't fit more books on this shelf).
+    - Track the maximum height of the current segment of books.
+    - Update `f[i]` to be the minimum of its current value and the height of the current segment plus the minimum height needed for the previous segment (`f[j - 1]`).
+
+4. **Return the Result**:
+    ```python
+    return f[n]
+    ```
+    - The value `f[n]` will contain the minimum height needed to place all `n` books on the shelf.
+
+### Example
+Suppose `books = [[1, 3], [2, 4], [3, 2]]` and `shelfWidth = 6`.
+
+1. For `i = 1`, we only consider the first book `[1, 3]`.
+   - `width = 1`, `height = 3`, `f[1] = 3`.
+
+2. For `i = 2`, we consider books `[1, 3]` and `[2, 4]`.
+   - `width = 2`, `height = 4` for book `[2, 4]` alone, `f[2] = 7` (placing book 2 on a new shelf).
+   - Combine both books on one shelf, `width = 3`, `height = 4`, `f[2] = 4`.
+
+3. For `i = 3`, we consider books `[1, 3]`, `[2, 4]`, and `[3, 2]`.
+   - `width = 3`, `height = 2` for book `[3, 2]` alone, `f[3] = 6`.
+   - Combine book 3 with book 2, `width = 5`, `height = 4`, `f[3] = 7` (placing book 3 on a new shelf).
+   - Combine all three books, `width = 6`, `height = 4`, `f[3] = 4`.
+
+Thus, the minimum height needed to place all books is `f[3] = 4`.
