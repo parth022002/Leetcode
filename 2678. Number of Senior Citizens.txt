@@ -1,0 +1,100 @@
+2678. Number of Senior Citizens
+Solution:
+
+class Solution:
+    def countSeniors(self, details: List[str]) -> int:
+        count = 0
+        for detail in details:
+            try:
+                # Extract the age from the string
+                age = int(detail[11:13])
+                # Check if the age is greater than 60
+                if age > 60:
+                    count += 1
+            except ValueError:
+                # Handle the case where conversion to int fails
+                print(f"Invalid age format in detail: {detail}")
+        return count
+
+Explanation:
+
+Sure, let's go through the code step by step:
+
+```python
+from typing import List
+
+class Solution:
+    def countSeniors(self, details: List[str]) -> int:
+        count = 0
+        for detail in details:
+            try:
+                # Extract the age from the string
+                age = int(detail[11:13])
+                # Check if the age is greater than 60
+                if age > 60:
+                    count += 1
+            except ValueError:
+                # Handle the case where conversion to int fails
+                print(f"Invalid age format in detail: {detail}")
+        return count
+```
+
+### Explanation
+
+1. **Importing List**:
+   ```python
+   from typing import List
+   ```
+   - This import statement allows us to use `List` for type hinting, making the code more readable and understandable.
+
+2. **Defining the Class**:
+   ```python
+   class Solution:
+   ```
+   - This defines a class named `Solution` which contains our method.
+
+3. **Defining the Method**:
+   ```python
+   def countSeniors(self, details: List[str]) -> int:
+   ```
+   - This defines a method `countSeniors` that takes a list of strings (`details`) and returns an integer.
+
+4. **Initializing the Counter**:
+   ```python
+   count = 0
+   ```
+   - This initializes a variable `count` to 0. This variable will be used to keep track of the number of seniors (people with age > 60).
+
+5. **Looping Through Details**:
+   ```python
+   for detail in details:
+   ```
+   - This loop iterates over each string in the `details` list.
+
+6. **Extracting and Checking Age**:
+   ```python
+   try:
+       # Extract the age from the string
+       age = int(detail[11:13])
+       # Check if the age is greater than 60
+       if age > 60:
+           count += 1
+   except ValueError:
+       # Handle the case where conversion to int fails
+       print(f"Invalid age format in detail: {detail}")
+   ```
+   - `try`: This block is used to attempt operations that might cause an error.
+   - `age = int(detail[11:13])`: This extracts a substring from `detail` (specifically characters at positions 11 and 12) and converts it to an integer. The assumption here is that these two characters represent the age.
+   - `if age > 60`: This checks if the extracted age is greater than 60.
+   - `count += 1`: If the age is greater than 60, the `count` is incremented by 1.
+   - `except ValueError`: If the conversion to integer fails (for instance, if the substring is not a valid number), this block will execute.
+   - `print(f"Invalid age format in detail: {detail}")`: This prints a message indicating that there was an invalid age format in the current `detail`.
+
+7. **Returning the Count**:
+   ```python
+   return count
+   ```
+   - After the loop has processed all the strings in `details`, the method returns the value of `count`, which represents the number of seniors found.
+
+### Summary
+The method `countSeniors` iterates through a list of strings, extracts the age from each string (assuming it's located at a specific position), and counts how many of these ages are greater than 60. If it encounters a string where the age can't be extracted or isn't in the correct format, it prints an error message and continues with the next string.
