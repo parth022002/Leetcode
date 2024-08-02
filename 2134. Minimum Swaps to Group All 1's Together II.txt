@@ -1,0 +1,70 @@
+2134. Minimum Swaps to Group All 1's Together II
+Solution:
+
+class Solution:
+    def minSwaps(self, nums: List[int]) -> int:
+        n = len(nums)
+        n1 = sum(nums)  # Total number of 1's in the array
+        n0 = n - n1     # Total number of 0's in the array
+
+        # Calculate the number of 1's in the initial window of size n1
+        current_ones = sum(nums[:n1])
+        min_swaps = n1 - current_ones  # Initial number of swaps needed
+
+        # Use sliding window to calculate number of 1's in all windows of size n1
+        for i in range(1, n):
+            # Update current_ones for the new window starting at index i
+            current_ones = current_ones - nums[i - 1] + nums[(i + n1 - 1) % n]
+            # Calculate the number of swaps needed for the current window
+            min_swaps = min(min_swaps, n1 - current_ones)
+
+        return min_swaps
+
+Explanation:
+
+Sure! Let's break down the `minSwaps` function to understand how it works step by step:
+
+### Problem Statement
+The goal is to determine the minimum number of swaps needed to group all the `1`s together in a circular array. The circular nature means that after the last element, the array wraps around to the first element.
+
+### Function Explanation
+
+1. **Initial Setup**:
+    ```python
+    n = len(nums)
+    n1 = sum(nums)  # Total number of 1's in the array
+    n0 = n - n1     # Total number of 0's in the array
+    ```
+    - `n` is the length of the input array `nums`.
+    - `n1` is the total number of `1`s in the array.
+    - `n0` is the total number of `0`s in the array (though it is not used further in the function).
+
+2. **Initial Window Calculation**:
+    ```python
+    current_ones = sum(nums[:n1])
+    min_swaps = n1 - current_ones  # Initial number of swaps needed
+    ```
+    - `current_ones` is the number of `1`s in the initial window of size `n1` (the size of the window is the same as the number of `1`s in the array).
+    - `min_swaps` is initialized as the number of `0`s in the initial window, which is calculated as `n1 - current_ones`. This represents the initial number of swaps needed to group the `1`s together within this window.
+
+3. **Sliding Window**:
+    ```python
+    for i in range(1, n):
+        current_ones = current_ones - nums[i - 1] + nums[(i + n1 - 1) % n]
+        min_swaps = min(min_swaps, n1 - current_ones)
+    ```
+    - This loop iterates from index `1` to `n-1`, effectively sliding the window one element to the right in each iteration.
+    - `current_ones` is updated by subtracting the element that is sliding out of the window (`nums[i - 1]`) and adding the element that is entering the window (`nums[(i + n1 - 1) % n]`). The modulo operation `% n` ensures the circular nature of the array.
+    - `min_swaps` is updated to be the minimum of its current value and the number of swaps needed for the current window (`n1 - current_ones`).
+
+4. **Return the Result**:
+    ```python
+    return min_swaps
+    ```
+    - Finally, the function returns the minimum number of swaps needed to group all the `1`s together in the array.
+
+### Summary
+- The function initializes by calculating the number of `1`s in the initial window.
+- It then uses a sliding window technique to efficiently calculate the number of `1`s in each possible window of the same size by updating the count rather than recalculating it from scratch.
+- It keeps track of the minimum number of swaps needed across all possible windows.
+- The overall time complexity of this approach is \(O(n)\), making it efficient for large input arrays.
