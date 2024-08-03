@@ -1,0 +1,56 @@
+1460. Make Two Arrays Equal by Reversing Subarrays
+Solution:
+
+class Solution:
+    def canBeEqual(self, target: List[int], arr: List[int]) -> bool:
+        return Counter(target) == Counter(arr)
+
+
+Explanation:
+
+Sure, let's break down the code step by step:
+
+```python
+from typing import List
+from collections import Counter
+
+class Solution:
+    def canBeEqual(self, target: List[int], arr: List[int]) -> bool:
+        return Counter(target) == Counter(arr)
+```
+
+### Imports
+- `from typing import List`: This import is used for type hinting. It helps specify that the `target` and `arr` parameters are expected to be lists of integers.
+- `from collections import Counter`: `Counter` is a class from the `collections` module that helps count the frequency of elements in a list.
+
+### Class Definition
+- `class Solution`: This defines a class named `Solution`.
+
+### Method Definition
+- `def canBeEqual(self, target: List[int], arr: List[int]) -> bool`: This defines a method named `canBeEqual` within the `Solution` class. It takes three parameters:
+  - `self`: Refers to the instance of the class.
+  - `target`: A list of integers.
+  - `arr`: Another list of integers.
+  The method is expected to return a boolean value (`bool`).
+
+### Method Body
+- `return Counter(target) == Counter(arr)`: This line performs the main logic of the method:
+  - `Counter(target)`: Creates a `Counter` object from the `target` list. A `Counter` is essentially a dictionary where the keys are elements from the list and the values are the counts of those elements.
+  - `Counter(arr)`: Similarly, creates a `Counter` object from the `arr` list.
+  - `Counter(target) == Counter(arr)`: Compares the two `Counter` objects. If they are equal, it means both lists have the same elements with the same frequencies, regardless of the order of elements in the lists.
+  - The `return` statement returns `True` if the `Counter` objects are equal, and `False` otherwise.
+
+### Example
+To illustrate, consider the following example:
+```python
+target = [1, 2, 2, 3]
+arr = [2, 3, 1, 2]
+
+# Counter(target) would be Counter({2: 2, 1: 1, 3: 1})
+# Counter(arr) would be Counter({2: 2, 3: 1, 1: 1})
+
+# Since both Counters are equal, canBeEqual would return True
+```
+
+In summary, this method checks if the two input lists can be made identical by rearranging their elements, leveraging the `Counter` class to compare the frequency of each element in the lists.
+
