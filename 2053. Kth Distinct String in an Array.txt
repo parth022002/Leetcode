@@ -1,0 +1,101 @@
+2053. Kth Distinct String in an Array
+Solution:
+
+class Solution:
+    def kthDistinct(self, arr: List[str], k: int) -> str:
+        count = 0
+        map = {}
+
+        # Count occurrences of each string
+        for item in arr:
+            if item in map:
+                map[item] = False  # Mark as not distinct
+            else:
+                map[item] = True  # Mark as distinct
+
+        # Find the k-th distinct string
+        for item in arr:
+            if map[item]:  # Check if it's distinct
+                count += 1
+                if count == k:
+                    return item
+
+        return ""
+
+Explanation:
+
+The given Python function `kthDistinct` is designed to find the k-th distinct string in a list of strings `arr`. Here’s a detailed explanation of how it works:
+
+### Explanation
+
+1. **Initialization**:
+   - `count` is initialized to `0`. This variable will be used to count the number of distinct strings encountered.
+   - `map` is initialized as an empty dictionary. This dictionary will keep track of the distinct status of each string in `arr`.
+
+2. **First Pass: Count Occurrences**:
+   - The first `for` loop iterates through each string `item` in the list `arr`.
+   - If `item` is already in the dictionary `map`, it means `item` has appeared before, so it is marked as `False` in the dictionary (indicating that it is not distinct).
+   - If `item` is not in the dictionary, it is added with a value of `True` (indicating that it is distinct).
+
+3. **Second Pass: Find the k-th Distinct String**:
+   - The second `for` loop iterates through each string `item` in the list `arr` again.
+   - For each `item`, it checks if it is marked as `True` in the dictionary `map` (indicating that it is distinct).
+   - If `item` is distinct, `count` is incremented by 1.
+   - If `count` equals `k`, it means we have found the k-th distinct string, so `item` is returned.
+   
+4. **Return Empty String**:
+   - If the loop completes without finding the k-th distinct string, an empty string `""` is returned.
+
+### Example
+
+Let’s go through an example:
+
+```python
+arr = ["a", "b", "a", "c", "b", "d"]
+k = 2
+```
+
+- **First Pass**:
+  - Iteration 1: `item = "a"` → `map = {"a": True}`
+  - Iteration 2: `item = "b"` → `map = {"a": True, "b": True}`
+  - Iteration 3: `item = "a"` → `map = {"a": False, "b": True}`
+  - Iteration 4: `item = "c"` → `map = {"a": False, "b": True, "c": True}`
+  - Iteration 5: `item = "b"` → `map = {"a": False, "b": False, "c": True}`
+  - Iteration 6: `item = "d"` → `map = {"a": False, "b": False, "c": True, "d": True}`
+
+- **Second Pass**:
+  - Iteration 1: `item = "a"` → `map["a"]` is `False`, skip.
+  - Iteration 2: `item = "b"` → `map["b"]` is `False`, skip.
+  - Iteration 3: `item = "c"` → `map["c"]` is `True`, `count = 1`
+  - Iteration 4: `item = "d"` → `map["d"]` is `True`, `count = 2`
+
+  Since `count` now equals `k`, the function returns `"d"`.
+
+### Code
+
+Here is the code for the solution:
+
+```python
+class Solution:
+    def kthDistinct(self, arr: List[str], k: int) -> str:
+        count = 0
+        map = {}
+
+        # Count occurrences of each string
+        for item in arr:
+            if item in map:
+                map[item] = False  # Mark as not distinct
+            else:
+                map[item] = True  # Mark as distinct
+
+        # Find the k-th distinct string
+        for item in arr:
+            if map[item]:  # Check if it's distinct
+                count += 1
+                if count == k:
+                    return item
+
+        return ""
+```
+
+This solution efficiently determines the k-th distinct string by using a dictionary to track the distinct status of each string and then iterating through the list again to find the desired string.
