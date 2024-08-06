@@ -1,0 +1,102 @@
+3016. Minimum Number of Pushes to Type Word II
+Solution:
+
+class Solution:
+    def minimumPushes(self, word: str) -> int:
+        # Count the frequency of each character in the word
+        freq_counts = Counter(word).values()
+        
+        # Sort frequencies in descending order
+        sorted_freqs = sorted(freq_counts, reverse=True)
+        
+        # Calculate the minimum number of pushes required
+        min_pushes = sum(f * (i // 8 + 1) for i, f in enumerate(sorted_freqs))
+        
+        return min_pushes
+        
+
+Explanation:
+
+Here's an explanation of the improved `minimumPushes` function step-by-step:
+
+### Function Purpose
+
+The purpose of the `minimumPushes` function is to calculate the minimum number of "pushes" required to type a given word on a virtual keyboard where each character push is influenced by the frequency of its occurrence and its position in sorted order.
+
+### Code Explanation
+
+```python
+from collections import Counter
+
+class Solution:
+    def minimumPushes(self, word: str) -> int:
+        # Count the frequency of each character in the word
+        freq_counts = Counter(word).values()
+        
+        # Sort frequencies in descending order
+        sorted_freqs = sorted(freq_counts, reverse=True)
+        
+        # Calculate the minimum number of pushes required
+        min_pushes = sum(f * (i // 8 + 1) for i, f in enumerate(sorted_freqs))
+        
+        return min_pushes
+```
+
+1. **Import Counter**:
+    ```python
+    from collections import Counter
+    ```
+    - Import the `Counter` class from the `collections` module to count the occurrences of each character in the word.
+
+2. **Class and Method Definition**:
+    ```python
+    class Solution:
+        def minimumPushes(self, word: str) -> int:
+    ```
+    - Define a class `Solution` with a method `minimumPushes` that takes a string `word` as input.
+
+3. **Count Character Frequencies**:
+    ```python
+    freq_counts = Counter(word).values()
+    ```
+    - Use `Counter(word).values()` to get the frequency of each character in the word. This returns a collection of frequency values.
+
+4. **Sort Frequencies**:
+    ```python
+    sorted_freqs = sorted(freq_counts, reverse=True)
+    ```
+    - Sort these frequency values in descending order. This means the most frequent characters will come first.
+
+5. **Calculate Minimum Pushes**:
+    ```python
+    min_pushes = sum(f * (i // 8 + 1) for i, f in enumerate(sorted_freqs))
+    ```
+    - Calculate the total number of pushes required:
+        - `enumerate(sorted_freqs)` provides each frequency `f` along with its index `i`.
+        - For each frequency `f`, the number of pushes is multiplied by `(i // 8 + 1)`. This formula ensures that every 8 characters (i.e., from index 0-7, 8-15, etc.) increment the push count by one. The logic behind `i // 8 + 1` is to increase the "effort" for characters based on their rank in the sorted frequency list.
+        - The `sum()` function aggregates these values to get the total minimum pushes.
+
+6. **Return the Result**:
+    ```python
+    return min_pushes
+    ```
+    - Return the calculated minimum number of pushes.
+
+### Example
+
+Let's take an example to illustrate the function:
+
+```python
+solution = Solution()
+result = solution.minimumPushes("aabbccddeeffgg")
+print(result)
+```
+
+- For the input "aabbccddeeffgg", each character appears twice.
+- Frequencies: `[2, 2, 2, 2, 2, 2, 2]`
+- Sorted Frequencies: `[2, 2, 2, 2, 2, 2, 2]`
+- Push calculation:
+  - For `i=0` to `i=7`: Pushes = `2 * (0 // 8 + 1) = 2 * 1 = 2`
+- Sum of pushes: `2 + 2 + 2 + 2 + 2 + 2 + 2 = 14`
+
+Thus, the function will return `14` for the given input.
