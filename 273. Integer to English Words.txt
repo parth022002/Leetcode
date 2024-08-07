@@ -1,0 +1,131 @@
+273. Integer to English Words
+Solution:
+
+class Solution:
+    def numberToWords(self, num: int) -> str:
+        if num == 0:
+            return "Zero"
+
+        less_than_twenty = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
+                            "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen",
+                            "Eighteen", "Nineteen"]
+        tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"]
+        thousands = ["", "Thousand", "Million", "Billion", "Trillion", "Quadrillion", "Quintillion", 
+                     "Sextillion", "Septillion", "Octillion", "Nonillion", "Decillion"]
+        
+        def to_words(n):
+            if n < 20:
+                return less_than_twenty[n]
+            elif n < 100:
+                return tens[n // 10] + ('' if n % 10 == 0 else ' ' + less_than_twenty[n % 10])
+            elif n < 1000:
+                return less_than_twenty[n // 100] + ' Hundred' + ('' if n % 100 == 0 else ' ' + to_words(n % 100))
+            else:
+                raise ValueError("to_words should not handle numbers 1000 or greater")
+        
+        def split_by_thousands(num):
+            parts = []
+            while num > 0:
+                parts.append(num % 1000)
+                num //= 1000
+            return parts
+        
+        parts = split_by_thousands(num)
+        result = []
+        
+        for i in range(len(parts)):
+            if parts[i] > 0:
+                result.append(to_words(parts[i]) + ('' if thousands[i] == "" else ' ' + thousands[i]))
+        
+        return ' '.join(result[::-1])
+
+Explanation:
+
+The given `numberToWords` function converts a given integer into its English words representation. Let's break down the code step by step for better understanding:
+
+### Step-by-Step Explanation:
+
+1. **Handle the Special Case of Zero**:
+    ```python
+    if num == 0:
+        return "Zero"
+    ```
+    - If the input number is zero, the function immediately returns the string "Zero".
+
+2. **Define Word Arrays**:
+    ```python
+    less_than_twenty = ["", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten",
+                        "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen",
+                        "Eighteen", "Nineteen"]
+    tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"]
+    thousands = ["", "Thousand", "Million", "Billion", "Trillion", "Quadrillion", "Quintillion", 
+                 "Sextillion", "Septillion", "Octillion", "Nonillion", "Decillion"]
+    ```
+    - These arrays store word equivalents for numbers. `less_than_twenty` handles numbers from 0 to 19, `tens` handles multiples of ten from 20 to 90, and `thousands` handles larger scales like Thousand, Million, Billion, etc.
+
+3. **Convert Number to Words for Less Than 1000**:
+    ```python
+    def to_words(n):
+        if n < 20:
+            return less_than_twenty[n]
+        elif n < 100:
+            return tens[n // 10] + ('' if n % 10 == 0 else ' ' + less_than_twenty[n % 10])
+        elif n < 1000:
+            return less_than_twenty[n // 100] + ' Hundred' + ('' if n % 100 == 0 else ' ' + to_words(n % 100))
+        else:
+            raise ValueError("to_words should not handle numbers 1000 or greater")
+    ```
+    - The `to_words` function converts numbers less than 1000 into words. It handles three cases:
+        - Numbers less than 20.
+        - Numbers between 20 and 99.
+        - Numbers between 100 and 999.
+    - It raises an error if the number is 1000 or greater, ensuring it's used only for numbers below 1000.
+
+4. **Split Number into Thousands**:
+    ```python
+    def split_by_thousands(num):
+        parts = []
+        while num > 0:
+            parts.append(num % 1000)
+            num //= 1000
+        return parts
+    ```
+    - The `split_by_thousands` function splits the number into groups of three digits (thousands). It repeatedly extracts the last three digits and adds them to a list until the number is fully divided.
+
+5. **Construct the Final Result**:
+    ```python
+    parts = split_by_thousands(num)
+    result = []
+    
+    for i in range(len(parts)):
+        if parts[i] > 0:
+            result.append(to_words(parts[i]) + ('' if thousands[i] == "" else ' ' + thousands[i]))
+    
+    return ' '.join(result[::-1])
+    ```
+    - `parts` contains the groups of thousands.
+    - The `result` list is constructed by converting each part into words and appending the corresponding scale (Thousand, Million, etc.).
+    - The result is constructed in reverse order (from highest scale to lowest) and joined into a single string to form the final output.
+
+### Example Usage:
+
+Let's see how the function works with an example:
+```python
+sol = Solution()
+print(sol.numberToWords(1234567890))
+```
+
+**Breakdown of the Example**:
+
+- The input number `1234567890` is split into parts: `[890, 567, 234, 1]` (representing 890, 567,000, 234,000,000, and 1,000,000,000).
+- These parts are converted to words:
+    - 890: "Eight Hundred Ninety"
+    - 567: "Five Hundred Sixty Seven"
+    - 234: "Two Hundred Thirty Four"
+    - 1: "One"
+- Each part is appended with the appropriate scale:
+    - "One Billion"
+    - "Two Hundred Thirty Four Million"
+    - "Five Hundred Sixty Seven Thousand"
+    - "Eight Hundred Ninety"
+- The final result is joined: "One Billion Two Hundred Thirty Four Million Five Hundred Sixty Seven Thousand Eight Hundred Ninety".
