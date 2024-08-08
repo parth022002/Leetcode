@@ -1,0 +1,108 @@
+885. Spiral Matrix III
+Solution:
+
+class Solution:
+    def spiralMatrixIII(self, rows: int, cols: int, rStart: int, cStart: int) -> List[List[int]]:
+        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        result = [[0, 0]] * (rows * cols)  # Pre-allocate space for the result
+        num_steps = 1
+        r, c = rStart, cStart
+        d = 0
+        index = 0  # To keep track of the position in the result list
+
+        while index < rows * cols:
+            for _ in range(2):
+                for _ in range(num_steps):
+                    if 0 <= r < rows and 0 <= c < cols:
+                        result[index] = [r, c]
+                        index += 1
+                    if index == rows * cols:
+                        return result
+                    r += directions[d][0]
+                    c += directions[d][1]
+                d = (d + 1) % 4
+            num_steps += 1
+
+        return result
+
+Explanation:
+
+### Explanation of the Optimized Spiral Matrix Algorithm
+
+This algorithm generates a spiral matrix starting from a given initial position within a grid of specified rows and columns. The main idea is to move in a spiral pattern (right, down, left, up) and collect the coordinates of the grid cells in the order they are visited. Here's a detailed step-by-step explanation:
+
+#### Initialization
+- **Directions**: Define the possible directions of movement as `[(0, 1), (1, 0), (0, -1), (-1, 0)]` representing right, down, left, and up respectively.
+- **Result**: Pre-allocate the result list with the exact number of elements needed (`rows * cols`) to avoid dynamic resizing during the process.
+- **Starting Point**: Initialize the starting position `(r, c)` with the given `rStart` and `cStart`.
+- **Direction Index**: `d` starts at 0, indicating the initial direction (right).
+- **Number of Steps**: `num_steps` starts at 1, representing the number of steps to take in the current direction before changing direction.
+- **Index**: A variable `index` to track the position in the result list.
+
+#### Main Loop
+- The loop continues until we fill all the positions in the result list (`index < rows * cols`).
+- For each direction change, there are two movements of `num_steps`:
+  - **First Movement**: Move in the current direction for `num_steps`.
+  - **Second Movement**: After completing `num_steps`, change direction and move again for `num_steps`.
+
+#### Direction Changes
+- After each complete movement, increment the direction index `d` and use modulo 4 to cycle through the directions.
+- Increment the number of steps (`num_steps`) after every two direction changes (one complete cycle of moving in one direction).
+
+#### Boundary Checks
+- Check if the current position `(r, c)` is within the grid boundaries (`0 <= r < rows` and `0 <= c < cols`). If it is within bounds, add it to the result list.
+- Update the position `(r, c)` based on the current direction.
+
+#### Completion
+- Once the result list is fully populated, return it.
+
+### Code Example
+
+Here's the complete code with the above explanation incorporated into the comments:
+
+```python
+from typing import List
+
+class Solution:
+    def spiralMatrixIII(self, rows: int, cols: int, rStart: int, cStart: int) -> List[List[int]]:
+        # Directions: right, down, left, up
+        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        # Pre-allocate result list with the required number of elements
+        result = [[0, 0]] * (rows * cols)
+        num_steps = 1  # Start with one step in each direction
+        r, c = rStart, cStart  # Starting position
+        d = 0  # Initial direction index (right)
+        index = 0  # Position in the result list
+        
+        # Loop until we've added all cells to the result list
+        while index < rows * cols:
+            # Each direction has two moves: num_steps times in current direction
+            for _ in range(2):
+                for _ in range(num_steps):
+                    if 0 <= r < rows and 0 <= c < cols:
+                        result[index] = [r, c]
+                        index += 1
+                    if index == rows * cols:
+                        return result
+                    # Move in the current direction
+                    r += directions[d][0]
+                    c += directions[d][1]
+                # Change direction
+                d = (d + 1) % 4
+            # Increase the number of steps after two direction changes
+            num_steps += 1
+        
+        return result
+
+# Example usage
+solution = Solution()
+print(solution.spiralMatrixIII(5, 6, 1, 4))
+```
+
+### Summary
+
+- **Efficiency**: Pre-allocating the result list improves memory usage and runtime by avoiding dynamic resizing.
+- **Direction Management**: Using modulo arithmetic to cycle through directions simplifies direction changes.
+- **Boundary Checks**: Ensuring positions are within bounds before adding them to the result list avoids unnecessary calculations.
+
+This approach ensures the algorithm runs efficiently and handles the generation of the spiral matrix dynamically.
