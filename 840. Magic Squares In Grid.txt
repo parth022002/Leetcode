@@ -1,0 +1,95 @@
+840. Magic Squares In Grid
+Solution:
+
+class Solution:
+    def numMagicSquaresInside(self, grid: List[List[int]]) -> int:
+        def is_magic_square(matrix):
+            # Check for numbers 1 to 9 and their unique presence
+            flattened = [num for row in matrix for num in row]
+            if sorted(flattened) != list(range(1, 10)):
+                return False
+            
+            # Sum of the first row, which will be the target sum
+            target_sum = sum(matrix[0])
+            
+            # Check all rows, columns, and diagonals
+            return (
+                all(sum(row) == target_sum for row in matrix) and
+                all(sum(matrix[r][c] for r in range(3)) == target_sum for c in range(3)) and
+                sum(matrix[i][i] for i in range(3)) == target_sum and
+                sum(matrix[i][2-i] for i in range(3)) == target_sum
+            )
+        
+        count = 0
+        rows, cols = len(grid), len(grid[0])
+        
+        # Loop through each possible 3x3 subgrid
+        for i in range(rows - 2):
+            for j in range(cols - 2):
+                subgrid = [row[j:j+3] for row in grid[i:i+3]]
+                if subgrid[1][1] == 5 and is_magic_square(subgrid):  # Optimize by checking the center first
+                    count += 1
+        
+        return count
+
+
+Explanation:
+
+The code provided is a Python implementation to find the number of 3x3 magic squares within a given grid. Here's an explanation of how it works:
+
+### Problem Overview:
+A magic square is a 3x3 grid where:
+1. Each number is unique and ranges from 1 to 9.
+2. The sum of the numbers in each row, each column, and both diagonals must be the same.
+
+### Code Explanation:
+
+1. **Helper Function `is_magic_square(matrix)`**:
+    - **Flattening and Sorting**: 
+        - The 3x3 subgrid (or matrix) is first flattened into a single list, and then it’s checked if this list contains all numbers from 1 to 9. If not, the subgrid cannot be a magic square.
+    - **Target Sum Calculation**:
+        - The sum of the first row of the matrix is calculated as the `target_sum`. This sum should be the same across all rows, columns, and diagonals.
+    - **Row, Column, and Diagonal Checks**:
+        - **Rows**: The function checks if the sum of each row matches the `target_sum`.
+        - **Columns**: Similarly, it checks if the sum of each column matches the `target_sum`.
+        - **Diagonals**: It checks the sum of both diagonals (top-left to bottom-right and top-right to bottom-left) to ensure they match the `target_sum`.
+    - If all these conditions are satisfied, the subgrid is a magic square.
+
+2. **Main Function `numMagicSquaresInside(grid)`**:
+    - **Initialization**:
+        - The variable `count` is initialized to keep track of the number of magic squares found.
+        - The dimensions of the grid are stored in `rows` and `cols`.
+    - **Loop through Possible 3x3 Subgrids**:
+        - The function loops through all possible top-left corners of 3x3 subgrids within the grid. The loop ensures that the subgrid doesn't go out of bounds.
+    - **Center Check Optimization**:
+        - The center element of a 3x3 magic square with numbers from 1 to 9 must be 5 (this is a property of such magic squares). The code first checks if the center element (`subgrid[1][1]`) is 5 before proceeding with the full magic square check. This optimization quickly eliminates non-magic squares.
+    - **Magic Square Validation**:
+        - If the center check passes, the `is_magic_square` function is called on the subgrid. If the subgrid is a magic square, the `count` is incremented.
+    - **Return Count**:
+        - After all possible subgrids are checked, the function returns the total count of magic squares found.
+
+### Example:
+Consider a grid:
+```
+[
+  [4, 3, 8, 4],
+  [9, 5, 1, 9],
+  [2, 7, 6, 2]
+]
+```
+The 3x3 subgrid starting at the top-left corner:
+```
+[
+  [4, 3, 8],
+  [9, 5, 1],
+  [2, 7, 6]
+]
+```
+is a magic square because:
+- All numbers from 1 to 9 are present.
+- The sum of each row, each column, and both diagonals is 15.
+
+Thus, the function will return `1` for this grid.
+
+### Summary:
+The code efficiently checks each possible 3x3 subgrid within a larger grid to determine if it forms a magic square, using logical checks and optimizations like verifying the center element first.
