@@ -1,0 +1,96 @@
+959. Regions Cut By Slashes
+Solution:
+
+class Solution:
+    def regionsBySlashes(self, grid: List[str]) -> int:
+        n = len(grid)
+        g = [[0] * (n * 3) for _ in range(n * 3)]
+        
+        # Mark slashes in the expanded grid
+        for i in range(n):
+            for j in range(n):
+                if grid[i][j] == '/':
+                    g[i * 3][j * 3 + 2] = g[i * 3 + 1][j * 3 + 1] = g[i * 3 + 2][j * 3] = 1
+                elif grid[i][j] == '\\':
+                    g[i * 3][j * 3] = g[i * 3 + 1][j * 3 + 1] = g[i * 3 + 2][j * 3 + 2] = 1
+        
+        def dfs(x, y):
+            stack = [(x, y)]
+            while stack:
+                i, j = stack.pop()
+                if i < 0 or i >= len(g) or j < 0 or j >= len(g) or g[i][j] != 0:
+                    continue
+                g[i][j] = 1
+                stack.extend([(i - 1, j), (i + 1, j), (i, j - 1), (i, j + 1)])
+        
+        regions = 0
+        for i in range(n * 3):
+            for j in range(n * 3):
+                if g[i][j] == 0:  # Unvisited cell, start a new region
+                    dfs(i, j)
+                    regions += 1
+        
+        return regions
+
+
+Explanation:
+
+### Explanation of the Code
+
+The code provided solves the problem of counting the number of regions formed by slashes (`'/'` and `'\\'`) in a grid. The grid is expanded to handle diagonal slashes more effectively, and a depth-first search (DFS) approach is used to count the distinct regions.
+
+Here's a step-by-step explanation:
+
+1. **Grid Expansion**:
+   - The grid is expanded by a factor of 3 for each cell. 
+   - This means each cell in the original grid is represented by a 3x3 block in the expanded grid.
+   - This expansion allows us to represent diagonal slashes (`'/'` and `'\\'`) by marking specific cells within this 3x3 block.
+
+2. **Marking the Slashes**:
+   - For each cell in the original grid:
+     - If the cell contains a `'/'`, the positions `(i * 3, j * 3 + 2)`, `(i * 3 + 1, j * 3 + 1)`, and `(i * 3 + 2, j * 3)` in the expanded grid are marked as `1` (visited).
+     - If the cell contains a `'\\'`, the positions `(i * 3, j * 3)`, `(i * 3 + 1, j * 3 + 1)`, and `(i * 3 + 2, j * 3 + 2)` are marked as `1`.
+   - The marking helps represent the slashes as walls that separate different regions.
+
+3. **Depth-First Search (DFS) for Region Counting**:
+   - A DFS function is used to explore the expanded grid.
+   - Starting from any unvisited cell (a cell with value `0`), the DFS marks all connected cells as visited by setting them to `1`.
+   - The DFS uses an explicit stack to avoid recursion, which helps prevent stack overflow in case of large grids.
+
+4. **Counting Regions**:
+   - The algorithm iterates over all cells in the expanded grid.
+   - Every time it finds an unvisited cell (`0`), it starts a DFS to explore and mark all connected cells, indicating a new region has been found.
+   - The region count is incremented each time a new DFS is initiated.
+
+5. **Return the Result**:
+   - Finally, the number of distinct regions is returned as the result.
+
+### Example Walkthrough
+
+Consider a 2x2 grid with the following layout:
+
+```
+["/\\", "\\/"]
+```
+
+- The grid is expanded to 6x6 as follows:
+
+```
+110011
+011001
+001110
+110011
+011001
+001110
+```
+
+- Here, `1` represents parts of the slashes that divide regions, and `0` represents empty spaces.
+
+- The DFS will explore each unvisited `0` and count how many distinct regions are formed by the connected `0`s.
+
+In this example, the code will return `5`, indicating that there are 5 distinct regions in the grid.
+
+### Optimization Insights
+
+- The grid expansion to 3x3 for each cell is necessary to handle diagonal slashes effectively, even though it increases memory usage. This allows the problem to be simplified into a problem of counting connected components in a 2D grid.
+- The use of an iterative DFS helps avoid recursion depth issues, making the solution more robust for larger inputs.
