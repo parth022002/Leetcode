@@ -1,0 +1,81 @@
+1568. Minimum Number of Days to Disconnect Island
+Solution:
+
+class Solution:
+    def minDays(self, grid: List[List[int]]) -> int:
+        def is_connected(grid):
+            visited = [[False]*n for _ in range(m)]
+            def dfs(x, y):
+                visited[x][y] = True
+                for dx, dy in ((0, 1), (0, -1), (1, 0), (-1, 0)):
+                    nx, ny = x + dx, y + dy
+                    if 0 <= nx < m and 0 <= ny < n and not visited[nx][ny] and grid[nx][ny] == 1:
+                        dfs(nx, ny)
+            
+            found = False
+            for i in range(m):
+                for j in range(n):
+                    if grid[i][j] == 1 and not visited[i][j]:
+                        if found:
+                            return False  # More than one island
+                        found = True
+                        dfs(i, j)
+            return found
+        
+        m, n = len(grid), len(grid[0])
+        
+        # If grid is already disconnected
+        if not is_connected(grid):
+            return 0
+        
+        # Try to disconnect by removing one cell
+        for i in range(m):
+            for j in range(n):
+                if grid[i][j] == 1:
+                    grid[i][j] = 0
+                    if not is_connected(grid):
+                        return 1
+                    grid[i][j] = 1
+        
+        # If we need to remove two cells
+        return 2
+
+Explanation:
+
+The given solution aims to determine the minimum number of days required to disconnect an island represented by a 2D grid. The grid consists of `1`s (land) and `0`s (water). The problem is about finding how many cells (i.e., land cells) need to be removed to make the island disconnected (i.e., to split the island into two or more disconnected parts).
+
+### Solution Breakdown
+
+1. **Helper Function - `is_connected(grid)`**:
+    - This function checks whether the island in the grid is connected (i.e., there is exactly one connected component of `1`s).
+    - It uses Depth-First Search (DFS) to explore the grid.
+    - The `visited` array is used to keep track of visited cells to prevent redundant work.
+    - The `dfs(x, y)` function is a standard DFS that marks all connected land cells starting from a given cell `(x, y)`.
+    - The outer loops iterate through each cell in the grid:
+      - If an unvisited land cell (`1`) is found, DFS starts from that cell.
+      - If another unvisited land cell is found after the first DFS completes, it means there is more than one island, and the function returns `False`.
+      - If only one island is found, the function returns `True`.
+
+2. **Main Function - `minDays(grid)`**:
+    - **Initial Check**: 
+      - First, the function checks if the grid is already disconnected using `is_connected(grid)`.
+      - If the grid is already disconnected, the minimum number of days required is `0`, so it returns `0` immediately.
+    
+    - **Check by Removing One Cell**:
+      - The function then tries to disconnect the island by removing one land cell at a time.
+      - It iterates over every cell in the grid:
+        - If a land cell (`1`) is found, it's temporarily set to `0` (simulating its removal).
+        - The function checks if this removal disconnects the grid by calling `is_connected(grid)`.
+        - If the grid becomes disconnected after removing this one cell, it returns `1` because the grid can be disconnected by removing just one cell.
+        - If the grid is still connected, the cell is restored to its original state (`1`).
+
+    - **Final Check - Removing Two Cells**:
+      - If the grid remains connected after trying to remove each single cell, it concludes that at least two cells must be removed to disconnect the grid.
+      - Therefore, it returns `2`.
+
+### Summary
+- The solution first checks if the grid is already disconnected.
+- Then it checks if removing one cell is sufficient to disconnect the grid.
+- If not, it concludes that removing two cells will disconnect the grid.
+
+The key operations involve DFS for island connectivity checks, and the solution is efficient in attempting minimal changes to achieve the goal of disconnection.
