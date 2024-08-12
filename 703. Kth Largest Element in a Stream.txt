@@ -1,0 +1,79 @@
+703. Kth Largest Element in a Stream
+Solution:
+
+class KthLargest:
+
+    def __init__(self, k: int, nums: List[int]):
+        self.k = k
+        # Keep only the k largest elements in the heap
+        self.nums = nums
+        heapq.heapify(self.nums)
+        # If there are more than k elements, trim the heap
+        while len(self.nums) > k:
+            heapq.heappop(self.nums)
+
+    def add(self, val: int) -> int:
+        if len(self.nums) < self.k:
+            # If the heap has less than k elements, just add the new value
+            heapq.heappush(self.nums, val)
+        elif val > self.nums[0]:
+            # If the new value is larger than the smallest in the heap, replace the smallest
+            heapq.heapreplace(self.nums, val)
+        # The smallest element in the heap is the k-th largest
+        return self.nums[0]
+
+Explanation:
+
+Here's an explanation of how the `KthLargest` class works, focusing on the key components and logic.
+
+### Class Overview
+
+The `KthLargest` class is designed to maintain the k-th largest element in a stream of numbers. The class uses a min-heap (a binary heap where the smallest element is always at the root) to efficiently keep track of the k largest elements seen so far.
+
+### Initialization (`__init__` method)
+
+```python
+def __init__(self, k: int, nums: List[int]):
+    self.k = k
+    self.nums = nums
+    heapq.heapify(self.nums)
+    while len(self.nums) > k:
+        heapq.heappop(self.nums)
+```
+
+1. **Parameters**:
+   - `k`: The class will maintain the k-th largest element.
+   - `nums`: A list of initial numbers.
+
+2. **Heap Initialization**:
+   - `heapq.heapify(self.nums)` converts the `nums` list into a heap in-place. This operation transforms the list into a min-heap, where the smallest element is at the root.
+
+3. **Trimming the Heap**:
+   - The heap should only keep the k largest elements. If the initial list has more than `k` elements, the smallest elements are removed using `heapq.heappop`, which pops the smallest element (root) of the heap.
+   - This ensures that after initialization, the heap has exactly `k` elements, which are the k largest elements from the input list.
+
+### Adding New Elements (`add` method)
+
+```python
+def add(self, val: int) -> int:
+    if len(self.nums) < self.k:
+        heapq.heappush(self.nums, val)
+    elif val > self.nums[0]:
+        heapq.heapreplace(self.nums, val)
+    return self.nums[0]
+```
+
+1. **Adding Elements**:
+   - If the current size of the heap is less than `k`, the new value is simply added to the heap using `heapq.heappush`. This is because we need exactly `k` elements in the heap, so we add without removing any existing elements.
+   - If the heap already has `k` elements, we compare the new value with the smallest element in the heap (`self.nums[0]`, which is the root of the min-heap).
+     - If the new value is larger than the smallest element, it means the new value should be part of the k largest elements. We replace the smallest element with this new value using `heapq.heapreplace`, which is an efficient way to pop the smallest element and push the new value in one operation.
+     - If the new value is not larger than the smallest element in the heap, it is ignored because it cannot be part of the k largest elements.
+
+2. **Returning the k-th Largest Element**:
+   - After adding the new value, the smallest element in the heap (`self.nums[0]`) is returned. This element represents the k-th largest element among all the elements seen so far because it is the smallest of the k largest elements maintained in the heap.
+
+### Summary
+
+- The `KthLargest` class efficiently tracks the k-th largest element in a stream of numbers using a min-heap.
+- The heap maintains exactly `k` elements at all times, ensuring that the smallest element in this heap is the k-th largest element overall.
+- The class is optimized in terms of both time and space by keeping the heap size small and only replacing elements when necessary.
