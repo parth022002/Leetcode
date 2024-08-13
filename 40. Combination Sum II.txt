@@ -1,0 +1,100 @@
+40. Combination Sum II
+Solution:
+
+class Solution:
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        candidates.sort()  # Sort the candidates to handle duplicates easily
+        result = []
+        
+        def backtrack(start, target, path):
+            if target == 0:
+                result.append(path)
+                return
+            
+            for i in range(start, len(candidates)):
+                # Skip duplicates
+                if i > start and candidates[i] == candidates[i - 1]:
+                    continue
+                
+                # If the current candidate exceeds the target, break the loop
+                if candidates[i] > target:
+                    break
+                
+                # Recur with reduced target and next starting index
+                backtrack(i + 1, target - candidates[i], path + [candidates[i]])
+
+        backtrack(0, target, [])
+        return result
+
+Explanation:
+
+Let's walk through the improved `combinationSum2` function and explain each part of it in detail:
+
+### Code Overview:
+The function is designed to find all unique combinations of numbers in the `candidates` list that sum up to a given `target`. Each number in `candidates` can be used at most once in the combination, and the combinations themselves must be unique.
+
+### Key Components:
+1. **Sorting the Candidates**:
+    ```python
+    candidates.sort()  # Sort the candidates to handle duplicates easily
+    ```
+    - **Purpose**: Sorting helps to easily identify and skip duplicate numbers, which prevents the generation of duplicate combinations.
+    - **Benefit**: By sorting, we can stop early in the loop if the current candidate exceeds the remaining target, reducing unnecessary computation.
+
+2. **Initialization of the Result List**:
+    ```python
+    result = []
+    ```
+    - **Purpose**: This list will store all valid combinations that sum up to the target.
+
+3. **Backtracking Function**:
+    ```python
+    def backtrack(start, target, path):
+    ```
+    - **Purpose**: The `backtrack` function is the core of this solution. It recursively explores potential combinations of numbers that sum to the target.
+
+4. **Base Case in Backtracking**:
+    ```python
+    if target == 0:
+        result.append(path)
+        return
+    ```
+    - **Explanation**: If the `target` becomes `0`, it means the current combination (`path`) sums exactly to the target. Thus, this combination is added to the `result` list.
+
+5. **Iterating Through Candidates**:
+    ```python
+    for i in range(start, len(candidates)):
+    ```
+    - **Purpose**: The loop iterates over each candidate starting from the `start` index to the end of the `candidates` list. This ensures that each recursive call explores the next candidates in sequence, ensuring each element is used at most once in each combination.
+
+6. **Skipping Duplicates**:
+    ```python
+    if i > start and candidates[i] == candidates[i - 1]:
+        continue
+    ```
+    - **Explanation**: This check skips duplicate candidates. If a candidate is the same as the previous one and it's not the first candidate in this level of recursion, it's skipped to avoid generating duplicate combinations.
+
+7. **Breaking the Loop Early**:
+    ```python
+    if candidates[i] > target:
+        break
+    ```
+    - **Purpose**: If the current candidate is greater than the remaining target, no further candidates can be part of the solution (since the list is sorted). Thus, the loop is terminated early, saving computation time.
+
+8. **Recursive Call**:
+    ```python
+    backtrack(i + 1, target - candidates[i], path + [candidates[i]])
+    ```
+    - **Purpose**: The function calls itself recursively, passing the next starting index (`i + 1`), the reduced target (`target - candidates[i]`), and the updated path (including the current candidate).
+    - **Why `i + 1`?**: Since each number can only be used once in a combination, the next recursion starts from the next index.
+
+9. **Returning the Result**:
+    ```python
+    return result
+    ```
+    - **Purpose**: After all recursive calls are completed, the function returns the `result` list containing all unique combinations that sum to the target.
+
+### Summary:
+- The function uses a **backtracking** approach to explore all potential combinations of candidates that sum to the target.
+- **Sorting** the candidates and **skipping duplicates** ensures that all combinations are unique.
+- The approach is both **time-efficient** (due to early termination of impossible branches) and **space-efficient** (since we only keep necessary data in memory during recursion).
