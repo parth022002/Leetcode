@@ -1,0 +1,96 @@
+719. Find K-th Smallest Pair Distance
+Solution:
+
+class Solution:
+    def smallestDistancePair(self, nums: List[int], k: int) -> int:
+        nums.sort()
+        n = len(nums)
+        low, high = 0, nums[-1] - nums[0]
+
+        def count_pairs(max_distance):
+            count = 0
+            j = 0
+            for i in range(n):
+                while j < n and nums[j] - nums[i] <= max_distance:
+                    j += 1
+                count += j - i - 1
+            return count
+
+        while low < high:
+            mid = (low + high) // 2
+            if count_pairs(mid) < k:
+                low = mid + 1
+            else:
+                high = mid
+
+        return low
+
+Explanation:
+
+### Explanation of the Code
+
+The problem requires finding the `k`-th smallest distance pair between any two elements in the array `nums`. A distance pair is defined as the absolute difference between two elements, i.e., `|nums[i] - nums[j]|`.
+
+This solution uses a combination of binary search and a two-pointer technique to efficiently find this `k`-th smallest distance.
+
+### Step-by-Step Explanation:
+
+1. **Sorting the Array**:
+    ```python
+    nums.sort()
+    ```
+   - The array `nums` is first sorted. Sorting is crucial because it allows us to efficiently count pairs with differences within a certain range using the two-pointer technique.
+
+2. **Binary Search Setup**:
+    ```python
+    n = len(nums)
+    low, high = 0, nums[-1] - nums[0]
+    ```
+   - `n` is the length of the array.
+   - `low` is initialized to `0` because the smallest possible difference between any two elements is `0` (when they are the same).
+   - `high` is initialized to `nums[-1] - nums[0]`, which is the maximum possible difference (difference between the largest and smallest elements).
+
+3. **Counting Pairs with Maximum Distance `max_distance`**:
+    ```python
+    def count_pairs(max_distance):
+        count = 0
+        j = 0
+        for i in range(n):
+            while j < n and nums[j] - nums[i] <= max_distance:
+                j += 1
+            count += j - i - 1
+        return count
+    ```
+   - This helper function counts how many pairs in the array have a distance less than or equal to `max_distance`.
+   - It uses a two-pointer technique:
+     - `i` iterates through each element in `nums`.
+     - `j` moves forward to find the farthest element from `i` where the distance is still within `max_distance`.
+     - For each `i`, the number of valid pairs is `j - i - 1`.
+   - The total count of such pairs is accumulated in `count`.
+
+4. **Binary Search to Find the `k`-th Smallest Distance**:
+    ```python
+    while low < high:
+        mid = (low + high) // 2
+        if count_pairs(mid) < k:
+            low = mid + 1
+        else:
+            high = mid
+    return low
+    ```
+   - The binary search runs on the range `[low, high]`, where each iteration calculates a midpoint `mid`.
+   - The number of pairs with a distance less than or equal to `mid` is calculated using `count_pairs(mid)`.
+   - If this count is less than `k`, it means the `k`-th smallest distance is larger, so the search space is adjusted to `[mid + 1, high]`.
+   - Otherwise, if the count is greater than or equal to `k`, it means the `k`-th smallest distance could be `mid` or smaller, so the search space is adjusted to `[low, mid]`.
+   - The loop continues until `low` equals `high`, at which point `low` will be the `k`-th smallest distance.
+
+### Final Result:
+- The `return low` statement gives the `k`-th smallest distance pair from the array `nums`.
+
+### Example:
+If `nums = [1, 3, 1]` and `k = 1`:
+- After sorting: `nums = [1, 1, 3]`.
+- Possible distances: `0 (1,1), 2 (1,3), 2 (1,3)`.
+- The 1st smallest distance is `0`, so the function returns `0`.
+
+This approach efficiently finds the answer by reducing unnecessary calculations and leveraging binary search on the possible range of distances.
