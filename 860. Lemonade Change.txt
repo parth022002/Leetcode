@@ -1,0 +1,91 @@
+860. Lemonade Change
+Solution:
+
+class Solution:
+    def lemonadeChange(self, bills: List[int]) -> bool:
+        five, ten = 0, 0  # Keep track of the number of $5 and $10 bills
+        for bill in bills:
+            if bill == 5:
+                five += 1
+            elif bill == 10:
+                if five == 0:
+                    return False
+                five -= 1
+                ten += 1
+            else:  # bill == 20
+                if ten > 0 and five > 0:
+                    ten -= 1
+                    five -= 1
+                elif five >= 3:
+                    five -= 3
+                else:
+                    return False
+        return True
+
+Explanation:
+
+Certainly! Here's an explanation of how the `lemonadeChange` function works:
+
+### Problem Context
+You're running a lemonade stand, and each lemonade costs $5. Customers pay with either a $5, $10, or $20 bill. The goal is to ensure you can provide the correct change when needed. The challenge is to determine if you can provide change for every customer using the bills you've collected so far.
+
+### Function Explanation
+
+```python
+class Solution:
+    def lemonadeChange(self, bills: List[int]) -> bool:
+        five, ten = 0, 0  # Keep track of the number of $5 and $10 bills
+```
+
+- **five**: This variable keeps track of how many $5 bills you have.
+- **ten**: This variable keeps track of how many $10 bills you have.
+
+### Loop through the Bills
+```python
+        for bill in bills:
+```
+- You iterate over each `bill` in the list of bills that customers give you.
+
+### Handle $5 Bills
+```python
+            if bill == 5:
+                five += 1
+```
+- If a customer gives you a $5 bill, you don't need to give any change, so you simply increase your count of $5 bills by 1.
+
+### Handle $10 Bills
+```python
+            elif bill == 10:
+                if five == 0:
+                    return False
+                five -= 1
+                ten += 1
+```
+- If a customer gives you a $10 bill, you need to give them $5 in change.
+- You first check if you have at least one $5 bill (`if five == 0`). If not, you can't provide change, so you return `False`.
+- If you do have a $5 bill, you reduce the count of $5 bills by 1 and increase the count of $10 bills by 1.
+
+### Handle $20 Bills
+```python
+            else:  # bill == 20
+                if ten > 0 and five > 0:
+                    ten -= 1
+                    five -= 1
+                elif five >= 3:
+                    five -= 3
+                else:
+                    return False
+```
+- If a customer gives you a $20 bill, you need to give them $15 in change.
+- The best way to give $15 in change is to use one $10 bill and one $5 bill. So, if you have both (`ten > 0 and five > 0`), you decrement both by 1.
+- If you don't have a $10 bill but have at least three $5 bills (`five >= 3`), you give three $5 bills as change and reduce the count of $5 bills by 3.
+- If neither of these conditions is met, you can't provide the correct change, so you return `False`.
+
+### Return True if All Customers are Served Correctly
+```python
+        return True
+```
+- If you successfully provide change to every customer, you return `True`.
+
+### Summary
+The function effectively simulates the process of handling payments and making change at a lemonade stand. It uses greedy principles, always trying to give the highest denomination in change first. If at any point you can't make change, the function returns `False`. If you make it through the list of bills without returning `False`, the function returns `True`, indicating that you successfully provided change to all customers.
