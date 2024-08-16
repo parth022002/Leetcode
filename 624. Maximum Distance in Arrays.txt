@@ -1,0 +1,91 @@
+624. Maximum Distance in Arrays
+Solution:
+
+class Solution:
+    def maxDistance(self, arrays: List[List[int]]) -> int:
+        min_value = arrays[0][0]
+        max_value = arrays[0][-1]
+        max_diff = 0
+        
+        for i in range(1, len(arrays)):
+            current_array = arrays[i]
+            current_min = current_array[0]
+            current_max = current_array[-1]
+            
+            # Calculate the maximum difference
+            max_diff = max(max_diff, max_value - current_min, current_max - min_value)
+            
+            # Update the global min and max
+            min_value = min(min_value, current_min)
+            max_value = max(max_value, current_max)
+        
+        return max_diff
+
+Explanation:
+
+Let's break down the given code step by step to explain how it works and why it is efficient.
+
+### Problem Statement:
+Given a list of arrays, each sorted in non-decreasing order, the goal is to find the maximum distance between any two elements where the elements come from different arrays.
+
+### Example:
+Consider the following example:
+```python
+arrays = [[1, 4], [0, 5], [3, 8]]
+```
+We want to find the maximum difference between an element from one array and an element from another array.
+
+### Code Explanation:
+
+#### Initial Setup:
+```python
+min_value = arrays[0][0]
+max_value = arrays[0][-1]
+max_diff = 0
+```
+- **`min_value`**: This variable holds the smallest element encountered so far, initialized to the first element of the first array.
+- **`max_value`**: This variable holds the largest element encountered so far, initialized to the last element of the first array.
+- **`max_diff`**: This variable stores the maximum difference found so far, initialized to 0.
+
+#### Iterating Through the Arrays:
+```python
+for i in range(1, len(arrays)):
+    current_array = arrays[i]
+    current_min = current_array[0]
+    current_max = current_array[-1]
+```
+- The loop starts from the second array (`i = 1`), as the first array's minimum and maximum have already been used to initialize `min_value` and `max_value`.
+- For each array:
+  - **`current_min`** is the first element (the smallest element) of the current array.
+  - **`current_max`** is the last element (the largest element) of the current array.
+
+#### Calculating the Maximum Difference:
+```python
+max_diff = max(max_diff, max_value - current_min, current_max - min_value)
+```
+- **`max_value - current_min`**: This computes the difference between the largest element encountered so far (`max_value`) and the smallest element of the current array (`current_min`).
+- **`current_max - min_value`**: This computes the difference between the largest element of the current array (`current_max`) and the smallest element encountered so far (`min_value`).
+- **`max_diff`**: The maximum of these three values is stored in `max_diff`. This ensures that we are always keeping track of the maximum possible difference between elements from different arrays.
+
+#### Updating the Global Min and Max:
+```python
+min_value = min(min_value, current_min)
+max_value = max(max_value, current_max)
+```
+- **`min_value`**: This updates the global `min_value` to be the smallest between the existing `min_value` and the current array's minimum (`current_min`).
+- **`max_value`**: This updates the global `max_value` to be the largest between the existing `max_value` and the current array's maximum (`current_max`).
+
+This ensures that for the next iteration, we have the correct smallest and largest values to calculate the differences with the next array.
+
+#### Returning the Result:
+```python
+return max_diff
+```
+- Finally, the function returns `max_diff`, which is the maximum difference between any two elements where each element comes from different arrays.
+
+### Efficiency:
+- **Time Complexity**: `O(n)` where `n` is the number of arrays. The loop runs through each array once, making it linear in time.
+- **Space Complexity**: `O(1)` because only a few variables are used to keep track of the minimum, maximum, and the maximum difference.
+
+### Conclusion:
+This approach efficiently finds the maximum distance by leveraging the sorted nature of the arrays and updating global minimum and maximum values while iterating through the list of arrays. The solution is optimal for the given problem constraints.
