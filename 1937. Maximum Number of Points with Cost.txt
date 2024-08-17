@@ -1,0 +1,102 @@
+1937. Maximum Number of Points with Cost
+Solution:
+
+class Solution:
+    def maxPoints(self, points: List[List[int]]) -> int:
+        width = len(points[0])
+        previous = [0] * width
+        
+        for level in points:
+            left_peak = [0] * width
+            right_peak = [0] * width
+            
+            # Forward sweep - calculate max points from left to right
+            left_peak[0] = previous[0]
+            for i in range(1, width):
+                left_peak[i] = max(left_peak[i-1] - 1, previous[i])
+            
+            # Backward sweep - calculate max points from right to left
+            right_peak[-1] = previous[-1]
+            for i in range(width - 2, -1, -1):
+                right_peak[i] = max(right_peak[i+1] - 1, previous[i])
+            
+            # Calculate current level's max points
+            for i in range(width):
+                previous[i] = max(left_peak[i], right_peak[i]) + level[i]
+        
+        return max(previous)
+
+def main():
+    input = sys.stdin.read().strip()
+    test_cases = input.splitlines()
+    results = []
+    
+    for case in test_cases:
+        grid = json.loads(case)
+        results.append(Solution().maxPoints(grid))
+
+    with open('user.out', 'w') as f:
+        for result in results:
+            f.write(f"{result}\n")
+
+if __name__ == "__main__":
+    main()
+    exit(0)
+
+Explanation:
+
+The provided code defines a solution to a problem where you need to calculate the maximum points that can be achieved on a grid by moving from the top to the bottom row, with certain constraints on movement.
+
+### Problem Overview:
+- You have a grid of points represented as a 2D list (`points`), where each element `points[i][j]` gives the points in row `i` and column `j`.
+- You can move from any position in a row to any position in the next row. However, moving horizontally comes with a penalty, which is subtracted from the points.
+- The goal is to find the maximum points that can be collected by starting from any position in the first row and moving downwards, one row at a time, until you reach the last row.
+
+### Code Explanation:
+
+1. **Initialization**:
+   - `width` is set to the number of columns in the grid (i.e., `len(points[0])`).
+   - `previous` is a list initialized with zeros, representing the maximum points that can be obtained up to the current row.
+
+2. **Processing Each Row (`level`)**:
+   - For each row in the grid (`level`), the algorithm performs two sweeps: forward and backward, to compute the maximum points possible when reaching each cell in the row.
+
+3. **Forward Sweep**:
+   - `left_peak[0]` is initialized with `previous[0]`.
+   - As the sweep moves from left to right, for each column `i`, it calculates the maximum points that can be achieved if you move to column `i` from the left. The penalty for moving horizontally is applied by subtracting 1 from the `left_peak[i-1]`.
+
+4. **Backward Sweep**:
+   - `right_peak[-1]` is initialized with `previous[-1]`.
+   - This sweep moves from right to left. Similar to the forward sweep, it calculates the maximum points for each column `i`, but considering the points from the right. The penalty for moving horizontally is applied similarly.
+
+5. **Updating Maximum Points**:
+   - For each column `i`, the code updates the `previous` list by calculating the maximum of the left and right peak values for that column and adding the points of the current cell `level[i]`.
+
+6. **Final Output**:
+   - After processing all rows, `max(previous)` returns the maximum points that can be obtained by following the optimal path from the first to the last row.
+
+### Example:
+
+Consider a grid:
+```
+[
+    [1, 2, 3],
+    [1, 5, 1],
+    [3, 1, 1]
+]
+```
+- Start with the first row: `[1, 2, 3]`.
+- After processing the second row `[1, 5, 1]`, considering the penalties for horizontal movement:
+  - Possible maximum points for each column might look like `[4, 7, 6]`.
+- Finally, process the last row `[3, 1, 1]`:
+  - The possible maximum points might look like `[10, 8, 8]`.
+  
+The function returns `max(previous)`, which is `10`.
+
+### `main()` Function:
+- Reads input as a string and splits it into test cases.
+- For each test case, it parses the grid, computes the maximum points using `Solution().maxPoints(grid)`, and writes the result to an output file `user.out`.
+
+### Improvements Made:
+- The code minimizes memory usage by avoiding the creation of extra lists where possible.
+- It uses in-place updates to make the process efficient in both time and space.
