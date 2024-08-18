@@ -1,0 +1,92 @@
+264. Ugly Number II
+Solution:
+    def nthUglyNumber(self, n: int) -> int:
+        # Initialize the array to hold ugly numbers and pointers for 2, 3, and 5
+        ugly = [0] * n
+        ugly[0] = 1
+        
+        i2 = i3 = i5 = 0
+        
+        # Initial multiples of 2, 3, and 5
+        next_multiple_of_2 = 2
+        next_multiple_of_3 = 3
+        next_multiple_of_5 = 5
+        
+        for i in range(1, n):
+            # Choose the smallest next multiple
+            next_ugly = min(next_multiple_of_2, next_multiple_of_3, next_multiple_of_5)
+            ugly[i] = next_ugly
+            
+            # Increment the index for the respective multiple if it was used
+            if next_ugly == next_multiple_of_2:
+                i2 += 1
+                next_multiple_of_2 = ugly[i2] * 2
+            if next_ugly == next_multiple_of_3:
+                i3 += 1
+                next_multiple_of_3 = ugly[i3] * 3
+            if next_ugly == next_multiple_of_5:
+                i5 += 1
+                next_multiple_of_5 = ugly[i5] * 5
+        
+        return ugly[-1]
+
+Explanation:
+
+Let's break down the code step by step to understand how it works:
+
+### Problem Recap:
+The problem is to find the `n`th ugly number, where an ugly number is a positive integer whose prime factors are only 2, 3, or 5. The sequence of ugly numbers starts with 1, 2, 3, 4, 5, 6, 8, 9, 10, 12, and so on.
+
+### Code Explanation:
+
+#### 1. **Initialization**:
+```python
+ugly = [0] * n
+ugly[0] = 1
+i2 = i3 = i5 = 0
+next_multiple_of_2 = 2
+next_multiple_of_3 = 3
+next_multiple_of_5 = 5
+```
+- **`ugly` array**: This array is used to store the first `n` ugly numbers. The first ugly number is `1`, so `ugly[0] = 1`.
+- **`i2`, `i3`, `i5`**: These are pointers that track the current position in the `ugly` array for generating the next multiples of 2, 3, and 5, respectively. Initially, all pointers are set to 0.
+- **`next_multiple_of_2`, `next_multiple_of_3`, `next_multiple_of_5`**: These variables hold the next possible multiples of 2, 3, and 5 based on the current pointers.
+
+#### 2. **Generating the Sequence**:
+```python
+for i in range(1, n):
+    next_ugly = min(next_multiple_of_2, next_multiple_of_3, next_multiple_of_5)
+    ugly[i] = next_ugly
+```
+- **Choosing the next ugly number**: For each iteration, the smallest value among `next_multiple_of_2`, `next_multiple_of_3`, and `next_multiple_of_5` is chosen as the next ugly number. This value is stored in `ugly[i]`.
+
+#### 3. **Updating Pointers**:
+```python
+    if next_ugly == next_multiple_of_2:
+        i2 += 1
+        next_multiple_of_2 = ugly[i2] * 2
+    if next_ugly == next_multiple_of_3:
+        i3 += 1
+        next_multiple_of_3 = ugly[i3] * 3
+    if next_ugly == next_multiple_of_5:
+        i5 += 1
+        next_multiple_of_5 = ugly[i5] * 5
+```
+- **Incrementing pointers**: Depending on which multiple was chosen as the next ugly number, the corresponding pointer (`i2`, `i3`, `i5`) is incremented, and the next multiple of 2, 3, or 5 is calculated by multiplying the new value at the pointer position in the `ugly` array by 2, 3, or 5.
+
+#### 4. **Returning the Result**:
+```python
+return ugly[-1]
+```
+- After filling up the `ugly` array with the first `n` ugly numbers, the function returns the last element of the array (`ugly[-1]`), which is the `n`th ugly number.
+
+### Example Walkthrough:
+For `n = 10`:
+- The `ugly` array will be built step by step: `[1, 2, 3, 4, 5, 6, 8, 9, 10, 12]`.
+- At the end of the loop, the 10th ugly number is `12`, so the function returns `12`.
+
+### Summary:
+- **Time Complexity**: `O(n)` because we are iterating `n` times to generate the first `n` ugly numbers.
+- **Space Complexity**: `O(n)` because we are storing the first `n` ugly numbers in the `ugly` array.
+
+This approach efficiently finds the nth ugly number using dynamic programming principles and avoids redundant calculations by maintaining pointers and updating them based on the smallest possible ugly number generated in each iteration.
