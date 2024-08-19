@@ -1,0 +1,91 @@
+650. 2 Keys Keyboard
+Solution:
+
+class Solution:
+    def minSteps(self, n: int) -> int:
+        steps = 0
+        factor = 2
+        
+        while n > 1:
+            while n % factor == 0:
+                steps += factor
+                n //= factor
+            factor += 1
+        
+        return steps
+
+Explanation:
+
+Let's break down the provided Python code and understand how it works to solve the problem of finding the minimum number of operations needed to get exactly `n` 'A's on the screen.
+
+### Problem Recap:
+- You start with one 'A' on the screen.
+- You can perform two operations: 
+  1. **Copy All**: Copies all the characters currently on the screen.
+  2. **Paste**: Pastes the copied characters (the last copied string is pasted).
+
+The goal is to determine the minimum number of operations needed to end up with exactly `n` 'A's on the screen.
+
+### Code Breakdown:
+
+```python
+class Solution:
+    def minSteps(self, n: int) -> int:
+        steps = 0
+        factor = 2
+        
+        while n > 1:
+            while n % factor == 0:
+                steps += factor
+                n //= factor
+            factor += 1
+        
+        return steps
+```
+
+#### Step-by-Step Explanation:
+
+1. **Initialization**:
+   - `steps = 0`: This variable will hold the total number of operations required.
+   - `factor = 2`: We start checking divisibility from 2 because dividing by 1 would not help in reducing `n`.
+
+2. **Main Loop (`while n > 1`)**:
+   - The outer `while` loop runs as long as `n` is greater than 1. The goal is to reduce `n` to 1 by dividing it by its smallest factors.
+
+3. **Inner Loop (`while n % factor == 0`)**:
+   - The inner loop checks if the current `factor` is a divisor of `n`.
+   - If `n` is divisible by `factor`, it means we can generate `factor` copies of the current string in one go (1 "Copy All" + `factor-1` "Paste" operations).
+   - Each time `n` is divisible by `factor`, we:
+     - Increment `steps` by `factor` (because it takes `factor` operations to get to that point).
+     - Divide `n` by `factor` to reduce `n`.
+
+4. **Increment Factor (`factor += 1`)**:
+   - If `n` is no longer divisible by the current `factor`, we move to the next factor by incrementing `factor`.
+
+5. **Return the Result**:
+   - Once `n` is reduced to 1, we exit the loop and return the total `steps` as the answer.
+
+### Example Execution:
+
+Let's go through an example to see how this works:
+
+- **Example 1**: `n = 3`
+  - Start with `factor = 2`.
+  - `3 % 2 != 0` (3 is not divisible by 2), so we increment `factor` to 3.
+  - `3 % 3 == 0` (3 is divisible by 3), so we:
+    - Add 3 to `steps` → `steps = 3`.
+    - Divide `n` by 3 → `n = 1`.
+  - Now, `n = 1`, so we exit the loop and return `steps = 3`.
+
+- **Example 2**: `n = 4`
+  - Start with `factor = 2`.
+  - `4 % 2 == 0`, so we:
+    - Add 2 to `steps` → `steps = 2`.
+    - Divide `n` by 2 → `n = 2`.
+  - `2 % 2 == 0` again, so we:
+    - Add 2 to `steps` → `steps = 4`.
+    - Divide `n` by 2 → `n = 1`.
+  - Now, `n = 1`, so we exit the loop and return `steps = 4`.
+
+### Conclusion:
+The algorithm works by breaking down the number `n` into its prime factors and using these factors to determine the minimum number of operations. The outer loop ensures that all possible factors are considered, and the inner loop reduces `n` as much as possible by each factor. This approach is efficient and works well within the constraints.
