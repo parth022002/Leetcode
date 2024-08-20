@@ -1,0 +1,71 @@
+1140. Stone Game II
+Solution:
+
+class Solution:
+    def stoneGameII(self, piles: List[int]) -> int:
+        n = len(piles)
+        dp = [[0] * (n + 1) for _ in range(n + 1)]
+        suffix_sum = [0] * (n + 1)
+
+        # Compute suffix sums
+        for i in range(n - 1, -1, -1):
+            suffix_sum[i] = suffix_sum[i + 1] + piles[i]
+
+        # dp[i][M] means the maximum stones the current player can get starting from index i with M
+        for i in range(n - 1, -1, -1):
+            for M in range(1, n + 1):
+                for X in range(1, min(2 * M, n - i) + 1):
+                    dp[i][M] = max(dp[i][M], suffix_sum[i] - dp[i + X][max(M, X)])
+
+        return dp[0][1]
+
+Explanation:
+
+Let's break down the code step by step to understand how the solution for "1140. Stone Game II" works:
+
+### Problem Overview:
+Alice and Bob are playing a game with a row of stone piles. The goal is to maximize the number of stones Alice can collect, assuming both players play optimally. The game starts with Alice, and the initial value of `M` is `1`. On each turn, a player can take the first `X` piles, where `1 <= X <= 2 * M`, and then `M` is updated to `max(M, X)` for the next turn. The game continues until all stones are taken.
+
+### Solution Explanation:
+
+#### 1. **Initialization:**
+   ```python
+   n = len(piles)
+   dp = [[0] * (n + 1) for _ in range(n + 1)]
+   suffix_sum = [0] * (n + 1)
+   ```
+   - `n` is the number of piles.
+   - `dp` is a 2D list (or table) where `dp[i][M]` will store the maximum number of stones the current player can collect starting from pile `i` with the current multiplier `M`.
+   - `suffix_sum` is an array where `suffix_sum[i]` represents the total number of stones in the piles starting from index `i` to the end.
+
+#### 2. **Compute Suffix Sums:**
+   ```python
+   for i in range(n - 1, -1, -1):
+       suffix_sum[i] = suffix_sum[i + 1] + piles[i]
+   ```
+   - We calculate the suffix sum array, which helps us quickly determine the total number of remaining stones from any pile `i` to the end.
+   - `suffix_sum[i]` is the sum of all stones from pile `i` to the last pile.
+
+#### 3. **Dynamic Programming Table Calculation:**
+   ```python
+   for i in range(n - 1, -1, -1):
+       for M in range(1, n + 1):
+           for X in range(1, min(2 * M, n - i) + 1):
+               dp[i][M] = max(dp[i][M], suffix_sum[i] - dp[i + X][max(M, X)])
+   ```
+   - We iterate backward over the piles starting from the last pile to the first.
+   - For each pile `i`, and for each possible value of `M` from `1` to `n`, we calculate the maximum number of stones the current player can collect if they take `X` piles.
+   - `X` can range from `1` to `2 * M`, but it can't exceed the remaining number of piles (`n - i`).
+   - `dp[i][M]` is updated by maximizing the number of stones the player can get, considering the next player's optimal move.
+   - The expression `suffix_sum[i] - dp[i + X][max(M, X)]` represents the total stones left after the opponent's best move.
+
+#### 4. **Final Result:**
+   ```python
+   return dp[0][1]
+   ```
+   - The final answer is `dp[0][1]`, which represents the maximum number of stones Alice can collect starting from the first pile with `M = 1`.
+
+### Summary:
+- The problem is solved using dynamic programming where we simulate the game by iterating backward over the piles.
+- The `dp` table helps in keeping track of the best possible outcome for each player assuming optimal play from both sides.
+- By precomputing the suffix sums, we efficiently calculate the remaining stones at any point in the game, enabling us to maximize Alice's score.
