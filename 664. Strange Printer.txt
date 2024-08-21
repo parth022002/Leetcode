@@ -1,0 +1,93 @@
+664. Strange Printer
+Solution:
+
+class Solution:
+    def strangePrinter(self, s: str) -> int:
+        n = len(s)
+        dp = [[0] * n for _ in range(n)]
+        
+        for i in range(n):
+            dp[i][i] = 1
+        
+        for length in range(2, n + 1):
+            for i in range(n - length + 1):
+                j = i + length - 1
+                dp[i][j] = dp[i][j - 1] + 1
+                for k in range(i, j):
+                    if s[k] == s[j]:
+                        dp[i][j] = min(dp[i][j], dp[i][k] + (dp[k + 1][j - 1] if k + 1 <= j - 1 else 0))
+        
+        return dp[0][n - 1]
+
+Explanation:
+
+Here's an explanation of the `strangePrinter` solution:
+
+### Problem Recap:
+You need to determine the minimum number of turns a strange printer needs to print a string `s`. The printer can only print a sequence of the same character in one turn, and it can start and end printing at any position in the string, potentially overlapping previously printed characters.
+
+### Approach:
+
+The problem is solved using **dynamic programming**. The idea is to break down the problem into subproblems and use the results of these smaller problems to solve the larger problem.
+
+### Dynamic Programming Table (`dp`):
+
+- **`dp[i][j]`**: This 2D array stores the minimum number of turns needed to print the substring `s[i:j+1]`.
+  - `dp[i][i] = 1`: It takes exactly one turn to print a single character.
+  - For longer substrings, we calculate the minimum number of turns by considering different possible partitions of the substring.
+
+### Step-by-Step Explanation:
+
+1. **Initialization**:
+   - `n = len(s)`: This is the length of the string `s`.
+   - `dp = [[0] * n for _ in range(n)]`: This initializes a 2D list `dp` with `n` rows and `n` columns, all set to 0. Each `dp[i][j]` will eventually store the minimum number of turns needed to print the substring `s[i:j+1]`.
+   - For substrings of length 1 (i.e., `i == j`), `dp[i][i] = 1` since a single character always takes one turn to print.
+
+2. **Filling the DP Table**:
+   - **Outer Loop (length)**: This loop runs for every possible length of the substring, starting from 2 up to the full length of the string (`n`).
+     - **Inner Loop (i, j)**: For each possible starting index `i` and corresponding ending index `j = i + length - 1`, we calculate `dp[i][j]`, which is the minimum number of turns needed to print the substring `s[i:j+1]`.
+     - We start by assuming the worst case: printing `s[i:j]` requires `dp[i][j-1] + 1` turns, meaning it takes the turns needed to print `s[i:j]` plus an additional turn to print `s[j]`.
+   
+   - **Partitioning**:
+     - We consider every possible partitioning point `k` between `i` and `j` to see if printing up to `s[k]` and then from `s[k+1:j]` could reduce the number of turns.
+     - If `s[k] == s[j]`, then the character `s[j]` can be printed in the same turn as `s[k]`, which might reduce the total number of turns. We then calculate `dp[i][j]` as the minimum of its current value and the sum of `dp[i][k]` and `dp[k+1][j-1]` (if `k+1 <= j-1`, otherwise just `dp[i][k]`).
+
+3. **Result**:
+   - The final result, the minimum number of turns needed to print the entire string `s`, is stored in `dp[0][n-1]`.
+
+### Example Walkthrough:
+
+Let's go through a small example with `s = "aba"`:
+
+- **Initialization**:
+  - `n = 3`
+  - Initial DP table:
+    ```
+    dp = [[1, 0, 0],
+          [0, 1, 0],
+          [0, 0, 1]]
+    ```
+
+- **Filling DP table**:
+  - **For length 2**:
+    - `dp[0][1]`: Consider `s[0:2] = "ab"`.
+      - Assume two turns: one for "a" and one for "b", so `dp[0][1] = 2`.
+    - `dp[1][2]`: Consider `s[1:3] = "ba"`.
+      - Same reasoning as above, `dp[1][2] = 2`.
+  - **For length 3**:
+    - `dp[0][2]`: Consider `s[0:3] = "aba"`.
+      - If we split at `k=0` and `k=1`, we get two potential values:
+        - `dp[0][0] + dp[1][2] = 1 + 2 = 3`
+        - But since `s[0] == s[2]`, we can cover the "a" at the end with the first "a", leading to `dp[0][2] = dp[0][1] = 2`.
+
+The final `dp` table looks like this:
+```
+dp = [[1, 2, 2],
+      [0, 1, 2],
+      [0, 0, 1]]
+```
+
+### Output:
+- The result is `dp[0][2] = 2`, meaning it takes a minimum of 2 turns to print the string `"aba"`.
+
+This approach efficiently calculates the minimum number of turns needed by breaking down the problem into manageable subproblems and using the results of these subproblems to solve the overall problem.
