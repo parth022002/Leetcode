@@ -1,0 +1,64 @@
+476. Number Complement
+Solution:
+
+class Solution:
+    def findComplement(self, num: int) -> int:
+        # Find the binary representation of the number without the '0b' prefix
+        binary_num = bin(num)[2:]
+        
+        # Flip the bits: replace '0' with '1' and '1' with '0'
+        complement_binary = ''.join('1' if bit == '0' else '0' for bit in binary_num)
+        
+        # Convert the flipped binary string back to an integer
+        return int(complement_binary, 2)
+
+Explanation:
+
+Let's break down the solution step by step:
+
+### Problem:
+Given an integer `num`, the task is to find its complement. The complement is obtained by flipping all the bits in the binary representation of `num` (i.e., turning all `1`s into `0`s and all `0`s into `1`s).
+
+### Step-by-Step Explanation:
+
+1. **Binary Representation**:
+    ```python
+    binary_num = bin(num)[2:]
+    ```
+    - The `bin(num)` function converts the integer `num` into its binary representation as a string, prefixed with `'0b'`.
+    - For example, if `num = 5`, then `bin(5)` returns `'0b101'`.
+    - The `[2:]` slice is used to remove the `'0b'` prefix, leaving us with just the binary digits. For `num = 5`, `binary_num` will be `'101'`.
+
+2. **Flipping the Bits**:
+    ```python
+    complement_binary = ''.join('1' if bit == '0' else '0' for bit in binary_num)
+    ```
+    - This line creates the complement of the binary number by flipping each bit.
+    - The generator expression `'1' if bit == '0' else '0' for bit in binary_num` iterates over each bit in the binary string `binary_num`.
+    - For each bit, it appends `'1'` to `complement_binary` if the original bit was `'0'`, and `'0'` if the original bit was `'1'`.
+    - For `binary_num = '101'`, the flipped bits will result in `complement_binary = '010'`.
+
+3. **Convert the Flipped Binary Back to Integer**:
+    ```python
+    return int(complement_binary, 2)
+    ```
+    - Finally, we convert the binary string `complement_binary` back into an integer using the `int()` function with base 2.
+    - For `complement_binary = '010'`, `int('010', 2)` returns `2`.
+
+### Example Walkthrough:
+
+Let's take an example where `num = 5`.
+
+- **Step 1**: Convert `5` to binary:
+    - `binary_num = bin(5)[2:]` gives `'101'`.
+
+- **Step 2**: Flip the bits:
+    - `'101'` becomes `'010'` (flipping each bit).
+
+- **Step 3**: Convert the binary string `'010'` back to an integer:
+    - `int('010', 2)` gives `2`.
+
+Thus, the complement of `5` is `2`.
+
+### Summary:
+The function effectively converts the given integer to its binary form, flips all the bits to create the complement, and then converts this complement back into an integer to return the result.
