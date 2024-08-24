@@ -1,0 +1,108 @@
+564. Find the Closest Palindrome
+Solution:
+
+class Solution:
+    def nearestPalindromic(self, n: str) -> str:
+        length = len(n)
+        if n == "1":
+            return "0"
+        
+        # Candidates to consider
+        candidates = set()
+        
+        # The basic palindrome by mirroring the first half
+        prefix = n[:(length + 1) // 2]
+        prefix_int = int(prefix)
+        
+        # Create possible palindromes
+        for i in [-1, 0, 1]:
+            new_prefix = str(prefix_int + i)
+            if len(new_prefix) > length // 2:  # Handle potential carry that increases length
+                candidate = new_prefix + new_prefix[:-1][::-1]
+            else:
+                candidate = new_prefix + new_prefix[::-1][(length % 2):]
+            candidates.add(candidate)
+        
+        # Consider special edge cases
+        candidates.add("9" * (length - 1))  # Case like 999...999
+        candidates.add("1" + "0" * (length - 1) + "1")  # Case like 100...001
+        
+        # Remove the original number itself
+        candidates.discard(n)
+        
+        # Find the closest palindrome
+        closest = None
+        min_diff = float('inf')
+        
+        for candidate in candidates:
+            # Skip invalid candidates, e.g., empty or negative ones
+            if candidate == "" or int(candidate) < 0:
+                continue
+            
+            diff = abs(int(candidate) - int(n))
+            if diff < min_diff or (diff == min_diff and int(candidate) < int(closest)):
+                closest = candidate
+                min_diff = diff
+        
+        return closest
+
+Explanation:
+
+Let's break down the solution step by step to explain how it works and why it addresses the problem requirements:
+
+### Problem Recap:
+Given a string `n` representing an integer, we need to find the closest palindrome to this integer (excluding the number itself). If there is a tie, we should return the smaller palindrome.
+
+### Approach:
+
+1. **Initial Setup**:
+   - The function first checks for the edge case where `n = "1"`. The closest palindrome to "1" is "0", so it returns "0".
+
+2. **Candidates Generation**:
+   - We aim to generate a set of palindrome candidates that could be close to `n`.
+   - The first step is to take the first half of `n` (including the middle digit if the length is odd) and use it as a basis to create potential palindromes.
+
+3. **Creating Palindromes**:
+   - For the basic palindrome, we mirror the first half to form the full palindrome.
+   - We also consider slightly modified versions by incrementing and decrementing the first half by 1. This helps us capture palindromes that might be just slightly smaller or larger than `n`.
+   - For example, if `n = "123"`, the first half is `12`. We consider:
+     - Mirroring `12` to get `121`.
+     - Incrementing `12` to `13` and mirroring to get `131`.
+     - Decrementing `12` to `11` and mirroring to get `111`.
+   - These palindromes are added to a set (`candidates`) to ensure uniqueness.
+
+4. **Handling Edge Cases**:
+   - Palindromes can have very special forms at certain transitions:
+     - Consider `10^k + 1`, which results in a palindrome like `1001` for `k=2`.
+     - Consider `10^{k-1} - 1`, which results in a palindrome like `999` for `k=3`.
+   - We manually add these edge cases to the candidates set:
+     - `"9" * (length - 1)` to capture a smaller palindrome with one less digit (e.g., for `100`, the candidate is `99`).
+     - `"1" + "0" * (length - 1) + "1"` to capture a larger palindrome that adds a digit (e.g., for `999`, the candidate is `1001`).
+
+5. **Comparison and Selection**:
+   - We then compare each candidate against `n` to find the closest palindrome.
+   - We calculate the absolute difference between the candidate and `n`.
+   - We track the smallest difference, and in case of ties, we select the numerically smaller palindrome.
+   - We skip invalid candidates (although in this case, the code is robust enough to avoid such scenarios).
+
+6. **Returning the Result**:
+   - Finally, the closest palindrome is returned.
+
+### Example Walkthrough:
+
+For `n = "123"`:
+- Length is 3, so the first half is `12`.
+- The candidates generated are:
+  - `121` (by mirroring `12`)
+  - `131` (by mirroring `13`, which is `12 + 1`)
+  - `111` (by mirroring `11`, which is `12 - 1`)
+- The special cases added are:
+  - `99` (for `"9" * 2`)
+  - `1001` (for `"1" + "0" * 2 + "1"`)
+- After discarding `n` itself if it appears in the candidates, we compare the remaining candidates:
+  - `121`, `131`, `111`, `99`, and `1001`
+- The closest palindrome is `121`, so it is returned.
+
+### Final Thoughts:
+
+This method is efficient because it only checks a small number of candidates, leveraging symmetry and edge case handling to ensure that the closest palindrome is found without unnecessary calculations. The use of a set ensures there are no duplicate candidates, and by focusing on only plausible candidates, the solution remains optimal.
