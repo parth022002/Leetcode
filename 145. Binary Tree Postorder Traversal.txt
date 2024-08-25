@@ -1,0 +1,73 @@
+145. Binary Tree Postorder Traversal
+Solution:
+
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def postorderTraversal(self, root: Optional[TreeNode]) -> List[int]:
+        num=[]
+        def f(root):
+            if root==None: return num
+            f(root.left)
+            f(root.right)
+            num.append(root.val)
+            return num
+        return f(root)
+
+Explanation:
+
+Your original code defines a method `postorderTraversal` for performing a postorder traversal on a binary tree. Let's break it down step by step:
+
+### 1. **Initialization**:
+   ```python
+   num = []
+   ```
+   - You initialize an empty list `num` to store the traversal result.
+
+### 2. **Helper Function `f(root)`**:
+   ```python
+   def f(root):
+       if root == None: return num
+       f(root.left)
+       f(root.right)
+       num.append(root.val)
+       return num
+   ```
+   - **Base Case**: 
+     - `if root == None`: This checks if the current node is `None`. If it is, the function immediately returns the `num` list.
+   
+   - **Recursive Case**:
+     - `f(root.left)`: Recursively traverses the left subtree.
+     - `f(root.right)`: Recursively traverses the right subtree.
+     - `num.append(root.val)`: After traversing both subtrees, the current node's value is appended to the `num` list (this is the essence of postorder traversal).
+
+   - **Return Statement**:
+     - The function returns the `num` list after processing the current node and its subtrees.
+
+### 3. **Final Return**:
+   ```python
+   return f(root)
+   ```
+   - The main function `postorderTraversal` calls the helper function `f(root)` with the root of the tree as the argument and returns the resulting `num` list containing the postorder traversal.
+
+### **Postorder Traversal**:
+- In postorder traversal, you visit nodes in the following order: left subtree, right subtree, and then the root node.
+- For example, if the tree is:
+  ```
+      1
+     / \
+    2   3
+   / \
+  4   5
+  ```
+  - The postorder traversal will visit the nodes in this order: `4, 5, 2, 3, 1`.
+
+### **Limitations**:
+- **Inefficient Return**: The helper function `f` returns the list `num` every time a `None` node is encountered, which is unnecessary and slightly inefficient.
+- **Naming Convention**: The variable `num` and function `f` could have more descriptive names to enhance readability.
+
+In summary, your code correctly implements postorder traversal, but it can be improved by refining the naming conventions and eliminating redundant returns for better performance.
