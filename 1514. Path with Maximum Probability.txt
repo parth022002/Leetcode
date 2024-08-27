@@ -1,0 +1,104 @@
+1514. Path with Maximum Probability
+Solution:
+
+import heapq
+from typing import List
+
+class Solution:
+    def maxProbability(self, n: int, edges: List[List[int]], succProb: List[float], start_node: int, end_node: int) -> float:
+        # Create the graph as an adjacency list
+        graph = [[] for _ in range(n)]
+        for i, (u, v) in enumerate(edges):
+            prob = succProb[i]
+            graph[u].append((v, prob))
+            graph[v].append((u, prob))
+
+        # Use a max-heap (priority queue) to store probabilities
+        max_heap = [(-1.0, start_node)]
+        probs = [0.0] * n
+        probs[start_node] = 1.0
+
+        while max_heap:
+            curr_prob, node = heapq.heappop(max_heap)
+            curr_prob = -curr_prob  # Convert back to positive
+
+            # Early exit if we reached the end_node
+            if node == end_node:
+                return curr_prob
+
+            if curr_prob < probs[node]:
+                continue
+
+            for neighbor, edge_prob in graph[node]:
+                new_prob = curr_prob * edge_prob
+                if new_prob > probs[neighbor]:
+                    probs[neighbor] = new_prob
+                    heapq.heappush(max_heap, (-new_prob, neighbor))  
+
+        # If the end_node is unreachable, return 0
+        return probs[end_node]
+
+Explanation:
+
+This code solves the problem of finding the maximum probability of reaching a target node (`end_node`) from a starting node (`start_node`) in a graph. The graph is represented by nodes, edges, and corresponding success probabilities for each edge. Here's a detailed explanation:
+
+### Problem Overview
+
+You have a graph with `n` nodes, and the graph's edges are defined by the list `edges`, where each edge connects two nodes `u` and `v` with a given success probability `succProb`. The goal is to determine the maximum probability of reaching the `end_node` from the `start_node`.
+
+### Key Components
+
+1. **Graph Representation (Adjacency List):**
+   - The graph is represented using an adjacency list `graph`, where `graph[i]` contains a list of tuples `(neighbor, probability)`. Each tuple represents an edge from node `i` to its neighboring node with a certain success probability.
+   - The adjacency list is built using the given `edges` and `succProb` lists.
+
+2. **Priority Queue (Max-Heap):**
+   - A max-heap (priority queue) is used to explore the nodes in the graph. The heap stores tuples of the form `(-current_probability, node)`, where `current_probability` is the probability of reaching the current `node` from the `start_node`.
+   - The probability is negated when storing in the heap because Python's `heapq` library implements a min-heap by default, and negating allows us to simulate a max-heap.
+
+3. **Probability Tracking (`probs` array):**
+   - The `probs` array is used to keep track of the maximum probability of reaching each node from the `start_node`. Initially, all probabilities are set to `0.0` except for the `start_node`, which is set to `1.0` (since the probability of starting at the `start_node` is 100%).
+
+4. **Algorithm (Modified Dijkstra's):**
+   - The algorithm is a modified version of Dijkstra's shortest path algorithm but adapted for maximizing probabilities instead of minimizing distances.
+   - The algorithm repeatedly extracts the node with the highest probability from the heap.
+   - For each neighbor of the current node, it calculates the new probability of reaching the neighbor through the current node. If this new probability is greater than the previously recorded probability for that neighbor, the algorithm updates the probability and pushes the neighbor onto the heap.
+   - The process continues until the heap is empty or the `end_node` is reached.
+
+5. **Early Exit:**
+   - If the algorithm reaches the `end_node`, it immediately returns the current probability, which is the maximum probability of reaching the `end_node` from the `start_node`.
+
+6. **Final Result:**
+   - If the algorithm exhausts the heap without reaching the `end_node`, it returns `0.0`, indicating that the `end_node` is unreachable from the `start_node`.
+
+### Example Walkthrough
+
+Let's say you have the following input:
+- `n = 3` (3 nodes)
+- `edges = [[0, 1], [1, 2], [0, 2]]`
+- `succProb = [0.5, 0.5, 0.2]`
+- `start_node = 0`
+- `end_node = 2`
+
+The graph would be represented as:
+- Node 0: connected to Node 1 with probability 0.5 and to Node 2 with probability 0.2
+- Node 1: connected to Node 0 with probability 0.5 and to Node 2 with probability 0.5
+- Node 2: connected to Node 0 with probability 0.2 and to Node 1 with probability 0.5
+
+The algorithm will explore paths from `start_node` 0 to `end_node` 2, aiming to maximize the probability.
+
+- Initially, the heap contains `(-1.0, 0)`, indicating a 100% chance of being at the start node.
+- The algorithm checks neighbors of Node 0: Node 1 and Node 2.
+- It calculates the probability of reaching Node 1 as `1.0 * 0.5 = 0.5` and updates Node 1's probability.
+- It calculates the probability of reaching Node 2 as `1.0 * 0.2 = 0.2` and updates Node 2's probability.
+- The heap now contains `(-0.5, 1)` and `(-0.2, 2)`.
+
+Next, Node 1 is explored (since it has the higher probability of 0.5):
+- It calculates the probability of reaching Node 2 via Node 1 as `0.5 * 0.5 = 0.25`, which is greater than the current probability of 0.2 for Node 2, so the probability is updated.
+
+Finally, Node 2 is explored:
+- Since Node 2 is the `end_node`, the algorithm exits early, returning the maximum probability of reaching Node 2, which is `0.25`.
+
+### Conclusion
+
+This algorithm effectively finds the maximum probability path in a graph, and the use of a max-heap ensures that it operates efficiently by always expanding the most promising node first. The code is optimized for both runtime and memory usage, making it suitable for large graphs.
