@@ -1,0 +1,107 @@
+1905. Count Sub Islands
+Solution:
+
+class Solution:
+    def countSubIslands(self, grid1: List[List[int]], grid2: List[List[int]]) -> int:
+        if not grid1 or not grid1[0] or not grid2 or not grid2[0]:
+            return 0
+
+        ROWS, COLS = len(grid1), len(grid1[0])
+        DIRECTIONS = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+        island_count = 0
+
+        def dfs_explore(r, c):
+            # If out of bounds or cell is water in grid2, return True (valid sub-island part)
+            if r < 0 or r >= ROWS or c < 0 or c >= COLS or grid2[r][c] == 0:
+                return True 
+            
+            # Mark cell as visited
+            grid2[r][c] = 0
+            
+            # If the corresponding cell in grid1 is water, this cannot be a sub-island
+            is_sub_island = grid1[r][c] == 1
+
+            # Explore all four directions
+            for dr, dc in DIRECTIONS:
+                is_sub_island = dfs_explore(r + dr, c + dc) and is_sub_island
+            
+            return is_sub_island
+
+        for row in range(ROWS):
+            for col in range(COLS):
+                if grid2[row][col] == 1:
+                    # If this island in grid2 is a sub-island, increment the count
+                    if dfs_explore(row, col):
+                        island_count += 1
+
+        return island_count
+
+Explanation:
+
+This code defines a solution to the problem of counting sub-islands in a grid. Here's a detailed explanation of the code:
+
+### Problem Statement
+Given two binary grids `grid1` and `grid2` of the same dimensions, an island in `grid2` is considered a sub-island if every cell in that island has the corresponding cell in `grid1` also being part of an island. The task is to count how many sub-islands exist in `grid2`.
+
+### Code Walkthrough
+
+#### 1. **Initial Setup**
+```python
+ROWS, COLS = len(grid1), len(grid1[0])
+DIRECTIONS = [(1, 0), (-1, 0), (0, 1), (0, -1)]
+island_count = 0
+```
+- `ROWS` and `COLS` store the number of rows and columns in the grids.
+- `DIRECTIONS` is a list of possible movements in the grid (down, up, right, left).
+- `island_count` keeps track of the number of sub-islands found.
+
+#### 2. **Depth-First Search (DFS) Function**
+```python
+def dfs_explore(r, c):
+    # If out of bounds or cell is water in grid2, return True (valid sub-island part)
+    if r < 0 or r >= ROWS or c < 0 or c >= COLS or grid2[r][c] == 0:
+        return True 
+
+    # Mark cell as visited
+    grid2[r][c] = 0
+    
+    # If the corresponding cell in grid1 is water, this cannot be a sub-island
+    is_sub_island = grid1[r][c] == 1
+
+    # Explore all four directions
+    for dr, dc in DIRECTIONS:
+        is_sub_island = dfs_explore(r + dr, c + dc) and is_sub_island
+    
+    return is_sub_island
+```
+- **Base Case**: The function checks if the current cell `(r, c)` is out of bounds or if it is water (`0`) in `grid2`. If either condition is true, the function returns `True`, meaning this path does not invalidate the sub-island condition.
+  
+- **Mark as Visited**: The current cell in `grid2` is marked as visited by setting `grid2[r][c]` to `0`.
+  
+- **Sub-Island Check**: The variable `is_sub_island` is set to `True` only if the corresponding cell in `grid1` is land (`1`). If it's water (`0`), this cell invalidates the sub-island, and `is_sub_island` is set to `False`.
+  
+- **Recursive Exploration**: The function then recursively explores all four possible directions (down, up, right, left). The result from each recursive call is combined with the current value of `is_sub_island` using the `and` operator. This ensures that if any part of the island in `grid2` fails the sub-island condition, `is_sub_island` will be `False`.
+
+- **Return**: The function returns `is_sub_island`, indicating whether the entire explored region qualifies as a sub-island.
+
+#### 3. **Main Loop**
+```python
+for row in range(ROWS):
+    for col in range(COLS):
+        if grid2[row][col] == 1:
+            # If this island in grid2 is a sub-island, increment the count
+            if dfs_explore(row, col):
+                island_count += 1
+```
+- **Iterate Over All Cells**: The main loop goes through each cell in `grid2`.
+- **Check for Unvisited Land**: If a cell in `grid2` is land (`1`) and hasn't been visited yet (i.e., still `1`), the DFS function `dfs_explore` is called to explore the entire island.
+- **Count Sub-Islands**: If `dfs_explore` returns `True`, the entire island qualifies as a sub-island, so `island_count` is incremented.
+
+#### 4. **Final Return**
+```python
+return island_count
+```
+- After exploring all cells, the function returns `island_count`, which represents the total number of sub-islands in `grid2`.
+
+### Summary
+The code effectively counts the number of sub-islands in `grid2` by performing a DFS on each island found in `grid2`. During the DFS, it checks if the corresponding cells in `grid1` also represent land. If an entire island in `grid2` satisfies this condition, it is counted as a sub-island.
