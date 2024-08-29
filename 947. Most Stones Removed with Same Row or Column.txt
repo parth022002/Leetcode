@@ -1,0 +1,108 @@
+947. Most Stones Removed with Same Row or Column
+Solution:
+
+class Solution:
+    def removeStones(self, stones: List[List[int]]) -> int:
+        # To store the graph connections
+        graph = {}
+        
+        # Build the graph
+        for x, y in stones:
+            if x not in graph:
+                graph[x] = []
+            if ~y not in graph:
+                graph[~y] = []
+            graph[x].append(~y)
+            graph[~y].append(x)
+        
+        # To track visited nodes
+        visited = set()
+        
+        def dfs(node):
+            stack = [node]
+            while stack:
+                current = stack.pop()
+                if current not in visited:
+                    visited.add(current)
+                    for neighbor in graph[current]:
+                        if neighbor not in visited:
+                            stack.append(neighbor)
+        
+        # Counting connected components
+        components = 0
+        for x, y in stones:
+            if x not in visited:
+                dfs(x)
+                components += 1
+        
+        # The number of stones that can be removed is total stones minus the number of connected components
+        return len(stones) - components
+
+Explanation:
+
+The code you've provided is a solution to the "Most Stones Removed with Same Row or Column" problem. Here's a breakdown of how it works:
+
+### Problem Overview
+The problem is to determine the maximum number of stones that can be removed from a 2D plane. Each stone is placed on an integer coordinate, and a stone can only be removed if it shares either its row or column with at least one other stone.
+
+### Explanation of the Code
+
+#### 1. **Graph Construction:**
+   - The goal is to treat each stone as a node in a graph. Two stones are connected if they share the same row or column.
+   - To distinguish between rows and columns, the column index (`y`) is negated (~y). This ensures that rows and columns are treated as different entities, preventing accidental connections between nodes that share the same numerical index but belong to different dimensions (row vs column).
+
+   ```python
+   for x, y in stones:
+       if x not in graph:
+           graph[x] = []
+       if ~y not in graph:
+           graph[~y] = []
+       graph[x].append(~y)
+       graph[~y].append(x)
+   ```
+
+   - Here, `x` represents a row, and `~y` represents a negated column index. The graph is built by linking the stone's row to its column and vice versa. If `x` or `~y` is not in the graph, they are initialized with an empty list.
+
+#### 2. **Depth-First Search (DFS):**
+   - The DFS function is used to explore the entire connected component starting from any given node.
+   - A stack is used to simulate the DFS process iteratively. The algorithm marks nodes as visited to avoid revisiting them.
+
+   ```python
+   def dfs(node):
+       stack = [node]
+       while stack:
+           current = stack.pop()
+           if current not in visited:
+               visited.add(current)
+               for neighbor in graph[current]:
+                   if neighbor not in visited:
+                       stack.append(neighbor)
+   ```
+
+   - The `dfs` function ensures that all stones in a connected component are visited.
+
+#### 3. **Counting Connected Components:**
+   - A connected component here represents a group of stones that can be removed except for one stone, which anchors the entire group.
+   - The algorithm iterates over each stone and initiates a DFS from unvisited stones, marking all connected stones as visited.
+   - The number of connected components is then counted.
+
+   ```python
+   components = 0
+   for x, y in stones:
+       if x not in visited:
+           dfs(x)
+           components += 1
+   ```
+
+#### 4. **Final Calculation:**
+   - The maximum number of stones that can be removed is the total number of stones minus the number of connected components.
+   - This works because each connected component can have all but one stone removed.
+
+   ```python
+   return len(stones) - components
+   ```
+
+### Summary:
+- The algorithm treats the stones as nodes in a graph where connections represent shared rows or columns.
+- It uses DFS to count the number of connected components.
+- The result is the total number of stones minus the number of connected components, representing the maximum number of removable stones.
