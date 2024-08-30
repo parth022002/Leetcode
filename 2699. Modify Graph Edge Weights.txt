@@ -1,0 +1,161 @@
+2699. Modify Graph Edge Weights
+Solution:
+
+class Solution:
+    def modifiedGraphEdges(self, n: int, edges: List[List[int]], source: int, destination: int, target: int) -> List[List[int]]:
+        graph, result_edges, unknown_edges = defaultdict(set), [], []
+
+        for u, v, weight in edges:
+            if weight != -1:
+                graph[u].add((v, weight))
+                graph[v].add((u, weight))
+                result_edges.append([u, v, weight])
+            else:
+                unknown_edges.append((u, v))
+
+        def shortest_path(src, dst):
+            dist = [2 * 10**9 for i in range(n)]
+            dist[src] = 0
+            min_heap = [(src, 0)]
+
+            while min_heap:
+                node, current_dist = heappop(min_heap)
+
+                for neighbor, weight in graph[node]:
+                    if dist[neighbor] > weight + current_dist:
+                        dist[neighbor] = weight + current_dist
+                        heappush(min_heap, (neighbor, weight + current_dist))
+
+            return dist
+
+        if shortest_path(source, destination)[destination] < target:
+            return []
+
+        i, unknown_count = 0, len(unknown_edges)
+
+        while i < unknown_count and shortest_path(source, destination)[destination] > target:
+            u, v = unknown_edges[i]
+            i += 1
+            graph[u].add((v, 1))
+            graph[v].add((u, 1))
+
+            if shortest_path(source, destination)[destination] <= target:
+                result_edges.append([u, v, 1 + target - shortest_path(source, destination)[destination]])
+                break
+
+            result_edges.append([u, v, 1])
+
+        if shortest_path(source, destination)[destination] > target:
+            return []
+
+        while i < unknown_count:
+            u, v = unknown_edges[i]
+            result_edges.append([u, v, 2 * 10**9])
+            i += 1
+
+        return result_edges
+
+Explanation:
+
+This code is designed to solve the problem of modifying the weights of certain edges in a graph so that the shortest path from a given `source` node to a `destination` node has a specific length, `target`. Here's a step-by-step explanation:
+
+### Problem Breakdown
+1. **Graph Setup:**
+   - You have a graph with `n` nodes, represented by an edge list (`edges`).
+   - Each edge is either:
+     - **Known (non-negative weight):** The edge has a specific weight.
+     - **Unknown (weight = -1):** The weight is unspecified, and you need to adjust it to achieve the target shortest path length from `source` to `destination`.
+
+2. **Objective:**
+   - Modify the unknown edges so that the shortest path from `source` to `destination` is exactly equal to `target`. If this is not possible, return an empty list. Otherwise, return the modified edge list.
+
+### Code Explanation
+
+#### 1. Initial Graph Construction
+- The graph is constructed using an adjacency list (`graph`), where each node points to a set of its neighbors with the corresponding edge weights.
+- The edges with known weights are directly added to the `graph`.
+- The edges with unknown weights (`-1`) are stored in `unknown_edges`.
+
+```python
+graph, result_edges, unknown_edges = defaultdict(set), [], []
+
+for u, v, weight in edges:
+    if weight != -1:
+        graph[u].add((v, weight))
+        graph[v].add((u, weight))
+        result_edges.append([u, v, weight])
+    else:
+        unknown_edges.append((u, v))
+```
+
+#### 2. Dijkstra's Algorithm to Find Shortest Path
+- The `shortest_path` function calculates the shortest path from a source node `src` to all other nodes in the graph using Dijkstra's algorithm.
+- It returns a list `dist` where `dist[i]` is the shortest distance from `src` to node `i`.
+
+```python
+def shortest_path(src, dst):
+    dist = [2 * 10**9 for i in range(n)]
+    dist[src] = 0
+    min_heap = [(src, 0)]
+
+    while min_heap:
+        node, current_dist = heappop(min_heap)
+
+        for neighbor, weight in graph[node]:
+            if dist[neighbor] > weight + current_dist:
+                dist[neighbor] = weight + current_dist
+                heappush(min_heap, (neighbor, weight + current_dist))
+
+    return dist
+```
+
+#### 3. Initial Check for Feasibility
+- The code first checks if the shortest path from `source` to `destination` using only the known edges is already less than the target. If so, it's impossible to reach the target distance by adding positive weights to the unknown edges, and the function returns an empty list.
+
+```python
+if shortest_path(source, destination)[destination] < target:
+    return []
+```
+
+#### 4. Adjusting the Unknown Edges
+- The code iterates over the unknown edges, assigning a weight of `1` to each and checking if this adjustment brings the shortest path closer to the target.
+- If adding the current edge with weight `1` makes the shortest path equal to or less than the target, the edge weight is adjusted accordingly to match the exact target distance.
+
+```python
+i, unknown_count = 0, len(unknown_edges)
+
+while i < unknown_count and shortest_path(source, destination)[destination] > target:
+    u, v = unknown_edges[i]
+    i += 1
+    graph[u].add((v, 1))
+    graph[v].add((u, 1))
+
+    if shortest_path(source, destination)[destination] <= target:
+        result_edges.append([u, v, 1 + target - shortest_path(source, destination)[destination]])
+        break
+
+    result_edges.append([u, v, 1])
+```
+
+#### 5. Final Check and Edge Assignments
+- After processing all relevant edges, the code performs a final check to see if the shortest path is still greater than the target. If it is, the function returns an empty list.
+- If not, the remaining unknown edges are assigned a very large weight (`2 * 10^9`) to effectively make them irrelevant to the shortest path calculation.
+
+```python
+if shortest_path(source, destination)[destination] > target:
+    return []
+
+while i < unknown_count:
+    u, v = unknown_edges[i]
+    result_edges.append([u, v, 2 * 10**9])
+    i += 1
+
+return result_edges
+```
+
+### Key Points
+- **Multiple Shortest Path Calculations:** The code recalculates the shortest path multiple times as it modifies the graph, which can be computationally expensive.
+- **Greedy Approach:** The strategy is greedy, adjusting one unknown edge at a time until the target is reached.
+- **Edge Modification:** The code dynamically adjusts the edges as needed to achieve the target distance, but if the path becomes longer than the target, the approach terminates and returns an empty list.
+
+This approach, while effective, may have performance issues due to the repeated recalculation of the shortest paths. Optimization could involve minimizing these recalculations.
