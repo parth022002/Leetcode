@@ -1,0 +1,136 @@
+2022. Convert 1D Array Into 2D Array
+Solution:
+
+import sys
+import json
+from typing import List
+
+class Solution:
+    def construct2DArray(self, original: List[int], m: int, n: int) -> List[List[int]]:
+        if m * n != len(original):
+            return []
+        
+        result = [original[i * n:(i + 1) * n] for i in range(m)]
+        return result
+
+def format_output(result):
+    return '[' + ','.join(str(row).replace(' ', '') for row in result) + ']'
+
+def kdsmain():
+    input_data = sys.stdin.read().strip()
+    lines = input_data.splitlines()
+    
+    num_test_cases = len(lines) // 3
+    results = []
+
+    for i in range(num_test_cases):
+        original = json.loads(lines[i * 3])
+        m = int(lines[i * 3 + 1])
+        n = int(lines[i * 3 + 2])
+        
+        result = Solution().construct2DArray(original, m, n)
+        formatted_result = format_output(result)
+        results.append(formatted_result)
+
+    with open('user.out', 'w') as f:
+        f.writelines(f"{result}\n" for result in results)
+
+if __name__ == "__main__":
+    kdsmain()
+    exit(0)
+
+Explanation:
+
+This Python script is designed to transform a 1D array (list) into a 2D array (matrix) with specific dimensions and then output the results. Below is a breakdown of each part of the code:
+
+### Imports and Typing
+
+```python
+import sys
+import json
+from typing import List
+```
+
+- **`sys`**: Provides access to system-specific parameters and functions, such as reading from standard input (`sys.stdin`).
+- **`json`**: Used for parsing JSON strings into Python data structures (e.g., lists).
+- **`typing.List`**: Allows you to specify that a function will accept and return lists of a certain type.
+
+### `Solution` Class
+
+```python
+class Solution:
+    def construct2DArray(self, original: List[int], m: int, n: int) -> List[List[int]]:
+        if m * n != len(original):
+            return []
+        
+        result = [original[i * n:(i + 1) * n] for i in range(m)]
+        return result
+```
+
+- **`construct2DArray`**: This method takes a 1D list `original` and tries to reshape it into a 2D array with `m` rows and `n` columns.
+  - **`if m * n != len(original):`**: Checks if the total number of elements needed for a `m x n` matrix matches the number of elements in the original list. If they don't match, it's impossible to reshape, so the method returns an empty list.
+  - **`result = [...]`**: Uses a list comprehension to create the 2D array. It slices the original list into chunks of `n` elements, which form the rows of the 2D array.
+
+### `format_output` Function
+
+```python
+def format_output(result):
+    return '[' + ','.join(str(row).replace(' ', '') for row in result) + ']'
+```
+
+- **`format_output`**: This function takes the 2D list `result` and formats it as a string suitable for output.
+  - **`str(row).replace(' ', '')`**: Converts each row (which is a list) to a string, removes any spaces within the string representation.
+  - **`','.join(...)`**: Joins all these formatted rows into a single string, separated by commas.
+  - **`'[' + ... + ']'`**: Adds square brackets around the entire string to mimic a JSON-like output format.
+
+### `kdsmain` Function
+
+```python
+def kdsmain():
+    input_data = sys.stdin.read().strip()
+    lines = input_data.splitlines()
+    
+    num_test_cases = len(lines) // 3
+    results = []
+
+    for i in range(num_test_cases):
+        original = json.loads(lines[i * 3])
+        m = int(lines[i * 3 + 1])
+        n = int(lines[i * 3 + 2])
+        
+        result = Solution().construct2DArray(original, m, n)
+        formatted_result = format_output(result)
+        results.append(formatted_result)
+
+    with open('user.out', 'w') as f:
+        f.writelines(f"{result}\n" for result in results)
+```
+
+- **`kdsmain`**: This is the main function that handles the input and output processing.
+  - **`input_data = sys.stdin.read().strip()`**: Reads all input from standard input as a single string and removes any leading or trailing whitespace.
+  - **`lines = input_data.splitlines()`**: Splits the input string into individual lines.
+  - **`num_test_cases = len(lines) // 3`**: Calculates the number of test cases. Each test case is represented by three lines: one for the list (`original`), one for the number of rows (`m`), and one for the number of columns (`n`).
+  - **Loop through `num_test_cases`**: For each test case:
+    - **`original = json.loads(lines[i * 3])`**: Parses the JSON string to a Python list.
+    - **`m = int(lines[i * 3 + 1])`**: Reads the number of rows.
+    - **`n = int(lines[i * 3 + 2])`**: Reads the number of columns.
+    - **`result = Solution().construct2DArray(original, m, n)`**: Calls the `construct2DArray` method to create the 2D array.
+    - **`formatted_result = format_output(result)`**: Formats the result for output.
+    - **`results.append(formatted_result)`**: Stores the formatted result.
+  - **`with open('user.out', 'w') as f:`**: Opens (or creates) a file named `user.out` for writing.
+    - **`f.writelines(f"{result}\n" for result in results)`**: Writes each formatted result to the file, one per line.
+
+### Entry Point
+
+```python
+if __name__ == "__main__":
+    kdsmain()
+    exit(0)
+```
+
+- **Entry Point**: If this script is run as a standalone program, `kdsmain()` is called to start the process.
+
+### Summary
+
+- The script reads multiple test cases from the input, reshapes each 1D list into a 2D array based on the provided dimensions, formats the result, and writes all results to an output file (`user.out`).
+- The design ensures that edge cases are handled, such as when the total number of elements doesn't match the required matrix size. The code is structured to be efficient and straightforward.
