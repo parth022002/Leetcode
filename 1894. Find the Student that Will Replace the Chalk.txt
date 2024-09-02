@@ -1,0 +1,73 @@
+1894. Find the Student that Will Replace the Chalk
+Solution:
+from typing import List
+import bisect
+
+class Solution:
+    def chalkReplacer(self, chalk: List[int], k: int) -> int:
+        total_chalk = sum(chalk)
+        k %= total_chalk  # Reduce k to within the range of one full cycle
+        
+        if k == 0:
+            return 0
+        
+        # Find the student who will replace the chalk
+        current_chalk = 0
+        for i, c in enumerate(chalk):
+            if k < current_chalk + c:
+                return i
+            current_chalk += c
+        
+        return len(chalk) - 1  # Fallback, though this should never be reached
+
+
+Explanation:
+
+Here’s a detailed explanation of the optimized `chalkReplacer` function:
+
+### Problem Statement
+You are given an array `chalk` where `chalk[i]` represents the amount of chalk the `i`-th student uses. Initially, the students start taking turns, each using a certain amount of chalk. When a student cannot take the required amount of chalk (because the chalk runs out), they need to be replaced, and the process starts again from the first student. Given the total amount of chalk `k`, the goal is to determine which student will be the one who can no longer take the required chalk.
+
+### Steps in the Solution
+
+1. **Calculate Total Chalk Usage**:
+   ```python
+   total_chalk = sum(chalk)
+   ```
+   We calculate the total amount of chalk required for one full cycle (i.e., each student using their respective amounts once). This allows us to determine how many full cycles we can skip since `k` could be much larger than `total_chalk`.
+
+2. **Reduce `k` Using Modulo**:
+   ```python
+   k %= total_chalk
+   ```
+   Since `k` might be larger than `total_chalk`, we can use the modulo operation to find the remainder when `k` is divided by `total_chalk`. This remainder `k` is the effective amount of chalk left after completing as many full cycles as possible. This step reduces the problem to within the range of a single cycle.
+
+3. **Early Exit**:
+   ```python
+   if k == 0:
+       return 0
+   ```
+   If the remainder `k` is `0`, it means that after reducing `k`, we have exactly enough chalk to complete full cycles, and we would start back at the first student. Therefore, the first student (index `0`) will need to replace the chalk.
+
+4. **Find the Student Who Runs Out of Chalk**:
+   ```python
+   current_chalk = 0
+   for i, c in enumerate(chalk):
+       if k < current_chalk + c:
+           return i
+       current_chalk += c
+   ```
+   We iterate through the list of chalk usage by each student, accumulating the total chalk used (`current_chalk`). For each student, we check if the remaining chalk (`k`) is less than the chalk required by the current student. If it is, this student will be the one who runs out of chalk, and we return their index.
+
+5. **Fallback (Unreachable in Practice)**:
+   ```python
+   return len(chalk) - 1
+   ```
+   This is a fallback case that shouldn't be reached in practice, because the loop should return an index as soon as it finds the student who runs out of chalk.
+
+### Key Improvements:
+- **Efficiency**: The use of `k %= total_chalk` significantly reduces the number of iterations when `k` is large.
+- **Direct Iteration**: Instead of modifying the list or using a binary search, the solution directly iterates over the students, making it straightforward and efficient.
+- **No List Modification**: The function does not modify the original `chalk` list, making it safer for repeated calls with the same data.
+
+This approach ensures the function runs efficiently even for large inputs while maintaining clarity and correctness.
