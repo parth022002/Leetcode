@@ -1,0 +1,81 @@
+1945. Sum of Digits of String After Convert
+Solution:
+
+class Solution:
+    def getLucky(self, s: str, k: int) -> int:
+        # Step 1: Convert the string `s` to its corresponding numeric value
+        number = ''.join(str(ord(char) - ord('a') + 1) for char in s)
+        
+        # Step 2: Sum the digits `k` times
+        for _ in range(k):
+            number = str(sum(int(digit) for digit in number))
+        
+        return int(number)
+
+Explanation:
+
+Here's a detailed explanation of how your `getLucky` function works:
+
+### Problem Statement Recap
+Given a string `s` and an integer `k`, you need to:
+1. Convert each character in the string `s` to its corresponding numeric value (where `'a'` is 1, `'b'` is 2, ..., `'z'` is 26).
+2. Sum the digits of the resulting numeric string.
+3. Repeat the summation process `k` times.
+4. Return the final numeric result as an integer.
+
+### Step-by-Step Explanation
+
+#### Step 1: Convert the String `s` to Its Corresponding Numeric Value
+- The function begins by converting each character in the input string `s` to a numeric value based on its position in the alphabet.
+- The conversion is done using the expression `ord(char) - ord('a') + 1`, which calculates the position of each character relative to `'a'`.
+  - `ord(char)` returns the Unicode code point for `char`.
+  - `ord('a')` gives the code point for `'a'`, which is 97.
+  - Subtracting `ord('a')` from `ord(char)` gives the offset from `'a'`.
+  - Adding 1 shifts the result so that `'a'` maps to 1, `'b'` to 2, and so on.
+  
+- Example:
+  - If `s = "zbax"`, the corresponding numeric string becomes `"262124"` because:
+    - `'z'` -> 26
+    - `'b'` -> 2
+    - `'a'` -> 1
+    - `'x'` -> 24
+
+This conversion is done efficiently using a list comprehension combined with `join`, resulting in a single numeric string.
+
+#### Step 2: Sum the Digits `k` Times
+- Next, the function enters a loop that runs `k` times.
+- In each iteration of the loop:
+  - It sums the digits of the current numeric string.
+  - The sum of the digits is then converted back to a string for the next iteration.
+
+- Example:
+  - For `number = "262124"`:
+    - The digits are `2 + 6 + 2 + 1 + 2 + 4 = 17`.
+    - The numeric string becomes `"17"` after the first iteration.
+  - If `k = 2`, the process repeats:
+    - For `number = "17"`:
+      - The digits are `1 + 7 = 8`.
+      - The numeric string becomes `"8"` after the second iteration.
+
+#### Final Step: Return the Result
+- After completing `k` iterations of summing the digits, the final numeric string is converted to an integer and returned as the result.
+
+### Example Walkthrough
+Suppose `s = "zbax"` and `k = 2`:
+
+1. **Convert to Numeric String**:
+   - `"zbax"` -> `"262124"`
+   
+2. **First Iteration (k = 1)**:
+   - Sum of digits in `"262124"`: `2 + 6 + 2 + 1 + 2 + 4 = 17`
+   - Numeric string becomes `"17"`
+
+3. **Second Iteration (k = 2)**:
+   - Sum of digits in `"17"`: `1 + 7 = 8`
+   - Numeric string becomes `"8"`
+
+4. **Return Result**:
+   - The final result is `8`.
+
+### Summary
+The function efficiently converts the input string to a numeric form, sums the digits repeatedly for `k` iterations, and returns the final result as an integer. The approach is optimized for both readability and performance.
