@@ -1,0 +1,103 @@
+874. Walking Robot Simulation
+Solution:
+
+class Solution:
+    def robotSim(self, commands: List[int], obstacles: List[List[int]]) -> int:
+        obstacle_set = set(map(tuple, obstacles))
+        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]  # N, E, S, W
+        direction_idx = 0  # Start facing North
+        
+        x = y = 0
+        max_dist = 0
+        
+        for command in commands:
+            if command == -2:  # Turn left
+                direction_idx = (direction_idx - 1) % 4
+            elif command == -1:  # Turn right
+                direction_idx = (direction_idx + 1) % 4
+            else:
+                for _ in range(command):
+                    next_x = x + directions[direction_idx][0]
+                    next_y = y + directions[direction_idx][1]
+                    
+                    if (next_x, next_y) in obstacle_set:
+                        break
+                        
+                    x, y = next_x, next_y
+                    max_dist = max(max_dist, x ** 2 + y ** 2)
+        
+        return max_dist
+
+Explanation:
+
+Here’s an explanation of the `robotSim` function:
+
+### Problem Context:
+The problem involves simulating the movement of a robot on a 2D grid. The robot starts at the origin (0, 0) and can move based on a series of commands. The commands can either be:
+- **Movement Commands**: Positive integers where the robot moves forward by the given number of units.
+- **Rotation Commands**: `-1` to turn right 90 degrees, and `-2` to turn left 90 degrees.
+
+The robot should avoid obstacles, which are given as a list of coordinates. The goal is to determine the maximum Euclidean distance squared from the origin that the robot reaches.
+
+### Code Explanation:
+
+1. **Convert Obstacles to a Set**:
+   ```python
+   obstacle_set = set(map(tuple, obstacles))
+   ```
+   - **Purpose**: Obstacles are stored in a set for O(1) time complexity when checking if a cell contains an obstacle. Each obstacle is represented as a tuple `(x, y)` for easy lookup.
+
+2. **Define Directions**:
+   ```python
+   directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]  # N, E, S, W
+   direction_idx = 0  # Start facing North
+   ```
+   - **Purpose**: The `directions` list contains vectors for movement in the North, East, South, and West directions. The `direction_idx` keeps track of which direction the robot is currently facing:
+     - `directions[0]` → North (up)
+     - `directions[1]` → East (right)
+     - `directions[2]` → South (down)
+     - `directions[3]` → West (left)
+   - Initially, the robot is facing North.
+
+3. **Initialize Variables**:
+   ```python
+   x = y = 0
+   max_dist = 0
+   ```
+   - **Purpose**: `x` and `y` store the current coordinates of the robot. `max_dist` keeps track of the maximum distance squared from the origin.
+
+4. **Process Commands**:
+   ```python
+   for command in commands:
+       if command == -2:  # Turn left
+           direction_idx = (direction_idx - 1) % 4
+       elif command == -1:  # Turn right
+           direction_idx = (direction_idx + 1) % 4
+       else:
+           for _ in range(command):
+               next_x = x + directions[direction_idx][0]
+               next_y = y + directions[direction_idx][1]
+               
+               if (next_x, next_y) in obstacle_set:
+                   break
+                   
+               x, y = next_x, next_y
+               max_dist = max(max_dist, x ** 2 + y ** 2)
+   ```
+   - **Turn Commands**:
+     - `-2`: Turn left. This is done by decrementing `direction_idx` and using modulo to wrap around the list.
+     - `-1`: Turn right. This is done by incrementing `direction_idx` and using modulo to wrap around the list.
+   - **Movement Commands**:
+     - For positive values, the robot moves forward one step at a time in the current direction (`direction_idx`).
+     - The new position `(next_x, next_y)` is calculated by adding the current direction vector to the current position.
+     - If the new position is an obstacle, the movement is halted (`break`).
+     - If the move is successful, the position is updated, and the maximum distance squared from the origin is recalculated.
+
+5. **Return the Result**:
+   ```python
+   return max_dist
+   ```
+   - **Purpose**: After processing all commands, the function returns the maximum Euclidean distance squared from the origin that the robot reached.
+
+### Summary:
+The function efficiently simulates the robot’s movement, considering obstacles, and keeps track of the furthest point reached. The use of direction vectors and modulo arithmetic simplifies the direction handling and ensures the robot turns correctly.
