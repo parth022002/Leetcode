@@ -1,0 +1,100 @@
+2028. Find the Missing Observation
+Solution:
+
+class Solution:
+    def missingRolls(self, rolls: List[int], mean: int, n: int) -> List[int]:
+        total_sum_needed = (len(rolls) + n) * mean - sum(rolls)
+        
+        # If it's impossible to distribute the required sum
+        if total_sum_needed < n or total_sum_needed > 6 * n:
+            return []
+        
+        # Distribute total_sum_needed as evenly as possible
+        base_val, extra = divmod(total_sum_needed, n)
+        
+        # If base_val goes beyond the dice's range (1 to 6)
+        if base_val < 1 or base_val > 6:
+            return []
+        
+        # Create an answer list with base_val as the starting point
+        ans = [base_val] * n
+        
+        # Distribute the remainder (extra) among the first 'extra' positions
+        for i in range(extra):
+            ans[i] += 1
+        
+        return ans
+
+Explanation:
+
+Let's break down the `missingRolls` function in your code:
+
+### Purpose
+The function `missingRolls` aims to find the missing dice rolls such that their average (mean) matches the given mean value, and the total number of dice rolls (including the missing ones) sums up to the expected total.
+
+### Parameters
+- `rolls`: A list of integers representing the known dice rolls.
+- `mean`: The desired mean of all dice rolls.
+- `n`: The number of missing dice rolls that need to be determined.
+
+### Steps and Logic
+
+1. **Calculate Total Sum Needed**:
+   ```python
+   total_sum_needed = (len(rolls) + n) * mean - sum(rolls)
+   ```
+   - `len(rolls)`: Number of known dice rolls.
+   - `n`: Number of missing dice rolls.
+   - `(len(rolls) + n) * mean`: This is the total sum required for all dice rolls (including both known and missing ones) to achieve the desired mean.
+   - `sum(rolls)`: The sum of the known dice rolls.
+   - `total_sum_needed`: The sum that the missing dice rolls must contribute to match the desired mean.
+
+2. **Check Feasibility**:
+   ```python
+   if total_sum_needed < n or total_sum_needed > 6 * n:
+       return []
+   ```
+   - Each missing dice roll must be between 1 and 6. So, the minimum sum for `n` dice rolls is `n` (all rolls are 1) and the maximum is `6 * n` (all rolls are 6).
+   - If `total_sum_needed` is less than `n` or greater than `6 * n`, it's impossible to distribute the sum among `n` dice rolls within the 1-6 range.
+
+3. **Distribute Sum Evenly**:
+   ```python
+   base_val, extra = divmod(total_sum_needed, n)
+   ```
+   - `base_val`: This is the base value for each dice roll.
+   - `extra`: This is the remainder when dividing `total_sum_needed` by `n`. It represents how many dice rolls need to be incremented by 1 to match the exact sum.
+
+4. **Check Base Value Validity**:
+   ```python
+   if base_val < 1 or base_val > 6:
+       return []
+   ```
+   - Ensure `base_val` falls within the valid dice range (1 to 6). If not, return an empty list as it's impossible to distribute the rolls correctly.
+
+5. **Create Result List**:
+   ```python
+   ans = [base_val] * n
+   ```
+   - Initialize the result list with `base_val` for all `n` dice rolls.
+
+6. **Adjust for Extra**:
+   ```python
+   for i in range(extra):
+       ans[i] += 1
+   ```
+   - Distribute the `extra` amount by incrementing the first `extra` dice rolls by 1. This ensures that the total sum of the dice rolls matches `total_sum_needed`.
+
+### Example
+
+Let's say:
+- `rolls = [1, 2, 3]`
+- `mean = 4`
+- `n = 2`
+
+**Steps**:
+1. `total_sum_needed = (3 + 2) * 4 - (1 + 2 + 3) = 5 * 4 - 6 = 20 - 6 = 14`
+2. The range check: `14` is within the bounds `2` (minimum) and `12` (maximum), so it's feasible.
+3. Distribute `14` among `2` dice rolls: `base_val = 7`, `extra = 0`.
+4. Since `base_val = 7` is out of range [1, 6], this would return `[]`, indicating it's not possible to achieve the mean.
+
+If you have any specific questions about the function or need further clarification, let me know!
