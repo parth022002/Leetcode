@@ -1,0 +1,123 @@
+3217. Delete Nodes From Linked List Present in Array
+Solution:
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+
+
+class Solution:
+    def modifiedList(self, nums: List[int], head: Optional[ListNode]) -> Optional[ListNode]:
+        s = set(nums)
+        
+        while head and head.val in s:
+            head = head.next
+        
+      
+        if not head:
+            return None
+
+        prev = head
+        curr = head.next
+        
+        while curr:
+            if curr.val not in s:
+                prev.next = curr
+                prev = curr
+            curr = curr.next
+        
+        prev.next = None
+        return head
+
+        
+Explanation:
+
+This function `modifiedList` is designed to modify a linked list by removing any nodes whose values exist in a given list (`nums`), and return the modified linked list. Here’s an explanation of how it works step-by-step:
+
+### 1. **Input Overview**:
+   - **`nums`**: A list of integers that need to be removed from the linked list.
+   - **`head`**: The head (starting node) of a singly linked list where each node contains an integer (`val`) and a pointer to the next node (`next`).
+
+### 2. **Initial Setup**:
+   - First, we convert the list `nums` into a set `s` to allow **O(1)** average-time lookups. This improves the efficiency of checking whether a node's value should be removed.
+
+   ```python
+   s = set(nums)
+   ```
+
+### 3. **Skipping Leading Nodes**:
+   - The linked list may start with several nodes whose values are in `s`. We need to skip over these nodes until we find the first node whose value is **not** in `s`. This is achieved with the following loop:
+   
+   ```python
+   while head and head.val in s:
+       head = head.next
+   ```
+   - This loop advances `head` until we either reach the end of the list (`head == None`) or find a node that is **not** in `s`. If all nodes in the list have values in `s`, `head` will become `None`.
+
+### 4. **Handling Empty List**:
+   - If, after skipping the leading nodes, we find that `head` is `None` (i.e., all nodes were in `s`), we return `None`, which means the entire list was removed.
+
+   ```python
+   if not head:
+       return None
+   ```
+
+### 5. **Processing the Rest of the List**:
+   - We now need to process the remaining nodes to remove those whose values are in `s`. We initialize two pointers:
+     - `prev`: Tracks the last valid node (i.e., a node whose value is **not** in `s`).
+     - `curr`: Points to the current node being checked, starting from `head.next`.
+   
+   ```python
+   prev = head
+   curr = head.next
+   ```
+
+### 6. **Traversing the Linked List**:
+   - We iterate over the remaining nodes using a `while` loop. For each node (`curr`), we check if its value is **not** in `s`:
+     - If the value is **not** in `s`, we link this node to the previous valid node (`prev`) by setting `prev.next = curr`, and then update `prev` to point to `curr`.
+     - If the value **is** in `s`, we skip the current node by advancing `curr` without linking it to `prev`.
+   
+   ```python
+   while curr:
+       if curr.val not in s:
+           prev.next = curr
+           prev = curr
+       curr = curr.next
+   ```
+
+### 7. **Cutting Off the Tail**:
+   - After the loop, there may be some nodes at the end of the list whose values are in `s` but haven’t been removed yet. To ensure that these nodes are not included in the modified list, we set `prev.next = None`, effectively cutting off any remaining nodes.
+
+   ```python
+   prev.next = None
+   ```
+
+### 8. **Returning the Modified List**:
+   - Finally, we return the modified linked list, starting from the updated `head`.
+
+   ```python
+   return head
+   ```
+
+### Example Walkthrough:
+
+Consider the following example:
+
+- **Input**:
+  - `nums = [2, 3]`
+  - Linked list: `1 -> 2 -> 3 -> 4 -> 5`
+  
+- **Steps**:
+  1. Convert `nums` to a set: `s = {2, 3}`.
+  2. Skip the leading nodes with values in `s`. Starting with `head = 1` (not in `s`), so no nodes are skipped.
+  3. Traverse the list, skipping nodes with values `2` and `3`.
+  4. Link nodes `1 -> 4 -> 5`, and remove any remaining connections after node `5`.
+  5. The modified list becomes: `1 -> 4 -> 5`.
+
+- **Output**: The modified linked list is `1 -> 4 -> 5`.
+
+### Time and Space Complexity:
+- **Time Complexity**: O(n), where `n` is the number of nodes in the linked list. This is because we traverse each node in the list exactly once.
+- **Space Complexity**: O(m), where `m` is the number of elements in `nums`. The set `s` takes O(m) space for storing `nums`.
