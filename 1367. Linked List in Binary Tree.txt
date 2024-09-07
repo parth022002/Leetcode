@@ -1,0 +1,86 @@
+1367. Linked List in Binary Tree
+Solution:
+
+# Definition for singly-linked list.
+# class ListNode:
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+# Definition for a binary tree node.
+# class TreeNode:
+#     def __init__(self, val=0, left=None, right=None):
+#         self.val = val
+#         self.left = left
+#         self.right = right
+class Solution:
+    def isSubPath(self, head: Optional[ListNode], root: Optional[TreeNode]) -> bool:
+        d=deque()
+        d.append(root)
+        def dfs(node1,node2):
+            if not node2:
+                return True
+            if not node1 or node1.val!=node2.val:
+                return False
+            return dfs(node1.right,node2.next) or dfs(node1.left,node2.next)
+        while(d):
+            for _ in range(len(d)):
+                curr=d.popleft()
+                if curr.val==head.val and dfs(curr,head):
+                    return True
+                if curr.left:
+                    d.append(curr.left)
+                if curr.right:
+                    d.append(curr.right)
+        return False
+        
+Explanation:
+
+This solution checks if a linked list is a subpath in a binary tree. A linked list is considered a subpath if there is a root-to-leaf path in the binary tree that matches the linked list from head to tail.
+
+### Key Concepts:
+
+1. **Linked List (`ListNode`)**:
+   - The linked list consists of nodes where each node has a value (`val`) and a pointer to the next node (`next`).
+   
+2. **Binary Tree (`TreeNode`)**:
+   - The binary tree has nodes with values (`val`) and pointers to the left (`left`) and right (`right`) children.
+
+### Approach:
+
+1. **DFS (Depth-First Search)**:
+   - A helper function `dfs` is used to traverse the binary tree and check if a subpath matching the linked list starts from a specific tree node.
+   - The function compares the current tree node (`node1`) with the current linked list node (`node2`). If their values match, it proceeds to check the left and right subtrees (recursively) to see if they continue matching the rest of the linked list.
+   - If the linked list is fully traversed (`node2` becomes `None`), it means a matching subpath is found, and `True` is returned.
+
+2. **BFS (Breadth-First Search)**:
+   - The outer loop performs a BFS on the binary tree using a deque `d`. 
+   - For each node in the binary tree, if the node's value matches the head of the linked list, the `dfs` function is called to check if this node starts a matching path.
+   - If such a path is found, the function returns `True`.
+
+3. **Edge Cases**:
+   - If the current tree node does not match the current linked list node, the search continues for another matching tree node.
+   - If no matching path is found after the entire tree is searched, the function returns `False`.
+
+### Detailed Explanation:
+
+- **Main Function (`isSubPath`)**:
+  - The function starts by adding the root node of the tree to a deque (`d`) for BFS traversal.
+  - For each node (`curr`) in the deque, the function checks:
+    - If the value of `curr` matches the head of the linked list, it calls `dfs` to check for a matching path.
+    - It continues the BFS traversal by appending the left and right children of `curr` to the deque.
+
+- **DFS Function (`dfs`)**:
+  - `dfs(node1, node2)` compares the current tree node (`node1`) with the current linked list node (`node2`).
+  - If the linked list is fully traversed (`node2 == None`), it returns `True`.
+  - If the current tree node is `None` or the values don't match (`node1.val != node2.val`), it returns `False`.
+  - Otherwise, it recursively checks both the left and right subtrees to continue the linked list path.
+
+### Time Complexity:
+- **BFS**: Each tree node is processed once in the BFS, so the time complexity is \(O(N)\), where \(N\) is the number of nodes in the binary tree.
+- **DFS**: For each node, the DFS compares at most the entire linked list, which has \(L\) nodes. Thus, for each tree node, the DFS takes \(O(L)\).
+- Therefore, the overall time complexity is \(O(N \times L)\), where \(N\) is the number of nodes in the tree and \(L\) is the length of the linked list.
+
+### Space Complexity:
+- The space complexity is dominated by the deque used for BFS and the recursive call stack for DFS. In the worst case, both BFS and DFS take \(O(N)\) space.
+
+This approach efficiently checks if a linked list exists as a subpath in a binary tree.
