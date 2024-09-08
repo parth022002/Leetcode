@@ -1,0 +1,128 @@
+725. Split Linked List in Parts
+Solution:
+
+# Definition for singly-linked list.
+# class ListNode(object):
+#     def __init__(self, val=0, next=None):
+#         self.val = val
+#         self.next = next
+# Definition for singly-linked list.
+
+class Solution:
+    def splitListToParts(self, head, k):
+        ans = [None] * k
+
+        # Calculate total size of the linked list
+        size = 0
+        current = head
+        while current:
+            size += 1
+            current = current.next
+
+        # Minimum size of each part
+        split_size = size // k
+        remainder = size % k  # Remaining nodes to distribute
+
+        current = head
+        for i in range(k):
+            ans[i] = current
+            current_size = split_size + (1 if remainder > 0 else 0)
+            remainder -= 1
+
+            # Traverse to the end of the current part
+            for _ in range(current_size - 1):
+                if current:
+                    current = current.next
+
+            # Cut the list
+            if current:
+                next_part = current.next
+                current.next = None
+                current = next_part
+
+        return ans
+
+Explanation:
+
+### Problem:
+You are asked to split a singly linked list into `k` parts as evenly as possible. Each part should have approximately the same number of nodes, with any extra nodes distributed one-by-one among the first few parts. If there are fewer nodes than `k`, the result should include empty parts (`None`).
+
+### Code Explanation:
+
+```python
+class Solution:
+    def splitListToParts(self, head, k):
+        ans = [None] * k  # Initialize an array of size k to hold the k parts, initially all set to None.
+
+        # Step 1: Calculate the total size (number of nodes) of the linked list
+        size = 0
+        current = head
+        while current:  # Traverse the list to count the number of nodes.
+            size += 1
+            current = current.next
+
+        # Step 2: Calculate the minimum size for each part and the number of extra nodes
+        split_size = size // k  # This is the base size of each part.
+        remainder = size % k  # These extra nodes need to be distributed among the first few parts.
+
+        current = head  # Reset current to the head of the linked list for the next traversal.
+        
+        # Step 3: Split the list into k parts
+        for i in range(k):
+            ans[i] = current  # Set the head of the i-th part to the current node.
+
+            # Calculate the current size of this part, which is `split_size` + 1 if remainder > 0
+            current_size = split_size + (1 if remainder > 0 else 0)
+            remainder -= 1  # Use one of the extra nodes if available (decrement remainder).
+
+            # Step 4: Traverse the current part to the end
+            for _ in range(current_size - 1):  # Traverse current_size - 1 nodes.
+                if current:
+                    current = current.next
+
+            # Step 5: Cut the list if we are not at the end
+            if current:
+                next_part = current.next  # Store the next part of the list.
+                current.next = None  # Cut the link to split the list.
+                current = next_part  # Move to the next part.
+
+        return ans  # Return the array containing the heads of each part.
+```
+
+### Steps Explained:
+
+1. **Initialization**:
+   - `ans = [None] * k`: Initialize an array to hold the result, with `k` elements, all initially set to `None`.
+
+2. **Calculate the total size of the linked list**:
+   - Use a loop to traverse the entire linked list and count the number of nodes. This is stored in `size`.
+
+3. **Calculate the minimum size of each part**:
+   - `split_size = size // k`: Calculate the base size of each part by dividing the total number of nodes by `k`.
+   - `remainder = size % k`: The remainder determines how many extra nodes need to be added one-by-one to the first few parts.
+
+4. **Splitting the list**:
+   - We go through `k` iterations (once for each part).
+   - For each part, assign `ans[i]` to the current node (`current`).
+   - Determine the size of the current part: it's either `split_size` or `split_size + 1` if there's a remainder (an extra node to add).
+   - Decrement `remainder` after using one of the extra nodes.
+   
+5. **Traverse and cut the list**:
+   - For each part, traverse `current_size - 1` nodes to reach the end of the part.
+   - After reaching the end, store the next node (`next_part`) and set `current.next = None` to cut the list and split it into separate parts.
+
+6. **Return the result**:
+   - Return `ans`, an array containing the heads of the split parts.
+
+### Example Walkthrough:
+
+Let's say the linked list is `1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8 -> 9 -> 10` and `k = 3`.
+
+- **Step 1**: The size of the list is `10`.
+- **Step 2**: The base size for each part is `10 // 3 = 3` and there is a remainder of `10 % 3 = 1`, so the first part will have one extra node.
+- **Step 3**: We start splitting:
+   - Part 1: 4 nodes (`1 -> 2 -> 3 -> 4`), remainder is used.
+   - Part 2: 3 nodes (`5 -> 6 -> 7`).
+   - Part 3: 3 nodes (`8 -> 9 -> 10`).
+
+The result will be three separate linked lists: `[1 -> 2 -> 3 -> 4, 5 -> 6 -> 7, 8 -> 9 -> 10]`.
