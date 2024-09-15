@@ -1,0 +1,85 @@
+1310. XOR Queries of a Subarray
+Solution:
+
+class Solution:
+    def xorQueries(self, arr: List[int], queries: List[List[int]]) -> List[int]:
+        # Step 1: Compute the prefix XOR array
+        n = len(arr)
+        prefix_xor = [0] * (n + 1)
+        
+        for i in range(n):
+            prefix_xor[i + 1] = prefix_xor[i] ^ arr[i]
+        
+        # Step 2: Answer each query in constant time
+        result = []
+        for left, right in queries:
+            result.append(prefix_xor[right + 1] ^ prefix_xor[left])
+        
+        return result
+
+Explanation:
+
+Let's walk through the code step-by-step to understand how it solves the problem efficiently.
+
+### Problem Recap:
+Given an array `arr` and a list of `queries`, each query `[left, right]` requires the XOR of elements from index `left` to `right` in `arr`. We need to return a list of results where each result corresponds to a query.
+
+### Solution Explanation:
+
+#### Step 1: Compute the Prefix XOR Array
+
+1. **Purpose of the Prefix XOR Array:**
+   The prefix XOR array is designed to store the XOR of all elements from the start of the array up to each index `i`. It allows us to compute the XOR of any subarray in constant time.
+
+2. **Construction of the Prefix XOR Array:**
+   - Initialize an array `prefix_xor` with length `n + 1` (where `n` is the length of `arr`) and fill it with zeros. The extra element is to handle the base case where no elements are considered (`prefix_xor[0] = 0`).
+   - For every index `i` from `0` to `n - 1` in `arr`:
+     - Set `prefix_xor[i + 1] = prefix_xor[i] ^ arr[i]`.
+     - This means that `prefix_xor[i + 1]` holds the XOR of all elements from `arr[0]` to `arr[i]`.
+
+3. **Why This Works:**
+   The XOR operation is both **associative** and **commutative**. This allows us to use the prefix XOR to efficiently compute the XOR of any subarray by canceling out the elements before the subarray.
+
+#### Step 2: Answer Each Query in Constant Time
+
+1. **Using the Prefix XOR Array to Answer Queries:**
+   - For each query `[left, right]`, the XOR of the elements from `left` to `right` in `arr` is given by:
+     - `prefix_xor[right + 1] ^ prefix_xor[left]`.
+   - This works because:
+     - `prefix_xor[right + 1]` contains the XOR of all elements from `arr[0]` to `arr[right]`.
+     - `prefix_xor[left]` contains the XOR of all elements from `arr[0]` to `arr[left - 1]`.
+     - XORing these two results effectively cancels out the elements from `arr[0]` to `arr[left - 1]`, leaving only the XOR of the subarray from `arr[left]` to `arr[right]`.
+
+2. **Efficiency:**
+   - Each query can now be answered in **O(1)** time due to the precomputed prefix XOR array.
+   - Constructing the prefix XOR array takes **O(n)** time, where `n` is the length of `arr`.
+   - Answering all `q` queries takes **O(q)** time, where `q` is the number of queries.
+   - Thus, the total time complexity is **O(n + q)**.
+
+### Code Execution:
+
+Given an example input:
+
+- `arr = [1, 3, 4, 8]`
+- `queries = [[0, 1], [1, 2], [0, 3], [3, 3]]`
+
+- The `prefix_xor` array will be computed as follows:
+  - `prefix_xor[0] = 0` (initial value)
+  - `prefix_xor[1] = prefix_xor[0] ^ arr[0] = 0 ^ 1 = 1`
+  - `prefix_xor[2] = prefix_xor[1] ^ arr[1] = 1 ^ 3 = 2`
+  - `prefix_xor[3] = prefix_xor[2] ^ arr[2] = 2 ^ 4 = 6`
+  - `prefix_xor[4] = prefix_xor[3] ^ arr[3] = 6 ^ 8 = 14`
+
+- Resulting `prefix_xor = [0, 1, 2, 6, 14]`
+
+- Answer each query using:
+  - `[0, 1] -> prefix_xor[2] ^ prefix_xor[0] = 2 ^ 0 = 2`
+  - `[1, 2] -> prefix_xor[3] ^ prefix_xor[1] = 6 ^ 1 = 7`
+  - `[0, 3] -> prefix_xor[4] ^ prefix_xor[0] = 14 ^ 0 = 14`
+  - `[3, 3] -> prefix_xor[4] ^ prefix_xor[3] = 14 ^ 6 = 8`
+
+- The output is `[2, 7, 14, 8]`, which matches the example's expected output.
+
+### Conclusion:
+
+The solution uses the prefix XOR array to provide an efficient answer to each query in constant time, leading to an overall time complexity of **O(n + q)**, which is well-suited for the given constraints.

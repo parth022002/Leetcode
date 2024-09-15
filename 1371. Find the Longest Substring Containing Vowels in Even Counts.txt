@@ -1,0 +1,101 @@
+1371. Find the Longest Substring Containing Vowels in Even Counts
+Solution:
+
+class Solution:
+    def findTheLongestSubstring(self, s: str) -> int:
+        # Initialize a map to store the first occurrence of each mask
+        mask_map = {0: -1}
+        max_len = 0
+        mask = 0
+
+        # Dictionary to map vowels to their respective bits in the mask
+        vowel_to_bit = {'a': 1, 'e': 2, 'i': 4, 'o': 8, 'u': 16}
+
+        # Iterate over the string and update the mask accordingly
+        for i, char in enumerate(s):
+            if char in vowel_to_bit:
+                # Flip the corresponding bit for the vowel
+                mask ^= vowel_to_bit[char]
+
+            # Check if the current mask has been seen before
+            if mask in mask_map:
+                max_len = max(max_len, i - mask_map[mask])
+            else:
+                # Store the first occurrence of this mask
+                mask_map[mask] = i
+
+        return max_len
+
+Explanation:
+
+### Explanation of the Code:
+
+This solution uses a clever **bitmasking** approach to solve the problem of finding the longest substring in which each vowel (`a`, `e`, `i`, `o`, `u`) appears an **even number of times**. Here's a detailed explanation of each part:
+
+#### 1. **Initialization**:
+```python
+mask_map = {0: -1}
+max_len = 0
+mask = 0
+```
+- `mask_map`: This dictionary stores the **first occurrence** of each bitmask (which tracks the even/odd parity of vowels). Initially, we set `{0: -1}` because if no vowels have appeared yet (i.e., their counts are all even), the bitmask is `0`, and this happens before the string starts (index `-1`).
+  
+- `max_len`: This variable keeps track of the **maximum length** of the substring that meets the condition of having vowels in even counts.
+
+- `mask`: This is a bitmask used to represent the parity of the vowels. Each bit of the integer represents a vowel:
+  - `a` is bit `1`,
+  - `e` is bit `2`,
+  - `i` is bit `4`,
+  - `o` is bit `8`,
+  - `u` is bit `16`.
+  
+  The bit is flipped whenever the corresponding vowel is encountered.
+
+#### 2. **Mapping Vowels to Bits**:
+```python
+vowel_to_bit = {'a': 1, 'e': 2, 'i': 4, 'o': 8, 'u': 16}
+```
+- This dictionary maps each vowel to a corresponding bit. This helps in flipping the bit when a vowel is encountered in the string.
+
+#### 3. **Iterating Over the String**:
+```python
+for i, char in enumerate(s):
+```
+- We iterate over the string `s` using the `enumerate` function, which gives us both the index `i` and the character `char` at that position in the string.
+
+#### 4. **Updating the Bitmask**:
+```python
+if char in vowel_to_bit:
+    mask ^= vowel_to_bit[char]
+```
+- If the current character `char` is a vowel (i.e., it is in the `vowel_to_bit` dictionary), we **flip the corresponding bit** in the `mask` using the XOR operator (`^`). This updates the mask to reflect whether the count of that vowel is odd or even. If the bit is `1`, the count is odd; if it’s `0`, the count is even.
+
+#### 5. **Checking for Previous Occurrences of the Mask**:
+```python
+if mask in mask_map:
+    max_len = max(max_len, i - mask_map[mask])
+else:
+    mask_map[mask] = i
+```
+- After updating the `mask`, we check if this bitmask has been encountered before:
+  - If it **has** been seen before (i.e., it is in `mask_map`), it means that the substring between the first occurrence of this mask and the current index `i` has all vowels in even counts. Therefore, we calculate the length of this substring (`i - mask_map[mask]`) and update `max_len` if this length is the largest we've seen so far.
+  
+  - If the **mask hasn't been seen** before, we store its occurrence in `mask_map` with the current index `i` to track where this mask first appeared.
+
+#### 6. **Returning the Result**:
+```python
+return max_len
+```
+- After finishing the iteration, the `max_len` variable contains the length of the longest substring where all vowels appear an even number of times, and we return it.
+
+### Key Concepts:
+
+- **Bitmasking**: We use a single integer (`mask`) to track the parity of all vowels. Each vowel corresponds to a different bit in the mask. Flipping the bit changes whether the vowel count is odd or even.
+
+- **Map for First Occurrence**: The `mask_map` dictionary keeps track of the first occurrence of each bitmask. This allows us to efficiently calculate the length of substrings where vowels are evenly distributed by comparing the current index with the first occurrence of the same mask.
+
+### Time and Space Complexity:
+- **Time Complexity**: O(n), where `n` is the length of the string `s`. We only traverse the string once and perform constant-time operations (bitwise XOR and dictionary lookups) at each step.
+- **Space Complexity**: O(1), as the bitmask has only 32 possible values (5 bits representing 5 vowels), and the dictionary will have at most 32 entries. Thus, space usage is effectively constant.
+
+This solution is both time and space efficient, making it suitable for large inputs.

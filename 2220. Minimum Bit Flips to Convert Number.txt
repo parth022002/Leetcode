@@ -1,0 +1,83 @@
+2220. Minimum Bit Flips to Convert Number
+Solution:
+
+class Solution:
+    def minBitFlips(self, start: int, goal: int) -> int:
+        xor = start ^ goal
+        count = 0
+        while xor:
+            count += xor & 1  # Increment if the least significant bit is 1
+            xor >>= 1          # Right shift to process the next bit
+        return count
+
+Explanation:
+
+Here’s a detailed explanation of how the optimized `minBitFlips` function works:
+
+### Problem:
+The goal is to find the minimum number of bit flips required to convert one integer (`start`) to another integer (`goal`). A "bit flip" means changing a `0` bit to `1` or a `1` bit to `0`.
+
+### Key Concepts:
+1. **XOR Operation (`^`)**:
+   - When two numbers are XORed, the resulting binary number has bits set to `1` wherever the corresponding bits of the two input numbers are different.
+   - For example:
+     - `start = 5 (0101 in binary)`
+     - `goal = 9 (1001 in binary)`
+     - `start ^ goal = 0101 ^ 1001 = 1100`
+     - The result (`1100` in binary) shows the positions where the bits differ between `start` and `goal`. The positions with `1` indicate where the bits need to be flipped.
+   
+2. **Counting Set Bits**:
+   - After XORing `start` and `goal`, the number of `1`s in the XOR result tells us how many bits are different and, thus, how many flips are needed.
+   - For example, in the XOR result `1100`, there are two `1`s, which means two bits need to be flipped.
+
+### Code Breakdown:
+
+```python
+class Solution:
+    def minBitFlips(self, start: int, goal: int) -> int:
+        xor = start ^ goal  # XOR the two numbers
+        count = 0           # Initialize a count of bit flips
+        while xor:          # Loop while there are still bits to process
+            count += xor & 1  # Check if the least significant bit is 1
+            xor >>= 1          # Shift the number right by 1 to process the next bit
+        return count          # Return the total number of bit flips
+```
+
+### Step-by-Step Explanation:
+1. **XOR Calculation**:
+   - The line `xor = start ^ goal` computes the XOR of `start` and `goal`. The result (`xor`) is a number that has `1`s in the positions where the bits of `start` and `goal` differ and `0`s where they are the same.
+   
+2. **Initialize Count**:
+   - `count = 0` is used to track the number of differing bits (i.e., the number of bit flips required).
+
+3. **Bitwise Operations**:
+   - **While Loop**: The loop continues as long as `xor` is non-zero, meaning there are still bits to check.
+   - **Check Least Significant Bit**: `xor & 1` isolates the least significant bit of `xor`. If this bit is `1`, it means there is a difference between the corresponding bits of `start` and `goal`, so `count` is incremented.
+   - **Shift Right**: `xor >>= 1` shifts the `xor` value to the right by 1 bit. This effectively removes the least significant bit we just processed and prepares the next bit for the next iteration of the loop.
+
+4. **Return the Count**:
+   - After all bits have been processed and counted, the `count` (which now contains the total number of bit flips required) is returned.
+
+### Example:
+
+Let's walk through an example where `start = 5` and `goal = 9`:
+
+- **Binary Representation**:
+   - `start = 5` is `0101` in binary.
+   - `goal = 9` is `1001` in binary.
+   - `start ^ goal = 1100` in binary (this shows that the second and third bits are different).
+
+- **Bitwise Process**:
+   - `xor = 1100` (12 in decimal)
+   - 1st iteration: `xor & 1 = 0` (least significant bit is `0`), so no flip. Then `xor >>= 1`, `xor` becomes `0110`.
+   - 2nd iteration: `xor & 1 = 0` (least significant bit is `0`), so no flip. Then `xor >>= 1`, `xor` becomes `0011`.
+   - 3rd iteration: `xor & 1 = 1` (least significant bit is `1`), so increment `count`. Then `xor >>= 1`, `xor` becomes `0001`.
+   - 4th iteration: `xor & 1 = 1` (least significant bit is `1`), so increment `count`. Then `xor >>= 1`, `xor` becomes `0000`.
+   - The loop stops since `xor` is now `0`.
+
+- **Final Result**:
+   - The number of bit flips is `2`, as indicated by the two `1`s in the XOR result `1100`.
+
+### Efficiency:
+- **Time Complexity**: The time complexity is \(O(b)\), where \(b\) is the number of bits in the input integers (usually 32 or 64 bits). Each bit is processed once.
+- **Space Complexity**: The space complexity is \(O(1)\), as the algorithm only uses a constant amount of extra space for variables like `xor` and `count`.
