@@ -1,0 +1,76 @@
+214. Shortest Palindrome
+Solution:
+
+class Solution:
+    def shortestPalindrome(self, s: str) -> str:
+        # If the string is empty or already a palindrome
+        if not s or s == s[::-1]:
+            return s
+
+        # Create a temporary string that includes both the original and reversed strings
+        temp = s + "#" + s[::-1]
+        # Compute LPS (Longest Prefix Suffix) array for temp
+        lps = [0] * len(temp)
+        
+        # Calculate the LPS array
+        for i in range(1, len(temp)):
+            j = lps[i - 1]
+            while j > 0 and temp[i] != temp[j]:
+                j = lps[j - 1]
+            if temp[i] == temp[j]:
+                j += 1
+            lps[i] = j
+        
+        # Determine the characters to add to the beginning of s
+        add = s[lps[-1]:][::-1]
+        return add + s
+
+Explanation:
+
+### Explanation of the Solution:
+
+The task is to find the shortest palindrome that can be formed by adding characters only at the beginning of a given string `s`. The algorithm uses the concept of the "Longest Prefix Suffix" (LPS) array from the KMP (Knuth-Morris-Pratt) pattern matching algorithm. Here’s a step-by-step explanation of how the code works:
+
+1. **Check for Edge Cases**:
+   - The first check `if not s or s == s[::-1]` handles edge cases:
+     - If the string `s` is empty, it is already a palindrome.
+     - If `s` is already a palindrome (i.e., it reads the same forwards and backwards), return `s` immediately since no additional characters are needed.
+
+2. **Create a Temporary String**:
+   - We create a new string `temp` by concatenating the original string `s`, a special separator character `"#"`, and the reverse of `s`. The separator ensures that there is no overlap between the original and the reversed parts.
+   - For example, if `s = "aacecaaa"`, then `temp = "aacecaaa#aaacecaa"`.
+
+3. **Compute the LPS Array**:
+   - The LPS (Longest Prefix Suffix) array helps in finding the longest substring that is both a prefix and a suffix of the combined string `temp`. This tells us the longest palindromic prefix of the original string `s`.
+   - We initialize an LPS array with zeros, `lps = [0] * len(temp)`, where each index will store the length of the longest prefix of the substring ending at that index, which is also a suffix.
+
+4. **Populate the LPS Array**:
+   - Loop through each character of `temp`, starting from index 1:
+     - Let `j` be the length of the previous longest prefix suffix (starting as `lps[i - 1]`).
+     - Use a while loop to reduce `j` if the characters at positions `i` and `j` do not match (`temp[i] != temp[j]`). This step allows us to find the longest matching prefix-suffix length.
+     - If the characters `temp[i]` and `temp[j]` match, increment `j` (`j += 1`).
+     - Set `lps[i]` to `j`, which now represents the longest prefix-suffix length ending at index `i`.
+
+5. **Determine the Characters to Add**:
+   - The last value in the LPS array (`lps[-1]`) represents the length of the longest palindromic prefix in the original string `s`.
+   - Extract the substring from `s` that is not part of this palindromic prefix (`s[lps[-1]:]`), reverse it, and add it to the start of `s`. This forms the shortest palindrome.
+   - For example, if `s = "abcd"`, then `lps[-1] = 0`, and `s[lps[-1]:] = "abcd"`, so we add the reverse of this substring (`"dcba"`) to the start of `s`, resulting in `"dcbabcd"`.
+
+6. **Return the Shortest Palindrome**:
+   - Finally, return the modified string with the added characters, which is the shortest palindrome.
+
+### Example Walkthrough:
+
+1. For `s = "aacecaaa"`:
+   - `temp = "aacecaaa#aaacecaa"`.
+   - LPS array calculation gives `[0, 1, 0, 0, 0, 1, 2, 2, 2, 0, 1, 2, 3, 4, 5, 6, 7]`.
+   - `lps[-1] = 7`, indicating that the longest palindromic prefix is `"aacecaaa"`.
+   - No additional characters are needed, so the output is `"aaacecaaa"`.
+
+2. For `s = "abcd"`:
+   - `temp = "abcd#dcba"`.
+   - LPS array calculation gives `[0, 0, 0, 0, 0, 0, 0, 0, 0]`.
+   - `lps[-1] = 0`, indicating no palindromic prefix.
+   - Add the reverse of `"abcd"`, resulting in `"dcbabcd"`.
+
+This approach is efficient with a time complexity of O(n) and a space complexity of O(n), making it well-suited for long strings.

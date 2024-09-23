@@ -1,0 +1,92 @@
+241. Different Ways to Add Parentheses
+Solution:
+
+class Solution:
+    def diffWaysToCompute(self, expression: str) -> List[int]:
+        # Memoization dictionary to store results of sub-expressions
+        memo = {}
+
+        def compute(expr: str) -> List[int]:
+            # If the result is already computed, return it from memo
+            if expr in memo:
+                return memo[expr]
+
+            # Check if the expression is just a number
+            if expr.isdigit():
+                return [int(expr)]
+
+            results = []
+            # Divide and Conquer approach: Split expression at each operator
+            for i, char in enumerate(expr):
+                if char in "+-*":
+                    # Recur on the left and right sides of the operator
+                    left = compute(expr[:i])
+                    right = compute(expr[i+1:])
+
+                    # Combine results from left and right using the current operator
+                    for l in left:
+                        for r in right:
+                            if char == '+':
+                                results.append(l + r)
+                            elif char == '-':
+                                results.append(l - r)
+                            elif char == '*':
+                                results.append(l * r)
+
+            # Store the computed result in the memo dictionary
+            memo[expr] = results
+            return results
+
+        # Call the helper function with the given expression
+        return compute(expression)
+
+Explanation:
+
+### Explanation of the Solution
+
+The given code aims to compute all possible results from different ways of adding parentheses in an arithmetic expression containing numbers and the operators `+`, `-`, and `*`. Here is a detailed breakdown of how the solution works:
+
+1. **Problem Understanding**:
+   - You have an arithmetic expression as a string containing digits and operators.
+   - You need to find all possible results from computing the expression with different ways of grouping (adding parentheses).
+
+2. **Approach**:
+   - The approach uses **Divide and Conquer** combined with **Memoization** to solve sub-problems efficiently.
+
+3. **Memoization**:
+   - A dictionary (`memo`) is used to store the results of sub-expressions to avoid redundant calculations, enhancing the performance of the solution.
+
+4. **Recursive Function `compute(expr: str)`**:
+   - This function takes an expression string and returns all possible results from computing the expression with different groupings.
+   - **Base Case**: 
+     - If the expression is a simple number (no operators), it directly returns the number as a list (e.g., `"2"` returns `[2]`).
+     - If the expression result is already computed and stored in `memo`, it returns the stored result.
+   - **Recursive Splitting**:
+     - The function iterates through the expression character by character.
+     - When an operator (`+`, `-`, `*`) is found, it divides the expression into two sub-expressions: 
+       - **Left sub-expression** (`expr[:i]`) before the operator.
+       - **Right sub-expression** (`expr[i+1:]`) after the operator.
+   - **Combining Results**:
+     - The function recursively computes results for both the left and right sub-expressions.
+     - For each combination of results from the left and right, it applies the operator (`+`, `-`, `*`) and appends the computed result to the `results` list.
+   - **Storing in Memo**:
+     - The computed results for the current expression are stored in the `memo` dictionary to avoid redundant recalculations.
+
+5. **Time Complexity**:
+   - The time complexity is generally O(2^n), where `n` is the number of operators. However, memoization optimizes the performance by preventing repeated calculations.
+
+6. **Example Walkthrough**:
+   - **Example 1**: For input `"2-1-1"`, the function explores two ways:
+     1. `((2-1)-1) = 0`
+     2. `(2-(1-1)) = 2`
+     - Thus, the output is `[0, 2]`.
+   - **Example 2**: For input `"2*3-4*5"`, several combinations are explored:
+     1. `(2*(3-(4*5))) = -34`
+     2. `((2*3)-(4*5)) = -14`
+     3. `((2*(3-4))*5) = -10`
+     4. `(2*((3-4)*5)) = -10`
+     5. `(((2*3)-4)*5) = 10`
+     - The output is `[-34, -14, -10, -10, 10]`.
+
+### Summary:
+The solution efficiently computes all possible results by exploring all groupings of the given arithmetic expression using a recursive approach with memoization, providing the best runtime dynamics with minimal memory usage for the problem.
