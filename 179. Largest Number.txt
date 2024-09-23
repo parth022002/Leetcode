@@ -1,0 +1,134 @@
+179. Largest Number
+Solution:
+
+class Solution:
+    def largestNumber(self, nums: List[int]) -> str:
+        # Custom comparator to order the numbers
+        def compare(a: str, b: str) -> int:
+            if a + b > b + a:
+                return -1
+            elif a + b < b + a:
+                return 1
+            else:
+                return 0
+
+        # Convert all numbers to strings for comparison
+        str_nums = list(map(str, nums))
+        
+        # Sort using the custom comparator
+        str_nums.sort(key=cmp_to_key(compare))
+        
+        # Join the sorted strings
+        largest_num = ''.join(str_nums)
+        
+        # Edge case: if the result is all zeroes, return "0"
+        if largest_num[0] == '0':
+            return '0'
+        
+        return largest_num
+
+Explanation:
+
+Here's a detailed explanation of the code:
+
+### Problem Overview:
+Given a list of non-negative integers, the goal is to arrange them in such a way that they form the largest possible number. Since the result might be very large, it needs to be returned as a string.
+
+### Code Breakdown:
+
+```python
+class Solution:
+    def largestNumber(self, nums: List[int]) -> str:
+```
+- A class `Solution` is defined with a method `largestNumber`. This method accepts a list of integers (`nums`) and returns the largest possible number as a string.
+
+#### Step 1: Custom Comparator
+
+```python
+        def compare(a: str, b: str) -> int:
+            if a + b > b + a:
+                return -1
+            elif a + b < b + a:
+                return 1
+            else:
+                return 0
+```
+- The function `compare` is a custom comparator function that determines the order of two numbers when concatenated.
+- It takes two strings `a` and `b`, and compares the two possible combinations `a + b` and `b + a`:
+  - If `a + b` is greater (lexicographically) than `b + a`, it returns `-1`, meaning `a` should come before `b`.
+  - If `a + b` is smaller, it returns `1`, meaning `b` should come before `a`.
+  - If both combinations are equal, it returns `0`.
+
+#### Step 2: Convert Numbers to Strings
+
+```python
+        str_nums = list(map(str, nums))
+```
+- Here, each integer in the list `nums` is converted into a string using `map(str, nums)`. This is necessary because the comparison in step 1 depends on string concatenation.
+- The result is stored in `str_nums`, a list of strings.
+
+#### Step 3: Sort the Strings Using Custom Comparator
+
+```python
+        str_nums.sort(key=cmp_to_key(compare))
+```
+- The list `str_nums` is sorted using the custom comparator defined in the `compare` function.
+- `cmp_to_key(compare)` converts the comparison function into a form that can be used as the sorting `key` in Python's `sort` function.
+- This sorting arranges the numbers in the order that will give the largest possible concatenated result.
+
+#### Step 4: Join the Sorted Strings
+
+```python
+        largest_num = ''.join(str_nums)
+```
+- The sorted list of strings `str_nums` is joined into a single string, `largest_num`, which forms the largest possible number.
+
+#### Step 5: Handle Edge Case of Leading Zero
+
+```python
+        if largest_num[0] == '0':
+            return '0'
+```
+- If the first character of `largest_num` is `'0'`, it means the entire result is composed of zeros (because `0` will only appear first if all numbers are `0`), so we return `"0"` instead of something like `"0000"`.
+
+#### Final Step: Return the Result
+
+```python
+        return largest_num
+```
+- The final concatenated result, `largest_num`, is returned as the answer.
+
+### Example Walkthrough:
+
+#### Example 1:
+
+**Input**: `nums = [10, 2]`
+
+- Convert to strings: `["10", "2"]`
+- Sort based on the comparator:
+  - `2 + 10 = "210"` and `10 + 2 = "102"`, so `"2"` comes before `"10"`.
+- After sorting: `["2", "10"]`
+- Join: `"210"`
+- Final output: `"210"`
+
+#### Example 2:
+
+**Input**: `nums = [3, 30, 34, 5, 9]`
+
+- Convert to strings: `["3", "30", "34", "5", "9"]`
+- Sort based on the comparator:
+  - `9` is the largest, followed by `5`, `34`, `3`, and `30`.
+- After sorting: `["9", "5", "34", "3", "30"]`
+- Join: `"9534330"`
+- Final output: `"9534330"`
+
+### Time Complexity:
+
+- The dominant step is sorting, which takes `O(n log n)` time, where `n` is the number of elements in `nums`.
+
+### Space Complexity:
+
+- The space complexity is `O(n)`, where `n` is the number of elements, due to storing the string representations and the sorting process.
+
+### Summary:
+The solution sorts the numbers by considering how they would be concatenated and then joins them into the largest possible number. It efficiently handles edge cases and uses a custom comparator to ensure the correct order for maximum value.

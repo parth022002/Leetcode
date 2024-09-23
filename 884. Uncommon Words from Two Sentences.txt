@@ -1,0 +1,94 @@
+884. Uncommon Words from Two Sentences
+Solution:
+
+class Solution:
+    def uncommonFromSentences(self, s1: str, s2: str) -> List[str]:
+        # Split the sentences into words
+        words_s1 = s1.split()
+        words_s2 = s2.split()
+        
+        # Combine all words into one list
+        all_words = words_s1 + words_s2
+        
+        # Count the frequency of each word
+        word_count = Counter(all_words)
+        
+        # Find words that occur exactly once
+        return [word for word in word_count if word_count[word] == 1]
+
+Explanation:
+
+Let me break down the code step by step:
+
+### Problem Statement
+The goal is to find all the "uncommon" words from two given sentences, `s1` and `s2`. An "uncommon" word is defined as a word that appears exactly once in one of the sentences and does not appear in the other sentence or anywhere else.
+
+### Code Explanation
+
+```python
+class Solution:
+    def uncommonFromSentences(self, s1: str, s2: str) -> List[str]:
+```
+Here, we define a method `uncommonFromSentences` that takes two string inputs `s1` and `s2`, which are sentences, and returns a list of uncommon words.
+
+#### Step 1: Split Sentences into Words
+
+```python
+words_s1 = s1.split()
+words_s2 = s2.split()
+```
+- The `split()` function is used to split each sentence `s1` and `s2` into individual words.
+- `words_s1` contains all the words from the first sentence, and `words_s2` contains all the words from the second sentence.
+  - For example, if `s1 = "apple banana"`, `words_s1 = ["apple", "banana"]`.
+  - Similarly, if `s2 = "banana orange"`, `words_s2 = ["banana", "orange"]`.
+
+#### Step 2: Combine Words from Both Sentences
+
+```python
+all_words = words_s1 + words_s2
+```
+- The two lists `words_s1` and `words_s2` are combined into a single list `all_words`.
+  - For example, if `words_s1 = ["apple", "banana"]` and `words_s2 = ["banana", "orange"]`, then `all_words = ["apple", "banana", "banana", "orange"]`.
+
+#### Step 3: Count the Frequency of Each Word
+
+```python
+word_count = Counter(all_words)
+```
+- `Counter` is a class from the `collections` module that counts the frequency of each element in an iterable.
+- Here, it creates a dictionary-like object `word_count`, where each unique word in `all_words` becomes a key, and its frequency becomes the value.
+  - For example, if `all_words = ["apple", "banana", "banana", "orange"]`, then `word_count = {"apple": 1, "banana": 2, "orange": 1}`.
+
+#### Step 4: Identify Uncommon Words
+
+```python
+return [word for word in word_count if word_count[word] == 1]
+```
+- A list comprehension is used to iterate over each word in `word_count`.
+- If the frequency of the word (`word_count[word]`) is equal to 1 (i.e., it appears exactly once), it is considered "uncommon" and added to the result list.
+  - For example, given `word_count = {"apple": 1, "banana": 2, "orange": 1}`, the words with a frequency of 1 are `"apple"` and `"orange"`, so the output will be `["apple", "orange"]`.
+
+### Final Output
+The method will return a list of all words that appear exactly once across both sentences.
+
+### Example:
+
+**Input:**
+```python
+s1 = "apple banana"
+s2 = "banana orange"
+```
+
+**Steps:**
+1. `words_s1 = ["apple", "banana"]`
+2. `words_s2 = ["banana", "orange"]`
+3. `all_words = ["apple", "banana", "banana", "orange"]`
+4. `word_count = {"apple": 1, "banana": 2, "orange": 1}`
+5. The words with a count of 1 are `["apple", "orange"]`.
+
+**Output:**
+```python
+["apple", "orange"]
+```
+
+This code efficiently finds uncommon words by counting the frequency of words from both sentences and filtering those that appear exactly once.

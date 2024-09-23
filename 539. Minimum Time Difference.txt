@@ -1,0 +1,75 @@
+539. Minimum Time Difference
+Solution:
+
+class Solution:
+    def findMinDifference(self, timePoints: List[str]) -> int:
+        # Convert time from "HH:MM" to minutes since 00:00
+        def timeToMinutes(time: str) -> int:
+            hours, minutes = map(int, time.split(':'))
+            return hours * 60 + minutes
+        
+        # Step 1: Convert all times to minutes
+        minutes = [timeToMinutes(tp) for tp in timePoints]
+        
+        # Step 2: Sort the minutes
+        minutes.sort()
+        
+        # Step 3: Calculate the minimum difference between consecutive times
+        min_diff = float('inf')  # Initialize to a large number
+        
+        for i in range(1, len(minutes)):
+            min_diff = min(min_diff, minutes[i] - minutes[i - 1])
+        
+        # Step 4: Check the circular difference between the last and first time points
+        circular_diff = 1440 - minutes[-1] + minutes[0]
+        min_diff = min(min_diff, circular_diff)
+        
+        return min_diff
+
+Explanation:
+
+The function `findMinDifference` is designed to calculate the minimum time difference between any two time points in a list of times, where each time point is given in the "HH:MM" format.
+
+Here’s a step-by-step explanation of the code:
+
+### 1. **Convert Time to Minutes**
+   The function `timeToMinutes` converts a time from "HH:MM" format to the total number of minutes since midnight (00:00).
+   - It splits the time string into hours and minutes using `split(':')`.
+   - Then, it calculates the total minutes as `hours * 60 + minutes`.
+
+   **Example**: 
+   - For "03:15", the total minutes would be `3 * 60 + 15 = 195 minutes`.
+
+### 2. **Convert All Times to Minutes**
+   Using a list comprehension, all time points in `timePoints` are converted into their corresponding minute values using the `timeToMinutes` function.
+
+   **Example**: 
+   - If `timePoints = ["23:59", "00:00", "12:00"]`, it will convert these into `[1439, 0, 720]`.
+
+### 3. **Sort the Times**
+   The list of times (in minutes) is sorted in ascending order. Sorting helps to easily calculate the time difference between consecutive time points.
+
+   **Example**: 
+   - For the above example, after sorting, the list would be `[0, 720, 1439]`.
+
+### 4. **Calculate Minimum Difference Between Consecutive Times**
+   A loop goes through each consecutive pair of times and calculates the difference between them.
+   - It keeps track of the minimum difference found so far using the variable `min_diff`.
+   
+   **Example**: 
+   - The differences would be `720 - 0 = 720` and `1439 - 720 = 719`. So, after this loop, `min_diff` is `719`.
+
+### 5. **Handle the Circular Time Difference**
+   Time points are circular, meaning the day wraps around. The circular difference between the last time (`minutes[-1]`) and the first time (`minutes[0]`) must also be checked.
+   - The difference is calculated as `1440 - minutes[-1] + minutes[0]`, where `1440` is the total number of minutes in a day (24 hours * 60 minutes).
+
+   **Example**: 
+   - For the example list `[0, 720, 1439]`, the circular difference would be `1440 - 1439 + 0 = 1`.
+
+   The final minimum difference is the smaller of the circular difference and the differences calculated earlier.
+
+### 6. **Return the Minimum Difference**
+   The function returns the smallest time difference found, either between consecutive time points or accounting for the circular nature of the clock.
+
+   **Final Example**:
+   - With the time points `["23:59", "00:00", "12:00"]`, the minimum difference would be `1 minute` (from `00:00` to `23:59`).
