@@ -1,0 +1,69 @@
+2707. Extra Characters in a String
+Solution:
+
+class Solution:
+    def minExtraChar(self, s: str, dictionary: List[str]) -> int:
+        # Convert the dictionary list into a set for O(1) lookup time
+        wordSet = set(dictionary)
+        n = len(s)
+        
+        # dp[i] will store the minimum extra characters in the substring s[i:]
+        dp = [0] * (n + 1)
+        
+        # Fill dp array from right to left
+        for i in range(n - 1, -1, -1):
+            # By default, we assume the current character is extra
+            dp[i] = dp[i + 1] + 1
+            
+            # Try to match any word from dictionary starting at index i
+            for length in range(1, n - i + 1):
+                if s[i:i + length] in wordSet:
+                    dp[i] = min(dp[i], dp[i + length])
+        
+        # The answer is the number of extra characters in the entire string
+        return dp[0]
+
+Explanation:
+
+This Python code solves a problem where we need to determine the minimum number of extra characters that need to be added to make the given string `s` composed entirely of words found in a given `dictionary`. Here’s an explanation of how the code works:
+
+### Problem Understanding:
+- We have a string `s` and a list of valid words called `dictionary`.
+- We want to split `s` into words such that all the words are in `dictionary`, and we want to minimize the number of extra characters that don’t match any words.
+
+### Key Concepts:
+- **Dynamic Programming (DP)** is used to keep track of the minimum number of extra characters needed as we iterate through the string.
+
+### Code Explanation:
+1. **Convert the Dictionary to a Set:**
+   - The `dictionary` list is converted into a set called `wordSet` to allow O(1) lookup time for checking if a substring is a valid word.
+
+2. **Initialize DP Array:**
+   - The `dp` array of size `n + 1` is initialized, where `n` is the length of `s`. 
+   - `dp[i]` represents the minimum number of extra characters in the substring starting from index `i` to the end of the string.
+
+3. **Fill DP Array from Right to Left:**
+   - The algorithm fills the `dp` array from the end of the string back to the beginning.
+   - For each index `i`, it assumes the current character is an extra character, so it sets `dp[i]` to `dp[i + 1] + 1`.
+
+4. **Check for Matching Words in the Dictionary:**
+   - For each index `i`, the algorithm checks every possible substring starting at `i` with different lengths (`1` to `n - i`).
+   - If a substring `s[i:i + length]` matches a word in `wordSet`, the algorithm updates `dp[i]` by taking the minimum value between its current value and `dp[i + length]` (i.e., the extra characters required if that word is used).
+
+5. **Return the Result:**
+   - The answer is stored in `dp[0]`, which represents the minimum number of extra characters needed for the entire string.
+
+### Example Walkthrough:
+Suppose `s = "leetcode"` and `dictionary = ["leet", "code"]`:
+- Convert `dictionary` to `wordSet = {"leet", "code"}`.
+- Start filling `dp` from the right:
+  - At `i = 7` (last character), `dp[7] = 1` (extra char).
+  - At `i = 6`, no word starts here, so `dp[6] = dp[7] + 1 = 2`.
+  - Continue this until you reach `i = 0`.
+  - At `i = 0`, the substring "leet" matches a word, so `dp[0]` can be reduced significantly.
+
+### Efficiency:
+- Time complexity: O(n^2), where `n` is the length of `s`, since for each index `i`, it checks all possible substrings.
+- Space complexity: O(n), as it uses an array of size `n + 1`.
+
+This approach efficiently finds the minimum number of extra characters needed by checking all potential splits of the string against the given dictionary.
