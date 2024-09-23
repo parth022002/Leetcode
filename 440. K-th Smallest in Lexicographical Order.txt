@@ -1,0 +1,98 @@
+440. K-th Smallest in Lexicographical Order
+Solution:
+
+class Solution:
+    def findKthNumber(self, n: int, k: int) -> int:
+        cur = 1
+        k -= 1
+        while k > 0:
+            steps = self.countSteps(cur, n)
+            if steps <= k:
+                cur += 1
+                k -= steps
+            else:
+                cur *= 10
+                k -= 1
+        return cur
+    
+    def countSteps(self, p: int, n: int) -> int:
+        steps = 0
+        f, l = p, p
+        while f <= n:
+            steps += min(n + 1, l + 1) - f
+            f *= 10
+            l = l * 10 + 9
+        return steps
+
+Explanation:
+
+Here's a detailed explanation of how the provided code works to solve the problem of finding the k-th smallest number in lexicographical order within the range `[1, n]`:
+
+### Key Concepts
+
+1. **Lexicographical Order**: Numbers are sorted as they would appear in a dictionary, e.g., `1, 10, 100, 101, ..., 11, ..., 2, 20, ...`.
+
+2. **Tree-like Traversal**: The numbers from 1 to n can be visualized as nodes in a prefix tree (Trie). The goal is to traverse this tree to find the k-th node in lexicographical order.
+
+3. **Prefix Navigation**: We use prefixes to navigate through the tree, moving between levels (adding digits) or to the next sibling prefix (incrementing the prefix).
+
+### Step-by-Step Explanation
+
+1. **Initialization**:
+   - Start with `cur = 1`, which is the first number in lexicographical order.
+   - Decrement `k` by 1 (`k -= 1`) because we are already at the first position, and we need to find the next `k` numbers.
+
+2. **Main Loop**:
+   - While `k > 0`, the loop continues, trying to navigate to the k-th smallest number.
+   
+   - **Counting Steps**:
+     - Call the `countSteps` method to determine how many numbers exist in the subtree rooted at the current prefix `cur`. For example, if `cur = 1`, this includes numbers like `1, 10, 11, ..., 19`.
+
+   - **Decision Making**:
+     - **Case 1: `steps <= k`**:
+       - If the number of steps is less than or equal to `k`, this means the k-th smallest number is not within this subtree. So, move to the next prefix (`cur += 1`).
+       - Subtract the number of steps from `k` (`k -= steps`).
+     - **Case 2: `steps > k`**:
+       - If there are more steps than `k`, the k-th smallest number is within this subtree. Move deeper into this prefix by multiplying `cur` by 10 (`cur *= 10`), which effectively adds a zero to the prefix.
+       - Decrease `k` by 1 (`k -= 1`) because we've moved one step down in the tree.
+
+3. **Return Result**:
+   - When `k` is reduced to zero, `cur` is the k-th smallest number in lexicographical order.
+
+### `countSteps` Method Explanation
+
+- The `countSteps(p, n)` function calculates the number of numbers that exist between `p` and `p + 1` within the range `[1, n]`.
+  
+- **Variables**:
+  - `f` (first) and `l` (last) represent the range `[f, l]` of numbers starting with prefix `p`.
+
+- **Loop Through Levels**:
+  - Expand `f` and `l` by multiplying by 10 to include numbers with additional digits (going deeper into the tree).
+  - Count all the numbers between `f` and `l` that are still within the range `[1, n]`.
+  
+- **End Condition**:
+  - The loop stops when `f` exceeds `n`, meaning no more valid numbers are within the range.
+
+### Complexity Analysis
+
+- **Time Complexity**: O(log(n)), where n is the number of digits in the maximum number. This is because the algorithm traverses the number tree level by level.
+- **Space Complexity**: O(1), as the algorithm uses a constant amount of extra space.
+
+### Example Walkthrough
+
+**Example 1**: `n = 13, k = 2`
+
+- Lexicographical order: `[1, 10, 11, 12, 13, 2, 3, ..., 9]`.
+- We start with `cur = 1` and `k = 1`.
+- Call `countSteps(1, 13)`:
+  - Steps from `1` to `2` are `[1, 10, 11, 12, 13]` → `steps = 5`.
+  - Since `steps > k`, we go deeper: `cur = 10`.
+- Now, `k = 0`, so we stop, and the answer is `10`.
+
+**Example 2**: `n = 1, k = 1`
+
+- Lexicographical order: `[1]`.
+- Start with `cur = 1` and `k = 0`.
+- Directly return `cur = 1`.
+
+This approach is efficient and optimally navigates the number space to find the desired result.

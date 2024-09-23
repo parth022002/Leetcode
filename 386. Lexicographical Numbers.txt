@@ -1,0 +1,80 @@
+386. Lexicographical Numbers
+Solution:
+
+class Solution:
+    def lexicalOrder(self, n: int) -> List[int]:
+        result = []
+        
+        def dfs(current):
+            # If current exceeds n, stop recursion
+            if current > n:
+                return
+            
+            # Append the current number to the result list
+            result.append(current)
+            
+            # Traverse all numbers formed by appending digits 0 to 9
+            for i in range(10):
+                next_number = current * 10 + i
+                if next_number > n:
+                    break
+                dfs(next_number)
+        
+        # Start DFS from 1 to 9
+        for i in range(1, 10):
+            dfs(i)
+        
+        return result
+
+Explanation:
+
+### Explanation of the Solution
+
+The goal of this solution is to generate numbers in lexicographical order from 1 to `n`. Lexicographical order is similar to dictionary order, where numbers are sorted based on their string representation.
+
+#### Key Idea
+The approach uses Depth-First Search (DFS) to traverse numbers in lexicographical order. By starting from each digit from 1 to 9 and recursively exploring all possible numbers formed by appending digits 0 to 9, we generate the sequence directly without sorting, which achieves O(n) time complexity.
+
+#### Detailed Step-by-Step Explanation
+
+1. **Initialization**: 
+   - We create an empty list `result` to store the numbers in lexicographical order.
+
+2. **DFS Function**:
+   - The `dfs(current)` function is a recursive function that traverses numbers lexicographically starting from the `current` number.
+   - **Base Case**: If the current number exceeds `n`, the recursion stops, as numbers beyond `n` are not needed.
+   - **Appending Numbers**: The current number is appended to the `result` list if it is valid (i.e., less than or equal to `n`).
+   - **Recursion**: The function then attempts to create the next numbers by appending digits 0 to 9 to the current number. For instance, if the current number is 1, it will try to create 10, 11, ..., 19.
+   - **Stopping Further Recursion**: If appending a digit results in a number that is greater than `n`, further recursion is stopped to prevent unnecessary exploration.
+
+3. **Starting DFS from 1 to 9**:
+   - The main loop starts the DFS traversal from numbers 1 to 9, ensuring that all valid lexicographical sequences starting with each of these digits are explored.
+   - For example, starting with 1, it explores 10, 100, 101, ..., up to the maximum allowed by `n`.
+
+4. **Output**:
+   - The result list, which contains numbers in lexicographical order, is returned as the final output.
+
+### Why DFS Works Efficiently Here
+
+- **Order Guarantee**: By starting from smaller numbers and expanding by appending digits, DFS inherently respects lexicographical order without explicit sorting.
+- **Space Efficiency**: Only the recursion stack is used, and no extra space proportional to `n` is required, achieving the O(1) extra space goal.
+
+### Example Execution
+
+**Example 1**: 
+- Input: `n = 13`
+- Execution Flow:
+  - Start DFS from 1:
+    - 1 → 10 → 11 → 12 → 13 (stop as 14 > 13)
+    - Backtrack to explore 2, 3, ..., 9.
+  - Output: `[1, 10, 11, 12, 13, 2, 3, 4, 5, 6, 7, 8, 9]`
+
+**Example 2**:
+- Input: `n = 2`
+- Execution Flow:
+  - Start DFS from 1:
+    - 1 (stop further as 10 > 2)
+    - Backtrack to explore 2.
+  - Output: `[1, 2]`
+
+This approach ensures that the numbers are efficiently generated in the desired order while adhering to the constraints of the problem.
