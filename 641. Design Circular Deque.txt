@@ -1,0 +1,173 @@
+641. Design Circular Deque
+Solution:
+class MyCircularDeque:
+    def __init__(self, k: int):
+        self.v = [-1] * k  # Initialize deque with -1
+        self.front = 0
+        self.back = 0
+        self.size = 0  # Keeps track of the current number of elements
+        self.capacity = k
+
+    def insertFront(self, value: int) -> bool:
+        if self.isFull():
+            return False
+
+        # Way - 01
+        if self.front == 0:
+            self.front = self.capacity - 1  # Wrap around to the end
+        else:
+            self.front -= 1  # Simply decrement front
+
+        # Way - 02 (Alternative method commented out)
+        # self.front = (self.front - 1 + self.capacity) % self.capacity
+
+        self.v[self.front] = value
+        self.size += 1
+        return True
+
+    def insertLast(self, value: int) -> bool:
+        if self.isFull():
+            return False
+
+        self.v[self.back] = value
+
+        # Way - 01
+        if self.back == self.capacity - 1:
+            self.back = 0  # Wrap around to the beginning
+        else:
+            self.back += 1  # Simply increment back
+
+        # Way - 02 (Alternative method commented out)
+        # self.back = (self.back + 1) % self.capacity
+
+        self.size += 1
+        return True
+
+    def deleteFront(self) -> bool:
+        if self.isEmpty():
+            return False
+
+        self.v[self.front] = -1
+
+        # Way - 01
+        if self.front == self.capacity - 1:
+            self.front = 0  # Wrap around to the beginning
+        else:
+            self.front += 1  # Simply increment front
+
+        # Way - 02 (Alternative method commented out)
+        # self.front = (self.front + 1) % self.capacity
+
+        self.size -= 1
+        return True
+
+    def deleteLast(self) -> bool:
+        if self.isEmpty():
+            return False
+
+        if self.back == 0:
+            self.back = self.capacity - 1  # Wrap around to the end
+        else:
+            self.back -= 1  # Simply decrement back
+
+        self.v[self.back] = -1
+        self.size -= 1
+        return True
+
+    def getFront(self) -> int:
+        if self.isEmpty():
+            return -1
+        return self.v[self.front]
+
+    def getRear(self) -> int:
+        if self.isEmpty():
+            return -1
+        if self.back == 0:
+            return self.v[self.capacity - 1]  # Wrap around to the last valid element
+        else:
+            return self.v[self.back - 1]  # Get the last element
+
+    def isEmpty(self) -> bool:
+        return self.size == 0
+
+    def isFull(self) -> bool:
+        return self.size == self.capacity
+
+Explanation:
+
+This implementation defines a class `MyCircularDeque` which represents a circular deque (double-ended queue) with fixed size `k`. A deque allows insertion and deletion from both the front and the back. Let's break down the code step by step:
+
+### 1. **Initialization (`__init__` method)**
+   - **Parameters:**
+     - `k`: The capacity of the deque.
+   - **Attributes:**
+     - `self.v`: A list initialized to `-1` of length `k` representing the deque.
+     - `self.front`: Index representing the front of the deque, initialized to `0`.
+     - `self.back`: Index representing the back of the deque, also initialized to `0`.
+     - `self.size`: Keeps track of how many elements are currently in the deque.
+     - `self.capacity`: Maximum capacity of the deque, set to `k`.
+
+### 2. **Insert Front (`insertFront` method)**
+   - Inserts a new element at the front of the deque.
+   - **Process:**
+     - Check if the deque is full (`isFull` method). If it is, return `False`.
+     - Update the `front` index. There are two ways to update the index:
+       - **Way 1:** Decrement `front`, wrapping around to the end of the deque if `front` reaches `0`.
+       - **Way 2:** Use modular arithmetic to handle wrap-around (commented out in the code).
+     - Insert the `value` at the new `front` position.
+     - Increment the size and return `True`.
+
+### 3. **Insert Last (`insertLast` method)**
+   - Inserts a new element at the back of the deque.
+   - **Process:**
+     - Check if the deque is full (`isFull` method). If it is, return `False`.
+     - Insert the `value` at the current `back` position.
+     - Update the `back` index:
+       - **Way 1:** Increment `back`, wrapping around to `0` if `back` reaches the end of the deque.
+       - **Way 2:** Use modular arithmetic to handle wrap-around (commented out in the code).
+     - Increment the size and return `True`.
+
+### 4. **Delete Front (`deleteFront` method)**
+   - Deletes the element from the front of the deque.
+   - **Process:**
+     - Check if the deque is empty (`isEmpty` method). If it is, return `False`.
+     - Set the current `front` element to `-1` to mark it as deleted.
+     - Update the `front` index:
+       - **Way 1:** Increment `front`, wrapping around to `0` if `front` reaches the end of the deque.
+       - **Way 2:** Use modular arithmetic (commented out).
+     - Decrement the size and return `True`.
+
+### 5. **Delete Last (`deleteLast` method)**
+   - Deletes the element from the back of the deque.
+   - **Process:**
+     - Check if the deque is empty (`isEmpty` method). If it is, return `False`.
+     - Update the `back` index:
+       - **Way 1:** Decrement `back`, wrapping around to the end of the deque if `back` reaches `0`.
+       - **Way 2:** Use modular arithmetic (commented out).
+     - Set the current `back` element to `-1` to mark it as deleted.
+     - Decrement the size and return `True`.
+
+### 6. **Get Front (`getFront` method)**
+   - Returns the element at the front of the deque.
+   - **Process:**
+     - Check if the deque is empty (`isEmpty` method). If it is, return `-1`.
+     - Return the element at the `front` index.
+
+### 7. **Get Rear (`getRear` method)**
+   - Returns the element at the back of the deque.
+   - **Process:**
+     - Check if the deque is empty (`isEmpty` method). If it is, return `-1`.
+     - Return the element at the `back` index:
+       - If `back` is `0`, wrap around to the last valid position.
+       - Otherwise, return the element just before `back`.
+
+### 8. **Check Empty (`isEmpty` method)**
+   - Returns `True` if the deque is empty (size is `0`), otherwise `False`.
+
+### 9. **Check Full (`isFull` method)**
+   - Returns `True` if the deque is full (size equals capacity), otherwise `False`.
+
+### Summary:
+- The deque supports operations for inserting and deleting from both the front and back.
+- It uses a circular approach for managing indices (`front` and `back`) and handles the wrap-around logic both for inserting and deleting elements.
+- There are commented-out alternative ways (modular arithmetic) to manage the wrap-around, but the current approach uses simple conditional logic.

@@ -1,0 +1,94 @@
+729. My Calendar I
+Solution:
+
+class MyCalendar:
+    def __init__(self):
+        # Define the slots in the calendar
+        self.slots = []
+
+    def book(self, start: int, end: int) -> bool:
+        # The index of this time slots if it is booked
+        index = bisect.bisect_left(self.slots, (start, end))
+        res = True
+
+        # Check the next time slot 
+        # which will be the current index if it is existed
+        if index < len(self.slots): res &= end <= self.slots[index][0]
+        
+        # Check the previous time slot 
+        # which will be the index - 1 if it is existed  
+        if index - 1 >= 0: res &= start >= self.slots[index-1][1]
+
+        # Only insert if it satisfied previous and next time slot
+        if res: bisect.insort_left(self.slots, (start, end))
+        return res
+
+Explanation:
+
+Your `MyCalendar` class is a calendar booking system that checks for overlapping time slots. Here's an explanation of how it works:
+
+### Class Breakdown
+
+#### `__init__` Method
+This method initializes an empty list `self.slots`, which will store the booked time slots as tuples of `(start, end)` values. Each tuple represents a booking where `start` is the starting time and `end` is the ending time of the booked slot.
+
+```python
+def __init__(self):
+    self.slots = []
+```
+
+---
+
+#### `book` Method
+The `book` method attempts to add a new time slot (`start`, `end`) to the calendar. It returns `True` if the time slot can be added without overlapping with existing slots, otherwise it returns `False`.
+
+1. **Find Insertion Point:**
+   ```python
+   index = bisect.bisect_left(self.slots, (start, end))
+   ```
+   - `bisect.bisect_left` is used to find the position (`index`) where the new time slot `(start, end)` should be inserted to maintain the sorted order of `self.slots`. This ensures the list remains sorted as you add more bookings.
+   
+2. **Check Next Time Slot:**
+   ```python
+   if index < len(self.slots): res &= end <= self.slots[index][0]
+   ```
+   - After finding the insertion point, the next step is to check if the new time slot overlaps with the next existing slot in the list (i.e., the slot at `self.slots[index]`).
+   - The condition `end <= self.slots[index][0]` checks if the end time of the new booking is less than or equal to the start time of the next slot. If this condition holds, it means there is no overlap with the next slot.
+   
+3. **Check Previous Time Slot:**
+   ```python
+   if index - 1 >= 0: res &= start >= self.slots[index-1][1]
+   ```
+   - Similarly, this checks for overlap with the previous time slot (i.e., the slot at `self.slots[index-1]`).
+   - The condition `start >= self.slots[index-1][1]` checks if the start time of the new booking is greater than or equal to the end time of the previous slot. If this condition holds, there is no overlap with the previous slot.
+   
+4. **Insert New Time Slot:**
+   ```python
+   if res: bisect.insort_left(self.slots, (start, end))
+   ```
+   - If both conditions (for next and previous slots) are satisfied, meaning there’s no overlap, the new time slot is inserted into `self.slots` at the correct position using `bisect.insort_left`, which maintains the sorted order.
+   
+5. **Return Result:**
+   ```python
+   return res
+   ```
+   - The method returns `True` if the slot was successfully booked (i.e., no overlaps), or `False` if overlaps occurred.
+
+---
+
+### Example:
+Let's say you have an empty calendar and try to book the following time slots:
+
+- First booking: `(10, 20)`
+  - No existing bookings, so it is successfully added.
+  
+- Second booking: `(15, 25)`
+  - This overlaps with the first booking because `15 < 20`. Hence, it will not be booked, and the method will return `False`.
+
+- Third booking: `(20, 30)`
+  - This does not overlap with the first booking since `20 == 20` (end time of the first booking matches the start time of the new one). So it is successfully added.
+
+---
+
+### Conclusion:
+The class efficiently handles time slot bookings while maintaining a sorted list of booked slots and ensuring no overlaps between bookings using binary search (`bisect`).
