@@ -1,0 +1,85 @@
+3043. Find the Length of the Longest Common Prefix
+Solution:
+
+class Solution:
+    def longestCommonPrefix(self, arr1: List[int], arr2: List[int]) -> int:
+        def commonPrefixLength(s1: str, s2: str) -> int:
+            # Compare the two strings and find the common prefix length
+            min_len = min(len(s1), len(s2))
+            for i in range(min_len):
+                if s1[i] != s2[i]:
+                    return i
+            return min_len
+        
+        # Convert all integers to strings for comparison
+        str_arr1 = [str(x) for x in arr1]
+        str_arr2 = [str(x) for x in arr2]
+        
+        # Sort the arrays of strings
+        str_arr1.sort()
+        str_arr2.sort()
+        
+        # Initialize the longest common prefix length
+        max_prefix_length = 0
+        
+        # Compare sorted arr1 and arr2 efficiently
+        for s1 in str_arr1:
+            # Use binary search to find the closest match for s1 in str_arr2
+            idx = bisect_left(str_arr2, s1)
+            
+            # Check the current index and the previous one for a common prefix
+            if idx < len(str_arr2):
+                max_prefix_length = max(max_prefix_length, commonPrefixLength(s1, str_arr2[idx]))
+            if idx > 0:
+                max_prefix_length = max(max_prefix_length, commonPrefixLength(s1, str_arr2[idx - 1]))
+        
+        return max_prefix_length
+
+Explanation:
+
+The provided code is a Python implementation of a function that finds the longest common prefix between any two elements from two integer arrays (`arr1` and `arr2`). Here's a step-by-step explanation of the code:
+
+### Code Breakdown
+
+1. **Inner Function `commonPrefixLength(s1: str, s2: str)`:**
+   - This function takes two strings (`s1` and `s2`) and calculates the length of their common prefix.
+   - It compares characters of `s1` and `s2` from the start until they differ or until the end of the shorter string is reached.
+   - If characters differ at any position, it returns the current index as the common prefix length.
+   - If all characters up to the minimum length match, it returns the length of the shorter string.
+
+2. **Main Function `longestCommonPrefix(arr1: List[int], arr2: List[int])`:**
+   - The function takes two integer arrays (`arr1` and `arr2`) and finds the longest common prefix length between any pair of elements (one from each array).
+   
+3. **Convert Integers to Strings:**
+   - Each integer in `arr1` and `arr2` is converted into a string to facilitate prefix comparison.
+   
+4. **Sorting:**
+   - The arrays of strings (`str_arr1` and `str_arr2`) are sorted. Sorting helps with efficient prefix comparison because strings that share a prefix are likely to be adjacent.
+   
+5. **Initialize Maximum Prefix Length:**
+   - A variable `max_prefix_length` is initialized to zero. This variable will store the longest common prefix length found during comparisons.
+   
+6. **Efficient Comparison Using Binary Search:**
+   - For each string `s1` in `str_arr1`, the code uses `bisect_left` to find the position (`idx`) where `s1` would fit in `str_arr2` while maintaining order. This helps in finding the closest matches for `s1` in `str_arr2`.
+   - Two comparisons are made:
+     - The string at the found index (`str_arr2[idx]`), if within bounds.
+     - The string just before the found index (`str_arr2[idx - 1]`), if within bounds.
+   - The `commonPrefixLength` function is called for these comparisons to determine the common prefix lengths.
+   - The maximum of these lengths is updated in `max_prefix_length`.
+
+7. **Return the Longest Prefix Length:**
+   - Finally, the function returns `max_prefix_length`, which holds the length of the longest common prefix found.
+
+### Example Usage
+
+```python
+arr1 = [123, 456, 789]
+arr2 = [12, 4567, 78]
+solution = Solution()
+print(solution.longestCommonPrefix(arr1, arr2))  # Output will be the length of the longest common prefix
+```
+
+### Key Points
+- The solution uses sorting and binary search to efficiently narrow down the comparison to nearby strings, minimizing unnecessary checks.
+- The `commonPrefixLength` function is a utility to directly compare two strings and find the prefix length.
+- This approach ensures that the longest common prefix is found with optimal comparisons rather than brute force.

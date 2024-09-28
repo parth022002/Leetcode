@@ -1,0 +1,96 @@
+2416. Sum of Prefix Scores of Strings
+Solution:
+
+class Solution:
+    def sumPrefixScores(self, words: List[str]) -> List[int]:
+        # Build the trie structure from the list of words
+        trie = self.buildTrie(words)
+        # Calculate and return the prefix scores for each word
+        return self.calculatePrefixScores(trie, words)
+
+    def buildTrie(self, words: List[str]) -> Dict:
+        trie = {}
+        for word in words:
+            node = trie
+            for char in word:
+                # Navigate through or create nodes in the trie
+                node = node.setdefault(char, {})
+                # Count occurrences of the prefix
+                node['$'] = node.get('$', 0) + 1
+        return trie
+
+    def calculatePrefixScores(self, trie: Dict, words: List[str]) -> List[int]:
+        scores = []
+        for word in words:
+            node = trie
+            total_score = 0
+            for char in word:
+                # Move to the next node and accumulate the score
+                node = node[char]
+                total_score += node['$']
+            scores.append(total_score)
+        return scores
+
+Explanation:
+
+This Python solution uses a **Trie** (prefix tree) data structure to solve the problem of calculating prefix scores for a list of words.
+
+### Problem Breakdown:
+The goal is to calculate a prefix score for each word in the given list. The **prefix score** of a word is the sum of the occurrences of all prefixes (including the full word) from the list of words. For each word, the prefixes can be from one character long to the entire word, and we need to count how many times each prefix appears across all words.
+
+### Explanation of the Code:
+
+1. **Main Function (`sumPrefixScores`)**:
+   - This function first builds a Trie from the list of words using the `buildTrie` method.
+   - Then, it uses the `calculatePrefixScores` method to compute and return a list of prefix scores for each word.
+
+2. **Building the Trie (`buildTrie`)**:
+   - A **Trie** is a tree-like data structure where each node represents a character of the word, and paths from the root represent prefixes of words.
+   - For each word in the list:
+     - It navigates through the Trie or creates new nodes if the prefix doesn't exist.
+     - Each time a node (representing a prefix) is visited, it increments the count `'$'` at that node, which tracks how many times that prefix occurs across all words.
+   - The Trie structure will store a count at every node for every prefix.
+
+   Example:
+   ```
+   words = ["abc", "ab", "bc"]
+   
+   Trie built would look like:
+   
+       root
+       / \
+      a   b
+     /     \
+    b       c
+   /         \
+  c           $
+  $
+  
+   '$' at each node tracks the count of words/prefixes that pass through that node.
+   ```
+   
+3. **Calculating Prefix Scores (`calculatePrefixScores`)**:
+   - For each word in the list, we traverse through the Trie:
+     - At each node, we add the prefix count stored in `'$'` to the total score for that word.
+     - The sum of all counts along the path represents how many times the prefix (including that character) appears across all the words.
+   - The result is a list where each index corresponds to the prefix score of the word at that index in the original list.
+
+   Example:
+   ```
+   For words = ["abc", "ab", "bc"]:
+   
+   - "abc" has prefixes: "a" (2 occurrences), "ab" (2 occurrences), "abc" (1 occurrence). Total = 2 + 2 + 1 = 5.
+   - "ab" has prefixes: "a" (2 occurrences), "ab" (2 occurrences). Total = 2 + 2 = 4.
+   - "bc" has prefixes: "b" (1 occurrence), "bc" (1 occurrence). Total = 1 + 1 = 2.
+   
+   Final scores: [5, 4, 2]
+   ```
+
+### Key Operations:
+- **Trie Insertion** (`setdefault`): The `setdefault` method is used to navigate through or create a new dictionary key if it doesn't exist. It helps efficiently build the Trie.
+- **Prefix Count** (`'$'`): Each node in the Trie tracks how many words have passed through that prefix using a `'$'` key.
+
+### Time Complexity:
+- **Building the Trie**: O(M), where M is the total number of characters in all the words.
+- **Calculating Scores**: O(M), as we visit each character of each word during score calculation.
+- **Total Complexity**: O(M), where M is the sum of the lengths of all words.
